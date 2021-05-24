@@ -1,4 +1,5 @@
 //https://flutter-es.io/docs/cookbook/navigation/navigation-basics
+import 'package:banavanmov/mainJCampo.dart';
 import 'package:flutter/material.dart';
 //import 'package:intl/intl.dart';
 //import 'package:izijob/footer.dart';
@@ -230,7 +231,7 @@ class _LoginState extends State<Login> {
     //myControllerCon.clear();
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       //globals.isLoggedIn = true;
-      return JBodegaVista();
+      return MainJCampo();
     }));
     //} else {
     //_showDialog(context);
