@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 //import 'package:intl/intl.dart';
 //import 'package:izijob/footer.dart';
 //import 'package:firebase_database/firebase_database.dart';
-import 'package:banavanmov/mainJBodega.dart';
+import 'package:banavanmov/mainGeneral.dart';
 
 //import 'package:izijob/clases/usuario.dart';
 //import 'globals.dart' as globals;
@@ -96,6 +96,11 @@ class _LoginState extends State<Login> {
                       'Iniciar Sesión',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 25, color: Colors.grey),
+                    ),
+                    Placeholder(
+                      fallbackHeight: 25,
+                      fallbackWidth: 100,
+                      color: Colors.transparent,
                     ),
                     new ListTile(
                         //leading: const Icon(Icons.person),
@@ -231,7 +236,9 @@ class _LoginState extends State<Login> {
     //myControllerCon.clear();
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       //globals.isLoggedIn = true;
-      return MainJCampo();
+      //return MainJCampo();
+      //return JBodegaVista();
+      return GeneralVista();
     }));
     //} else {
     //_showDialog(context);

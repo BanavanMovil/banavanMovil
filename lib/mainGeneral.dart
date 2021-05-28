@@ -7,20 +7,22 @@ import 'package:flutter/material.dart';
 //
 import 'package:banavanmov/vistaEnfundadoJBodega.dart';
 import 'package:banavanmov/vistaRacimosJBodega.dart';
-import 'package:banavanmov/vistaPerdidosJBodega.dart';
+
+import 'package:banavanmov/mainJCampo.dart';
+import 'package:banavanmov/mainJBodega.dart';
 
 //import 'package:izijob/clases/usuario.dart';
 //import 'globals.dart' as globals;
 //import 'registro.dart';
 
-class JBodegaVista extends StatefulWidget {
+class GeneralVista extends StatefulWidget {
   @override
-  _JBodegaVista createState() => _JBodegaVista();
+  _GeneralVista createState() => _GeneralVista();
 }
 
 //enum SingingCharacter { empleo, cachuelo }
 
-class _JBodegaVista extends State<JBodegaVista> {
+class _GeneralVista extends State<GeneralVista> {
   final _formLogin = GlobalKey<FormState>();
   //SingingCharacter _character = SingingCharacter.empleo;
   final globalKey = GlobalKey<ScaffoldState>();
@@ -66,7 +68,7 @@ class _JBodegaVista extends State<JBodegaVista> {
     return Scaffold(
       key: globalKey,
       appBar: AppBar(
-        title: Text('Jefe de Bodega'),
+        title: Text('Menú Principal'),
         backgroundColor: Colors.orange,
         centerTitle: true,
       ),
@@ -143,12 +145,12 @@ class _JBodegaVista extends State<JBodegaVista> {
                   //
                   new RaisedButton(
                     disabledColor: Colors.white,
-                    child: Text("Enfundado",
+                    child: Text("Jefe de Bodega",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15, color: Colors.white)),
                     splashColor: Colors.white,
                     color: Colors.blueGrey,
-                    onPressed: ingresarEnfundado,
+                    onPressed: ingresarJBodega,
                   ),
 
                   Placeholder(
@@ -161,12 +163,12 @@ class _JBodegaVista extends State<JBodegaVista> {
 
                   new RaisedButton(
                     disabledColor: Colors.white,
-                    child: Text("Racimos Cosechados",
+                    child: Text("Jefe de Campo",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15, color: Colors.white)),
                     splashColor: Colors.white,
                     color: Colors.blueGrey,
-                    onPressed: ingresarRacimos,
+                    onPressed: ingresarJCampo,
                   ),
 
                   Placeholder(
@@ -177,7 +179,7 @@ class _JBodegaVista extends State<JBodegaVista> {
 
                   //SizedBox(height: 10.0),
 
-                  new RaisedButton(
+                  /*new RaisedButton(
                     disabledColor: Colors.white,
                     child: Text("Racimos Perdidos",
                         textAlign: TextAlign.center,
@@ -186,7 +188,7 @@ class _JBodegaVista extends State<JBodegaVista> {
                     color: Colors.blueGrey,
                     onPressed: ingresarPerdidos,
                   ),
-                  SizedBox(height: 10.0),
+                  SizedBox(height: 10.0),*/
 
                   /*new RaisedButton(
                       disabledColor: Colors.amber,
@@ -268,14 +270,14 @@ class _JBodegaVista extends State<JBodegaVista> {
         });
   }*/
 
-  void ingresarEnfundado() {
+  void ingresarJBodega() {
     //if (validarForm()) {
     //if (validarLogin() == "true") {
     //myController.clear();
     //myControllerCon.clear();
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       //globals.isLoggedIn = true;
-      return EnfundadoVista();
+      return JBodegaVista();
     }));
     //} else {
     //_showDialog(context);
@@ -283,14 +285,14 @@ class _JBodegaVista extends State<JBodegaVista> {
     //}
   }
 
-  void ingresarRacimos() {
+  void ingresarJCampo() {
     //if (validarForm()) {
     //if (validarLogin() == "true") {
     //myController.clear();
     //myControllerCon.clear();
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       //globals.isLoggedIn = true;
-      return RacimosVista();
+      return MainJCampo();
     }));
     //} else {
     //_showDialog(context);
@@ -298,18 +300,18 @@ class _JBodegaVista extends State<JBodegaVista> {
     //}
   }
 
-  void ingresarPerdidos() {
-    //if (validarForm()) {
-    //if (validarLogin() == "true") {
-    //myController.clear();
-    //myControllerCon.clear();
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      //globals.isLoggedIn = true;
-      return PerdidosVista();
-    }));
-    //} else {
-    //_showDialog(context);
-    //}
-    //}
-  }
+  //void ingresarPerdidos() {
+  //if (validarForm()) {
+  //if (validarLogin() == "true") {
+  //myController.clear();
+  //myControllerCon.clear();
+  //Navigator.push(context, MaterialPageRoute(builder: (context) {
+  //globals.isLoggedIn = true;
+  //return PerdidosVista();
+  //}));
+  //} else {
+  //_showDialog(context);
+  //}
+  //}
+  //}
 }

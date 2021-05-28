@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 //import 'package:izijob/clases/empleo.dart';
 //
 //
-import 'package:banavanmov/publicarRacimoJBodega.dart';
+import 'package:banavanmov/publicarPerdidoJBodega.dart';
 
 //import 'DetailEmpleo.dart';
 
 //import 'globals.dart' as globals;
 
-class RacimosVista extends StatefulWidget {
+class PerdidosVista extends StatefulWidget {
   @override
-  _RacimosVistaState createState() => _RacimosVistaState();
+  _PerdidosVistaState createState() => _PerdidosVistaState();
 }
 
-class _RacimosVistaState extends State<RacimosVista> {
+class _PerdidosVistaState extends State<PerdidosVista> {
   //List<Empleo> empleoList = [];
   //List<Empleo> filteredEmpleoList = [];
   bool isBusqueda = false;
@@ -74,7 +74,7 @@ class _RacimosVistaState extends State<RacimosVista> {
         backgroundColor: Colors.orange,
         centerTitle: true,
         title: !isBusqueda
-            ? Text('     Jefe de Bodega\nRacimos Cosechados')
+            ? Text('   Jefe de Bodega\nRacimos Perdidos')
             : TextField(
                 onChanged: (value) {
                   //_filterEmpleos(value);
@@ -117,7 +117,7 @@ class _RacimosVistaState extends State<RacimosVista> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text("No hay Racimos Cosechados",
+                        Text("No hay Racimos Perdidos",
                             style: TextStyle(
                               fontFamily: 'Varela',
                               fontSize: 18.0,
@@ -153,7 +153,7 @@ class _RacimosVistaState extends State<RacimosVista> {
       onPressed: () {
         //if (globals.isLoggedIn) {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return PublicarRacimoJB();
+          return PublicarPerdidoJB();
         }));
       },
       //},
