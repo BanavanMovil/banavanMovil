@@ -154,13 +154,52 @@ class _PerdidosVistaState extends State<PerdidosVista> {
 
   Widget _crearItem(Perdido p) {
     return Card(
-      child: Column(children: <Widget>[
-        Text("Lote: " + p.lote.toString()),
-        Text("Reportado por: " + p.trabajador.toString()),
-        Text("Fecha de Reporte: " + p.fechaRegistro.toString()),
-        Text("Motivo: " + p.motivo.toString()),
-        Text("Color: " + p.colorCinta.toString())
-      ]),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Placeholder(
+              fallbackHeight: 10,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text(
+              "Lote: " + p.lote.toString(),
+              style: TextStyle(fontSize: 10),
+            ),
+            Placeholder(
+              fallbackHeight: 5,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text(
+              "Reportado por: " + p.trabajador.toString(),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Placeholder(
+              fallbackHeight: 5,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text("Fecha de Reporte: " + p.fechaRegistro.toString()),
+            Placeholder(
+              fallbackHeight: 5,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text("Motivo de pérdida: " + p.motivo.toString()),
+            Placeholder(
+              fallbackHeight: 5,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text("Color de cinta: " + p.colorCinta.toString()),
+            Placeholder(
+              fallbackHeight: 10,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+          ]),
     );
   }
 

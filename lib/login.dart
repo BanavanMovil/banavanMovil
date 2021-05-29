@@ -88,7 +88,7 @@ class _LoginState extends State<Login> {
                       height: 170,
                     ),
                     Placeholder(
-                      fallbackHeight: 50,
+                      fallbackHeight: 25,
                       fallbackWidth: 100,
                       color: Colors.white,
                     ),

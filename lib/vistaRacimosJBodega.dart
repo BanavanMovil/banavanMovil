@@ -154,12 +154,43 @@ class _RacimosVistaState extends State<RacimosVista> {
 
   Widget _crearItem(Cosechado c) {
     return Card(
-      child: Column(children: <Widget>[
-        Text("Lote: " + c.lote.toString()),
-        Text("Numero de Racimos Cosechados: " + c.numRacimos.toString()),
-        Text("Semana: " + c.semana.toString()),
-        Text("Color de cinta: " + c.colorCinta)
-      ]),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Placeholder(
+              fallbackHeight: 10,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text(
+              "Lote: " + c.lote.toString(),
+              style: TextStyle(fontSize: 10),
+            ),
+            Placeholder(
+              fallbackHeight: 5,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text("Numero de Racimos Cosechados: " + c.numRacimos.toString()),
+            Placeholder(
+              fallbackHeight: 5,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text("Semana: " + c.semana.toString()),
+            Placeholder(
+              fallbackHeight: 5,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text("Color de cinta: " + c.colorCinta),
+            Placeholder(
+              fallbackHeight: 10,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+          ]),
     );
   }
 

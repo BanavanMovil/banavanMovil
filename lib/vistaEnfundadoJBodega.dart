@@ -155,15 +155,55 @@ class _EnfundadoVistaState extends State<EnfundadoVista> {
 
   Widget _crearItem(Enfundado e) {
     return Card(
-      child: Column(children: <Widget>[
-        Text("Lote: " + e.lote.toString()),
-        Text(e.trabajador.toString()),
-        Text("Fecha de Entrega: " + e.fechaEntrega.toString()),
-        Text("Número de Fundas Entregadas: " + e.fundasEntregadas.toString()),
-        Text("Número de Fundas Recibidas: " + e.fundasRecibidas.toString()),
-        //Text("Semana: " + e.semana.toString()),
-        //Text("Color de cinta: " + e.colorCinta)
-      ]),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Placeholder(
+              fallbackHeight: 10,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text(
+              "Lote: " + e.lote.toString(),
+              style: TextStyle(fontSize: 10),
+            ),
+            Placeholder(
+              fallbackHeight: 5,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text(
+              e.trabajador.toString(),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Placeholder(
+              fallbackHeight: 5,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text("Fecha de Entrega: " + e.fechaEntrega.toString()),
+            Placeholder(
+              fallbackHeight: 5,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text("Número de Fundas Entregadas: " +
+                e.fundasEntregadas.toString()),
+            Placeholder(
+              fallbackHeight: 5,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            Text("Número de Fundas Recibidas: " + e.fundasRecibidas.toString()),
+            Placeholder(
+              fallbackHeight: 10,
+              fallbackWidth: 100,
+              color: Colors.transparent,
+            ),
+            //Text("Semana: " + e.semana.toString()),
+            //Text("Color de cinta: " + e.colorCinta)
+          ]),
     );
   }
 
