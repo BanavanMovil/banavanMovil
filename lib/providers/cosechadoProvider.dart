@@ -36,7 +36,7 @@ class CosechadoProvider {
     decodedData.forEach((dona) {
       final cosecha = Cosechado.fromJson(dona);
       cosechados.add(cosecha);
-      print(cosecha.id.toString() + ' ' + cosecha.colorCinta);
+      //print(cosecha.id.toString() + ' ' + cosecha.colorCinta);
     });
     return cosechados;
   }

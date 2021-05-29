@@ -36,7 +36,7 @@ class EnfundadoProvider {
     decodedData.forEach((dona) {
       final enfunde = Enfundado.fromJson(dona);
       enfundados.add(enfunde);
-      print(enfunde.id.toString() + ' ' + enfunde.trabajador);
+      //print(enfunde.id.toString() + ' ' + enfunde.trabajador);
     });
     return enfundados;
   }

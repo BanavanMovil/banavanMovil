@@ -6,6 +6,7 @@ import 'package:banavanmov/model/perdido.dart';
 
 class PerdidoProvider {
   final String url = 'https://api.jsonbin.io/b/60b12f05a5cd4a5576a9933e';
+  //final String url = 'https://api.jsonbin.io/b/60b2c67392af611956f5da02';
 
   //POST
   Future<bool> postPerdido(Perdido perdido) async {
@@ -36,7 +37,7 @@ class PerdidoProvider {
     decodedData.forEach((dona) {
       final perdido = Perdido.fromJson(dona);
       perdidos.add(perdido);
-      print(perdido.id.toString() + perdido.motivo);
+      //print(perdido.id.toString() + perdido.motivo);
     });
     return perdidos;
   }

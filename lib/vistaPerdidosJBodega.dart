@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 //import 'package:izijob/clases/empleo.dart';
 //
 //
+
 import 'package:banavanmov/publicarPerdidoJBodega.dart';
 import 'package:banavanmov/providers/perdidoProvider.dart';
+import 'package:banavanmov/model/perdido.dart';
 //import 'DetailEmpleo.dart';
 
 //import 'globals.dart' as globals;
@@ -113,7 +115,7 @@ class _PerdidosVistaState extends State<PerdidosVista> {
       body: Container(
           //padding: const EdgeInsets.all(5.0),
           //child: filteredEmpleoList.length == 0
-          child: 0 == 0
+          child: 1 == 0
               ? Center(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -130,20 +132,35 @@ class _PerdidosVistaState extends State<PerdidosVista> {
                         CircularProgressIndicator()
                       ]),
                 )
-              : ListView.builder(
-                  //itemCount: filteredEmpleoList.length,
-                  itemCount: 0,
-                  itemBuilder: (_, index) {
-                    //return postsEmpleo(filteredEmpleoList[index]
-                    //return postsEmpleo(0
-                    /*empleoList[index].titulo,
-                        empleoList[index].fechaPublicado,
-                        empleoList[index].descripcion,
-                        empleoList[index].categoria,
-                        empleoList[index].vacantes*/
-                    //);
-                  })),
+              : Center(
+                  child: FutureBuilder(
+                      future: pv.getAllPerdido(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Perdido>> snapshot) {
+                        if (snapshot.hasData) {
+                          final perdidos = snapshot.data;
+                          return ListView.builder(
+                              itemCount: perdidos.length,
+                              itemBuilder: (context, i) =>
+                                  _crearItem(perdidos[i]));
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      }),
+                )),
       floatingActionButton: botonEmpleo(),
+    );
+  }
+
+  Widget _crearItem(Perdido p) {
+    return Card(
+      child: Column(children: <Widget>[
+        Text("Lote: " + p.lote.toString()),
+        Text("Reportado por: " + p.trabajador.toString()),
+        Text("Fecha de Reporte: " + p.fechaRegistro.toString()),
+        Text("Motivo: " + p.motivo.toString()),
+        Text("Color: " + p.colorCinta.toString())
+      ]),
     );
   }
 
