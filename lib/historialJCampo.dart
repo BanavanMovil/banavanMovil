@@ -1,5 +1,8 @@
+import 'package:banavanmov/providers/perdidoProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:banavanmov/providers/jCampoProvider.dart';
+import 'package:banavanmov/providers/enfundadoProvider.dart';
+import 'package:banavanmov/providers/cosechadoProvider.dart';
 
 class HistorialJC extends StatefulWidget {
   @override
@@ -23,6 +26,8 @@ class _HistorialJCState extends State<HistorialJC> {
   }
 
   void prueba() {
-    jc.getInfo();
+    //jc.getInfo();
+    PerdidoProvider ep = new PerdidoProvider();
+    ep.getAllPerdido();
   }
 }
