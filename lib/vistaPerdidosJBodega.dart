@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 //
 //
 import 'package:banavanmov/publicarPerdidoJBodega.dart';
-
+import 'package:banavanmov/providers/perdidoProvider.dart';
 //import 'DetailEmpleo.dart';
 
 //import 'globals.dart' as globals;
@@ -17,6 +17,7 @@ class PerdidosVista extends StatefulWidget {
 class _PerdidosVistaState extends State<PerdidosVista> {
   //List<Empleo> empleoList = [];
   //List<Empleo> filteredEmpleoList = [];
+  final PerdidoProvider pv = new PerdidoProvider();
   bool isBusqueda = false;
 
   @override

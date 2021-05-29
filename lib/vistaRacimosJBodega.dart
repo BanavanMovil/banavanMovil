@@ -1,5 +1,7 @@
 //import 'package:firebase_database/firebase_database.dart';
+import 'package:banavanmov/model/cosechado.dart';
 import 'package:flutter/material.dart';
+import 'package:banavanmov/providers/cosechadoProvider.dart';
 //import 'package:izijob/clases/empleo.dart';
 //
 //
@@ -17,6 +19,7 @@ class RacimosVista extends StatefulWidget {
 class _RacimosVistaState extends State<RacimosVista> {
   //List<Empleo> empleoList = [];
   //List<Empleo> filteredEmpleoList = [];
+  final CosechadoProvider cv = new CosechadoProvider();
   bool isBusqueda = false;
 
   @override
@@ -112,7 +115,7 @@ class _RacimosVistaState extends State<RacimosVista> {
       body: Container(
           //padding: const EdgeInsets.all(5.0),
           //child: filteredEmpleoList.length == 0
-          child: 0 == 0
+          child: 1 == 0
               ? Center(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -129,20 +132,34 @@ class _RacimosVistaState extends State<RacimosVista> {
                         CircularProgressIndicator()
                       ]),
                 )
-              : ListView.builder(
-                  //itemCount: filteredEmpleoList.length,
-                  itemCount: 0,
-                  itemBuilder: (_, index) {
-                    //return postsEmpleo(filteredEmpleoList[index]
-                    //return postsEmpleo(0
-                    /*empleoList[index].titulo,
-                        empleoList[index].fechaPublicado,
-                        empleoList[index].descripcion,
-                        empleoList[index].categoria,
-                        empleoList[index].vacantes*/
-                    //);
-                  })),
+              : Center(
+                  child: FutureBuilder(
+                      future: cv.getAllCosechado(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Cosechado>> snapshot) {
+                        if (snapshot.hasData) {
+                          final cosechados = snapshot.data;
+                          return ListView.builder(
+                              itemCount: cosechados.length,
+                              itemBuilder: (context, i) =>
+                                  _crearItem(cosechados[i]));
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      }),
+                )),
       floatingActionButton: botonEmpleo(),
+    );
+  }
+
+  Widget _crearItem(Cosechado c) {
+    return Card(
+      child: Column(children: <Widget>[
+        Text("Lote: " + c.lote.toString()),
+        Text("Numero de Racimos Cosechados: " + c.numRacimos.toString()),
+        Text("Semana: " + c.semana.toString()),
+        Text("Color de cinta: " + c.colorCinta)
+      ]),
     );
   }
 
