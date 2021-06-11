@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:banavanmov/misc/MainScreen.dart';
-//import 'package:izijob/footer.dart';
-//mport 'package:izijob/registroVista.dart';
 
 void main() {
   runApp(MyApp());

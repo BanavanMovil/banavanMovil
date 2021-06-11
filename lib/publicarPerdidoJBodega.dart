@@ -239,33 +239,6 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
     );
   }
 
-  //Guardamos texto
-  /*void guardarToDatabase() {
-    var dbTimeKey = DateTime.now();
-    var formatDate = DateFormat('d/M/y');
-    var formatTime = new DateFormat.jm();
-
-    String date = formatDate.format(dbTimeKey);
-    String time = formatTime.format(dbTimeKey);
-
-    DatabaseReference ref = FirebaseDatabase.instance.reference();
-    var data = {
-      "titulo": tfTitulo,
-      "descripcion": tfDescripcion,
-      "experiencia": tfExp,
-      "vacantes": tfVacantes,
-      "sueldo": tfSueldo,
-      "telefono": tfTelefono,
-      "email": tfEmail,
-      "categoria": tfCategoria,
-      "fechaP": date,
-      "tiempoP": time,
-      "idUser": 1
-    };
-    print(data);
-    ref.child("Empleo").push().set(data);
-  }*/
-
   //Valida que esté todos los campos llenos
   /*bool validarForm() {
     final form = _formKey.currentState;
