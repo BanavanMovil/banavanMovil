@@ -154,57 +154,60 @@ class _EnfundadoVistaState extends State<EnfundadoVista> {
   }
 
   Widget _crearItem(Enfundado e) {
-    return Card(
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Placeholder(
-              fallbackHeight: 10,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text(
-              "Lote: " + e.lote.toString(),
-              style: TextStyle(fontSize: 10),
-            ),
-            Placeholder(
-              fallbackHeight: 5,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text(
-              e.trabajador.toString(),
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Placeholder(
-              fallbackHeight: 5,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text("Fecha de Entrega: " + e.fechaEntrega.toString()),
-            Placeholder(
-              fallbackHeight: 5,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text("Número de Fundas Entregadas: " +
-                e.fundasEntregadas.toString()),
-            Placeholder(
-              fallbackHeight: 5,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text("Número de Fundas Recibidas: " + e.fundasRecibidas.toString()),
-            Placeholder(
-              fallbackHeight: 10,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            //Text("Semana: " + e.semana.toString()),
-            //Text("Color de cinta: " + e.colorCinta)
-          ]),
-    );
+    return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Card(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Lote: " + e.lote.toString(),
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        e.trabajador.toString(),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text("Fecha de Entrega: " + e.fechaEntrega.toString()),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text("Número de Fundas Entregadas: " +
+                          e.fundasEntregadas.toString()),
+                      Spacer(),
+                      Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Icon(Icons.edit))
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text("Número de Fundas Recibidas: " +
+                          e.fundasRecibidas.toString()),
+                    ])),
+
+                Placeholder(
+                  fallbackHeight: 10,
+                  fallbackWidth: 100,
+                  color: Colors.transparent,
+                ),
+                //Text("Semana: " + e.semana.toString()),
+                //Text("Color de cinta: " + e.colorCinta)
+              ]),
+        ));
   }
 
   Widget botonEmpleo() {

@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 //import 'package:izijob/footer.dart';
 import 'package:flutter/services.dart';
-
+import 'package:banavanmov/model/enfundado.dart';
 import 'package:banavanmov/vistaEnfundadoJBodega.dart';
+import 'package:banavanmov/providers/enfundadoProvider.dart';
 
 class PublicarEnfundadoJB extends StatefulWidget {
   @override
@@ -18,6 +19,11 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
   final _formKey = GlobalKey<FormState>();
   //SingingCharacter _character = SingingCharacter.empleo;
   final globalKey = GlobalKey<ScaffoldState>();
+  DateTime fecha_entrega;
+  var usuario = TextEditingController();
+  var semana = TextEditingController();
+  var fundas_entregadas = TextEditingController();
+  var fundas_recibidas = TextEditingController();
 
   List<String> _locations = [
     '1',
@@ -32,15 +38,6 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
   ]; // Option 2
   String _selectedLocation; // Option 2
 
-  /*String tfTitulo,
-      tfDescripcion,
-      tfExp,
-      tfVacantes,
-      tfSueldo,
-      tfTelefono,
-      tfEmail,
-      tfCategoria;*/
-
   Widget build(BuildContext context) {
     return Scaffold(
       key: globalKey,
@@ -48,15 +45,6 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
         title: Text('Registro Enfundador'),
         backgroundColor: Colors.orange,
         centerTitle: true,
-        /*actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.check,
-              color: Colors.white,
-            ),
-            onPressed: uploadStatusEmpleo,
-          )
-        ],*/
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -108,50 +96,39 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                           );
                         }).toList(),
                       ),
-                      //leading: const Icon(Icons.description),
-                      /*title: TextFormField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          labelText: 'Ingrese el número de lote',
-                          //hintText: 'Ej: Señor(a) de tal edad...',
-                        ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Por favor, ingrese el número de lote';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          return tfDescripcion = value;
-                        },
-                      ),*/
                     ),
                     new ListTile(
-                      //leading: const Icon(Icons.star),
-                      title: TextFormField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          labelText: 'Fecha de entrega',
-                          //hintText: 'Ej: Experiencia en dicho campo...',
-                        ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Por favor, ingrese la fecha de entrega';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          //return tfExp = value;
-                        },
-                      ),
-                    ),
+                        //leading: const Icon(Icons.star),
+                        title: Row(
+                      children: <Widget>[
+                        Text(fecha_entrega == null
+                            ? "No ha seleccionado fecha de entrega"
+                            : fecha_entrega.toString()),
+                        Spacer(),
+                        ElevatedButton(
+                            onPressed: () {
+                              showDatePicker(
+                                      context: context,
+                                      initialDate: fecha_entrega == null
+                                          ? DateTime.now()
+                                          : fecha_entrega,
+                                      firstDate: DateTime(2001),
+                                      lastDate: DateTime(2222))
+                                  .then((date) {
+                                setState(() {
+                                  fecha_entrega = date;
+                                });
+                              });
+                            },
+                            child: Icon(Icons.date_range))
+                      ],
+                    )),
                     new ListTile(
                       //leading: const Icon(Icons.monetization_on),
                       title: TextFormField(
                           //controller: _controller,
                           keyboardType: TextInputType.number,
+                          controller: semana,
                           inputFormatters: <TextInputFormatter>[
                             WhitelistingTextInputFormatter.digitsOnly
                           ],
@@ -160,20 +137,6 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                             //hintText: "whatever you want",
                             //icon: Icon(Icons.phone_iphone)
                           )),
-                      /*title: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Número de Semana',
-                        //hintText: 'Ingresa el posible sueldo',
-                      ),
-                      validator: (value) {
-                        return value.isEmpty
-                            ? 'Por favor, ingrese el número de semana.'
-                            : null;
-                      },
-                      onSaved: (value) {
-                        return tfSueldo = value;
-                      },
-                    )*/
                     ),
                     new ListTile(
                       //leading: const Icon(Icons.supervisor_account),
@@ -181,6 +144,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                       title: TextFormField(
                           //controller: _controller,
                           keyboardType: TextInputType.number,
+                          controller: fundas_entregadas,
                           inputFormatters: <TextInputFormatter>[
                             WhitelistingTextInputFormatter.digitsOnly
                           ],
@@ -189,21 +153,6 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                             //hintText: "whatever you want",
                             //icon: Icon(Icons.phone_iphone)
                           )),
-
-                      /*title: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Número de Fundas Entregadas',
-                        //hintText: 'Ej: 1, 2-4, Por ver...',
-                      ),
-                      validator: (value) {
-                        return value.isEmpty
-                            ? 'Por favor, ingrese el número de fundas entregadas.'
-                            : null;
-                      },
-                      onSaved: (value) {
-                        return tfVacantes = value;
-                      },
-                    )*/
                     ),
                     new ListTile(
                       //leading: const Icon(Icons.contact_phone),
@@ -211,6 +160,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                       title: TextFormField(
                           //controller: _controller,
                           keyboardType: TextInputType.number,
+                          controller: fundas_recibidas,
                           inputFormatters: <TextInputFormatter>[
                             WhitelistingTextInputFormatter.digitsOnly
                           ],
@@ -219,22 +169,6 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                             //hintText: "whatever you want",
                             //icon: Icon(Icons.phone_iphone)
                           )),
-
-                      /*title: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Número de Fundas Recibidas',
-
-                        ///hintText: 'Ej: 098542261,(04)254789...',
-                      ),
-                      validator: (value) {
-                        return value.isEmpty
-                            ? 'Por favor, ingrese el número de fundas recibidas.'
-                            : null;
-                      },
-                      onSaved: (value) {
-                        return tfTelefono = value;
-                      },
-                    )*/
                     ),
                     new ListTile(
                         //leading: const Icon(Icons.contact_mail),
@@ -243,43 +177,12 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                       textAlign: TextAlign.left,
                       style: TextStyle(fontSize: 17, color: Colors.grey),
                     )),
-                    new RaisedButton(
-                      disabledColor: Colors.white,
+                    new ElevatedButton(
                       child: Text("Guardar",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 15, color: Colors.white)),
-                      splashColor: Colors.white,
-                      color: Colors.blueGrey,
-                      onPressed: uploadStatusEmpleo,
+                      onPressed: uploadStatusEmpleo(),
                     ),
-
-                    /*FractionalTranslation(
-                      translation: Offset(0, 0),
-                      child: Container(
-                          width: 50,
-                          height: 50,
-                          child: SizedBox(
-                            height: 2,
-                            width: 2,
-                            child: const ColoredBox(color: Colors.amber),
-                          )),
-                    ),*/
-                    /*new ListTile(
-                        leading: const Icon(Icons.category),
-                        title: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Categorías',
-                            hintText: 'Ej: cocineros, música, ingenieros...',
-                          ),
-                          validator: (value) {
-                            return value.isEmpty
-                                ? 'Por favor, ingresa al menos 1 categoría.'
-                                : null;
-                          },
-                          onSaved: (value) {
-                            return tfCategoria = value;
-                          },
-                        )),*/
                   ],
                 ),
               ),
@@ -331,10 +234,16 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
     return false;
   }*/
 
-  void uploadStatusEmpleo() async {
+  void uploadStatusEmpleo(Enfundado e) async {
     //if (validarForm()) {
     // guardarToDatabase();
     // Navigator.pop(context);
+    if (_formKey.currentState.validate()) {
+      EnfundadoProvider ep = new EnfundadoProvider();
+      ep.postEnfundado(e);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Enfundado Creado')));
+    }
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
       //return Footer();
       return EnfundadoVista();
