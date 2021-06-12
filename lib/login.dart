@@ -1,9 +1,6 @@
 //https://flutter-es.io/docs/cookbook/navigation/navigation-basics
 import 'package:banavanmov/mainJCampo.dart';
 import 'package:flutter/material.dart';
-//import 'package:intl/intl.dart';
-//import 'package:izijob/footer.dart';
-//import 'package:firebase_database/firebase_database.dart';
 import 'package:banavanmov/mainGeneral.dart';
 
 //import 'package:izijob/clases/usuario.dart';
@@ -27,37 +24,16 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    /*DatabaseReference usuarioRef =
-        FirebaseDatabase.instance.reference().child("Usuario");
-    usuarioRef.once().then((DataSnapshot snap) {
-      var keys = snap.value.keys;
-      var data = snap.value;
-      usuarioList.clear();
-
-      for (var individualKey in keys) {
-        Usuario user = Usuario(
-          data[individualKey]['idUSer'],
-          data[individualKey]['nombre'],
-          data[individualKey]['usuario'],
-          data[individualKey]['correo'],
-          data[individualKey]['fechaCreacion'],
-          data[individualKey]['clave'],
-        );
-        usuarioList.add(user);
-      }
-    });*/
   }
 
-  //final myController = TextEditingController();
-  //final myControllerCon = TextEditingController();
-  //@override
-  //void dispose() {
-  //  myController.dispose();
-  //  myControllerCon.dispose();
-  //  super.dispose();
-  //}
-
-  //String tfUsuario, tfContrasena;
+  final myController = TextEditingController();
+  final myControllerCon = TextEditingController();
+  @override
+  void dispose() {
+    myController.dispose();
+    myControllerCon.dispose();
+    super.dispose();
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +81,7 @@ class _LoginState extends State<Login> {
                     new ListTile(
                         //leading: const Icon(Icons.person),
                         title: TextFormField(
-                      //                  controller: myController,
+                      controller: myController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Usuario',
@@ -122,7 +98,7 @@ class _LoginState extends State<Login> {
                     new ListTile(
                       //leading: const Icon(Icons.lock),
                       title: TextFormField(
-                        //                controller: myControllerCon,
+                        controller: myControllerCon,
                         //keyboardType: TextInputType.multiline,
                         obscureText: true,
                         //maxLines: null,
@@ -149,32 +125,6 @@ class _LoginState extends State<Login> {
                       onPressed: ingresarMain,
                     ),
                     SizedBox(height: 10.0),
-                    /*new RaisedButton(
-                      disabledColor: Colors.amber,
-                      child: Text("Registrarse"),
-                      splashColor: Colors.amber,
-                      color: Colors.blueAccent,
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return Registro();
-                        }));
-                      },
-                    ),
-                    SizedBox(height: 10.0),*/
-                    /*new RaisedButton(
-                      disabledColor: Colors.amber,
-                      child: Text("Ingresar como invitado"),
-                      splashColor: Colors.amber,
-                      color: Colors.blueAccent,
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          globals.isLoggedIn = false;
-                          return Footer();
-                        }));
-                      },
-                    ),*/
                   ],
                 ),
               ),
@@ -185,19 +135,8 @@ class _LoginState extends State<Login> {
     );
   }
 
-  /*String validarLogin() {
-    for (Usuario x in usuarioList) {
-      if (x.usuario == myController.text) {
-        if (x.clave == myControllerCon.text) {
-          return "true";
-        }
-      }
-    }
-    return "false";
-  }*/
-
   //Valida que esté todos los campos llenos
-  /*bool validarForm() {
+  bool validarForm() {
     final form = _formLogin.currentState;
     if (form.validate()) {
       // Si el formulario es válido, queremos mostrar un Snackbar
@@ -205,44 +144,66 @@ class _LoginState extends State<Login> {
       return true;
     }
     return false;
-  }*/
+  }
 
-  /*_showDialog(BuildContext ctx) {
+  _showDialogConfirm(BuildContext ctx) {
     showDialog(
         context: ctx,
         builder: (context) {
           return SimpleDialog(
-            title: Center(child: Text("Datos Incorrectos")),
+            title: Center(child: Text("Ingreso Exitoso")),
             children: <Widget>[
-              Center(child: Text("El usuario que ha ingresado ")),
-              Center(child: Text("no se encuentra registrado.")),
-              Center(child: Text("Compruebe los datos o ")),
-              Center(child: Text("Regístrese. Gracias!")),
+              Center(child: Text("Datos ingresados correctamente.")),
+              Placeholder(
+                fallbackHeight: 7,
+                fallbackWidth: 100,
+                color: Colors.transparent,
+              ),
+              //Center(child: Text("")),
+              Center(child: Text("Bienvenido: " + myController.text)),
+
+              Placeholder(
+                fallbackHeight: 10,
+                fallbackWidth: 100,
+                color: Colors.transparent,
+              ),
+              //Center(child: Text("Regístrese. Gracias!")),
               Center(
-                  child: FlatButton(
+                  child: RaisedButton(
                       child: Text("Ok"),
                       onPressed: () {
+                        myController.clear();
+                        myControllerCon.clear();
                         Navigator.pop(ctx);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          //globals.isLoggedIn = true;
+                          //return MainJCampo();
+                          //return JBodegaVista();
+
+                          return GeneralVista();
+                        }));
                       })),
             ],
           );
         });
-  }*/
+  }
 
   void ingresarMain() {
-    //if (validarForm()) {
-    //if (validarLogin() == "true") {
-    //myController.clear();
-    //myControllerCon.clear();
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+    if (validarForm()) {
+      _showDialogConfirm(context);
+      //if (validarLogin() == "true") {
+      //myController.clear();
+      //myControllerCon.clear();
+      //Navigator.push(context, MaterialPageRoute(builder: (context) {
       //globals.isLoggedIn = true;
       //return MainJCampo();
       //return JBodegaVista();
-      return GeneralVista();
-    }));
-    //} else {
-    //_showDialog(context);
-    //}
+      //  return GeneralVista();
+      //}));
+      //} else {
+      //  _showDialog(context);
+    }
     //}
   }
 }

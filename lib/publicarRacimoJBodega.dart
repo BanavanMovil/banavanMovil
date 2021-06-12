@@ -68,74 +68,6 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
               child: Scrollbar(
                 child: ListView(
                   children: <Widget>[
-                    /*new ListTile(
-                        //leading: const Icon(Icons.title),
-                        title: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Usuario',
-                        //hintText: 'Ej: Necesito empleador...',
-                      ),
-                      validator: (value) {
-                        return value.isEmpty
-                            ? 'Por favor, ingresa el usuario'
-                            : null;
-                      },
-                      onSaved: (value) {
-                        //return tfTitulo = value;
-                      },
-                    )),
-                    
-                    new ListTile(
-                      //leading: const Icon(Icons.star),
-                      title: TextFormField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          labelText: 'Fecha de entrega',
-                          //hintText: 'Ej: Experiencia en dicho campo...',
-                        ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Por favor, ingrese la fecha de entrega';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          //return tfExp = value;
-                        },
-                      ),
-                    ),
-                    */
-                    /*new ListTile(
-                      //leading: const Icon(Icons.supervisor_account),
-
-                      title: TextFormField(
-                          //controller: _controller,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            WhitelistingTextInputFormatter.digitsOnly
-                          ],
-                          decoration: InputDecoration(
-                            labelText: "Número de Fundas Entregadas",
-                            //hintText: "whatever you want",
-                            //icon: Icon(Icons.phone_iphone)
-                          )),
-
-                      /*title: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Número de Fundas Entregadas',
-                        //hintText: 'Ej: 1, 2-4, Por ver...',
-                      ),
-                      validator: (value) {
-                        return value.isEmpty
-                            ? 'Por favor, ingrese el número de fundas entregadas.'
-                            : null;
-                      },
-                      onSaved: (value) {
-                        return tfVacantes = value;
-                      },
-                    )*/
-                    ),*/
                     new ListTile(
                       //leading: const Icon(Icons.contact_phone),
 
@@ -292,33 +224,6 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
       //backgroundColor: Colors.green,
     );
   }
-
-  //Guardamos texto
-  /*void guardarToDatabase() {
-    var dbTimeKey = DateTime.now();
-    var formatDate = DateFormat('d/M/y');
-    var formatTime = new DateFormat.jm();
-
-    String date = formatDate.format(dbTimeKey);
-    String time = formatTime.format(dbTimeKey);
-
-    DatabaseReference ref = FirebaseDatabase.instance.reference();
-    var data = {
-      "titulo": tfTitulo,
-      "descripcion": tfDescripcion,
-      "experiencia": tfExp,
-      "vacantes": tfVacantes,
-      "sueldo": tfSueldo,
-      "telefono": tfTelefono,
-      "email": tfEmail,
-      "categoria": tfCategoria,
-      "fechaP": date,
-      "tiempoP": time,
-      "idUser": 1
-    };
-    print(data);
-    ref.child("Empleo").push().set(data);
-  }*/
 
   //Valida que esté todos los campos llenos
   /*bool validarForm() {

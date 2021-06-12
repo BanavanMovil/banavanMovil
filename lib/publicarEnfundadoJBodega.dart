@@ -1,8 +1,6 @@
 //https://flutter-es.io/docs/cookbook/navigation/navigation-basics
-//import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-//import 'package:izijob/footer.dart';
 import 'package:flutter/services.dart';
 import 'package:banavanmov/model/enfundado.dart';
 import 'package:banavanmov/vistaEnfundadoJBodega.dart';
@@ -13,11 +11,8 @@ class PublicarEnfundadoJB extends StatefulWidget {
   _PublicarEnfundadoJBState createState() => _PublicarEnfundadoJBState();
 }
 
-//enum SingingCharacter { empleo, cachuelo }
-
 class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
   final _formKey = GlobalKey<FormState>();
-  //SingingCharacter _character = SingingCharacter.empleo;
   final globalKey = GlobalKey<ScaffoldState>();
   DateTime fecha_entrega;
   var usuario = TextEditingController();
@@ -61,7 +56,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                         title: TextFormField(
                       decoration: InputDecoration(
                         labelText: 'Usuario',
-                        //hintText: 'Ej: Necesito empleador...',
+                        //hintText: 'Ej: ',
                       ),
                       validator: (value) {
                         return value.isEmpty
@@ -193,33 +188,6 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
       //backgroundColor: Colors.green,
     );
   }
-
-  //Guardamos texto
-  /*void guardarToDatabase() {
-    var dbTimeKey = DateTime.now();
-    var formatDate = DateFormat('d/M/y');
-    var formatTime = new DateFormat.jm();
-
-    String date = formatDate.format(dbTimeKey);
-    String time = formatTime.format(dbTimeKey);
-
-    DatabaseReference ref = FirebaseDatabase.instance.reference();
-    var data = {
-      "titulo": tfTitulo,
-      "descripcion": tfDescripcion,
-      "experiencia": tfExp,
-      "vacantes": tfVacantes,
-      "sueldo": tfSueldo,
-      "telefono": tfTelefono,
-      "email": tfEmail,
-      "categoria": tfCategoria,
-      "fechaP": date,
-      "tiempoP": time,
-      "idUser": 1
-    };
-    print(data);
-    ref.child("Empleo").push().set(data);
-  }*/
 
   //Valida que esté todos los campos llenos
   /*bool validarForm() {
