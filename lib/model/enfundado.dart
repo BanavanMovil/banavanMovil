@@ -1,5 +1,19 @@
 import 'dart:convert';
 
+class EnfundadoResponse {
+  List<Enfundado> results;
+  EnfundadoResponse({this.results});
+
+  EnfundadoResponse.fromJson(List<dynamic> json) {
+    if (json.isNotEmpty) {
+      results = <Enfundado>[];
+      json.forEach((v) {
+        results.add(new Enfundado.fromJson(v));
+      });
+    }
+  }
+}
+
 class Enfundado {
   int id;
   int lote;

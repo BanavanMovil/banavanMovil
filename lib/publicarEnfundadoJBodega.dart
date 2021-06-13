@@ -176,7 +176,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                       child: Text("Guardar",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 15, color: Colors.white)),
-                      onPressed: uploadStatusEmpleo(),
+                      onPressed: uploadStatusEmpleo,
                     ),
                   ],
                 ),
@@ -202,13 +202,13 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
     return false;
   }*/
 
-  void uploadStatusEmpleo(Enfundado e) async {
+  void uploadStatusEmpleo() async {
     //if (validarForm()) {
     // guardarToDatabase();
     // Navigator.pop(context);
     if (_formKey.currentState.validate()) {
       EnfundadoProvider ep = new EnfundadoProvider();
-      ep.postEnfundado(e);
+      //ep.postEnfundado(e);
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Enfundado Creado')));
     }

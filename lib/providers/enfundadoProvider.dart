@@ -1,15 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:banavanmov/model/enfundado.dart';
+import 'package:banavanmov/exception/customException.dart';
 
 class EnfundadoProvider {
-  final String url = 'https://api.jsonbin.io/b/60b1246bd0f4985540539053';
+  final String baseUrl = 'https://api.jsonbin.io/b/60b1246bd0f4985540539053';
 
   //POST
   Future<bool> postEnfundado(Enfundado enfundado) async {
-    final response = await http.post(url, body: enfundado.toJson());
+    final response = await http.post(baseUrl, body: enfundado.toJson());
     final decodeData = json.decode(response.body);
 
     print(decodeData);
@@ -18,26 +21,42 @@ class EnfundadoProvider {
 
   //PUT
   Future<bool> updateEnfundado(Enfundado enfundado) async {
-    final response =
-        await http.put(url + enfundado.id.toString(), body: enfundado.toJson());
+    final response = await http.put(baseUrl + enfundado.id.toString(),
+        body: enfundado.toJson());
     final decodeData = json.decode(response.body);
 
     print(decodeData);
     return true;
   }
 
-  Future<List<Enfundado>> getAllEnfundado() async {
-    final response = await http.get(url);
-    final List<dynamic> decodedData = json.decode(response.body);
-    final List<Enfundado> enfundados = new List();
+  Future<List<dynamic>> getAll() async {
+    var responseJson;
+    try {
+      final resp = await http.get(baseUrl);
+      responseJson = _response(resp);
+    } on SocketException {
+      throw FetchDataException('No Internet connection');
+    }
+    return responseJson;
+  }
 
-    if (decodedData == null) return [];
+  dynamic _response(http.Response response) {
+    switch (response.statusCode) {
+      case 200:
+        var responseJson = json.decode(response.body.toString());
+        print(responseJson);
+        return responseJson;
+      case 400:
+        throw BadRequestException(response.body.toString());
+      case 401:
 
-    decodedData.forEach((dona) {
-      final enfunde = Enfundado.fromJson(dona);
-      enfundados.add(enfunde);
-      //print(enfunde.id.toString() + ' ' + enfunde.trabajador);
-    });
-    return enfundados;
+      case 403:
+        throw UnauthorisedException(response.body.toString());
+      case 500:
+
+      default:
+        throw FetchDataException(
+            'Error occured while Communication with Server with StatusCode : ${response.statusCode}');
+    }
   }
 }
