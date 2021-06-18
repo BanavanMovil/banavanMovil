@@ -1,5 +1,19 @@
 import 'dart:convert';
 
+class PerdidoResponse {
+  List<Perdido> results;
+  PerdidoResponse({this.results});
+
+  PerdidoResponse.fromJson(List<dynamic> json) {
+    if (json.isNotEmpty) {
+      results = <Perdido>[];
+      json.forEach((v) {
+        results.add(new Perdido.fromJson(v));
+      });
+    }
+  }
+}
+
 class Perdido {
   int id;
   int lote;
@@ -9,14 +23,15 @@ class Perdido {
   String fechaRegistro;
   String motivo;
 
-  Perdido(
-      {this.id,
-      this.lote,
-      this.semana,
-      this.colorCinta,
-      this.trabajador,
-      this.fechaRegistro,
-      this.motivo});
+  Perdido({
+    this.id,
+    this.lote,
+    this.semana,
+    this.colorCinta,
+    this.trabajador,
+    this.fechaRegistro,
+    this.motivo,
+  });
 
   factory Perdido.fromJson(Map<String, dynamic> json) => Perdido(
       id: json['id'],
