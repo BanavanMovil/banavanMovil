@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:banavanmov/model/perdido.dart';
+import 'dart:io';
+import 'package:banavanmov/exception/customException.dart';
 
 class PerdidoProvider {
   final String url = 'https://api.jsonbin.io/b/60b12f05a5cd4a5576a9933e';
@@ -40,5 +42,36 @@ class PerdidoProvider {
       //print(perdido.id.toString() + perdido.motivo);
     });
     return perdidos;
+  }
+
+  Future<List<dynamic>> getAll() async {
+    var responseJson;
+    try {
+      final resp = await http.get(url);
+      responseJson = _response(resp);
+    } on SocketException {
+      throw FetchDataException('No Internet connection');
+    }
+    return responseJson;
+  }
+
+  dynamic _response(http.Response response) {
+    switch (response.statusCode) {
+      case 200:
+        var responseJson = json.decode(response.body.toString());
+        print(responseJson);
+        return responseJson;
+      case 400:
+        throw BadRequestException(response.body.toString());
+      case 401:
+
+      case 403:
+        throw UnauthorisedException(response.body.toString());
+      case 500:
+
+      default:
+        throw FetchDataException(
+            'Error occured while Communication with Server with StatusCode : ${response.statusCode}');
+    }
   }
 }
