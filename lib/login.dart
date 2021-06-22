@@ -7,25 +7,17 @@ import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:banavanmov/mainGeneral.dart';
 
-//import 'package:izijob/clases/usuario.dart';
-//import 'globals.dart' as globals;
-//import 'registro.dart';
-
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
 
-//enum SingingCharacter { empleo, cachuelo }
-
 class _LoginState extends State<Login> {
   final _formLogin = GlobalKey<FormState>();
-  //SingingCharacter _character = SingingCharacter.empleo;
   final globalKey = GlobalKey<ScaffoldState>();
   var userController = TextEditingController();
   var passController = TextEditingController();
   bool isLoading = false;
-  //List<Usuario> usuarioList = [];
 
   @override
   void initState() {
@@ -42,11 +34,6 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: globalKey,
-      /*appBar: AppBar(
-        title: Text('Iniciar Sesión'),
-        backgroundColor: Colors.blue[900],
-        centerTitle: true,
-      ),*/
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Card(
@@ -95,12 +82,9 @@ class _LoginState extends State<Login> {
                             ? 'Por favor, ingrese su usuario'
                             : null;
                       },
-                      onSaved: (value) {
-                        //                  return tfUsuario = value;
-                      },
+                      onSaved: (value) {},
                     )),
                     new ListTile(
-                      //leading: const Icon(Icons.lock),
                       title: TextFormField(
                         controller: passController,
                         //keyboardType: TextInputType.multiline,
@@ -192,7 +176,7 @@ class _LoginState extends State<Login> {
                         userController.clear();
                         passController.clear();
                         Navigator.pop(ctx);
-                        if (body['rol'] == 'JC') {
+                        if (body['rol'] != 'JC') {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return MainJCampo();

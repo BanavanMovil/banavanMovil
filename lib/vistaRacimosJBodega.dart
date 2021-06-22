@@ -1,12 +1,12 @@
 import 'package:banavanmov/model/cosechado.dart';
 import 'package:flutter/material.dart';
-import 'package:banavanmov/providers/cosechadoProvider.dart';
-
 //
 //
 import 'package:banavanmov/publicarRacimoJBodega.dart';
 import 'package:banavanmov/response.dart';
 import 'package:banavanmov/blocs/cosechadoBloc.dart';
+import 'package:banavanmov/providers/cosechadoProvider.dart';
+import 'package:banavanmov/actualizarRacimoJBodega.dart';
 
 class RacimosVista extends StatefulWidget {
   @override
@@ -91,86 +91,7 @@ class _RacimosVistaState extends State<RacimosVista> {
           },
         ),
       ),
-      /*body: Container(
-          //padding: const EdgeInsets.all(5.0),
-          //child: filteredEmpleoList.length == 0
-          child: 1 == 0
-              ? Center(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("No hay Racimos Cosechados",
-                            style: TextStyle(
-                              fontFamily: 'Varela',
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        CircularProgressIndicator()
-                      ]),
-                )
-              : Center(
-                  child: FutureBuilder(
-                      future: cv.getAllCosechado(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<Cosechado>> snapshot) {
-                        if (snapshot.hasData) {
-                          final cosechados = snapshot.data;
-                          return ListView.builder(
-                              itemCount: cosechados.length,
-                              itemBuilder: (context, i) =>
-                                  _crearItem(cosechados[i]));
-                        } else {
-                          return CircularProgressIndicator();
-                        }
-                      }),
-                )),*/
-
       floatingActionButton: botonCosechado(),
-    );
-  }
-
-  Widget _crearItem(Cosechado c) {
-    return Card(
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Placeholder(
-              fallbackHeight: 10,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text(
-              "Lote: " + c.lote.toString(),
-              style: TextStyle(fontSize: 10),
-            ),
-            Placeholder(
-              fallbackHeight: 5,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text("Numero de Racimos Cosechados: " + c.numRacimos.toString()),
-            Placeholder(
-              fallbackHeight: 5,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text("Semana: " + c.semana.toString()),
-            Placeholder(
-              fallbackHeight: 5,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text("Color de cinta: " + c.colorCinta),
-            Placeholder(
-              fallbackHeight: 10,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-          ]),
     );
   }
 
@@ -200,13 +121,13 @@ class CosechadoList extends StatelessWidget {
     return ListView.builder(
       itemCount: cosechados.length,
       itemBuilder: (context, index) {
-        return _crearCartaCosechado(cosechados[index]);
+        return _crearCartaCosechado(context, cosechados[index]);
       },
     );
   }
 }
 
-Widget _crearCartaCosechado(Cosechado c) {
+Widget _crearCartaCosechado(BuildContext context, Cosechado c) {
   return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Card(
@@ -240,43 +161,18 @@ Widget _crearCartaCosechado(Cosechado c) {
                   padding: const EdgeInsets.only(left: 10, top: 7.0),
                   child: Row(children: <Widget>[
                     Text("Color de Cinta: " + c.colorCinta),
-                    /*Spacer(),
-                    Padding(
-                        padding: const EdgeInsets.only(right: 0.0, top: 0.0),
-                        child: IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            print("TO DO");
-                          },
-                        ))*/
                   ])),
-              /*Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.only(left: 280.0, top: 0.0),
-                        child: IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            print("TO DO");
-                          },
-                        ))
-                  ]),*/
               Padding(
                   padding: const EdgeInsets.only(left: 280.0, top: 0.0),
                   child: IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
-                      print("TO DO");
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ActualizarCosechadoJB(c);
+                      }));
                     },
                   )),
-
-              /*Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
-                  child: Row(children: <Widget>[
-                    Text("Hora fin: " + e.fechaEntrega),
-                  ])),*/
               Placeholder(
                 fallbackHeight: 10,
                 fallbackWidth: 100,

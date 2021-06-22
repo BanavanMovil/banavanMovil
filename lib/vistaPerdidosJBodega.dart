@@ -7,6 +7,7 @@ import 'package:banavanmov/providers/perdidoProvider.dart';
 import 'package:banavanmov/model/perdido.dart';
 import 'package:banavanmov/blocs/perdidoBloc.dart';
 import 'package:banavanmov/response.dart';
+import 'package:banavanmov/actualizarPerdidoJBodega.dart';
 
 class PerdidosVista extends StatefulWidget {
   @override
@@ -91,94 +92,7 @@ class _PerdidosVistaState extends State<PerdidosVista> {
           },
         ),
       ),
-      /*body: Container(
-          //padding: const EdgeInsets.all(5.0),
-          //child: filteredEmpleoList.length == 0
-          child: 1 == 0
-              ? Center(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("No hay Racimos Perdidos",
-                            style: TextStyle(
-                              fontFamily: 'Varela',
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        CircularProgressIndicator()
-                      ]),
-                )
-              : Center(
-                  child: FutureBuilder(
-                      future: pv.getAllPerdido(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<Perdido>> snapshot) {
-                        if (snapshot.hasData) {
-                          final perdidos = snapshot.data;
-                          return ListView.builder(
-                              itemCount: perdidos.length,
-                              itemBuilder: (context, i) =>
-                                  _crearItem(perdidos[i]));
-                        } else {
-                          return CircularProgressIndicator();
-                        }
-                      }),
-                )),*/
       floatingActionButton: botonPerdido(),
-    );
-  }
-
-  Widget _crearItem(Perdido p) {
-    return Card(
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Placeholder(
-              fallbackHeight: 10,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text(
-              "Lote: " + p.lote.toString(),
-              style: TextStyle(fontSize: 10),
-            ),
-            Placeholder(
-              fallbackHeight: 5,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text(
-              "Reportado por: " + p.trabajador.toString(),
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Placeholder(
-              fallbackHeight: 5,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text("Fecha de Reporte: " + p.fechaRegistro.toString()),
-            Placeholder(
-              fallbackHeight: 5,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text("Motivo de pérdida: " + p.motivo.toString()),
-            Placeholder(
-              fallbackHeight: 5,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-            Text("Color de cinta: " + p.colorCinta.toString()),
-            Placeholder(
-              fallbackHeight: 10,
-              fallbackWidth: 100,
-              color: Colors.transparent,
-            ),
-          ]),
     );
   }
 
@@ -208,13 +122,13 @@ class PerdidoList extends StatelessWidget {
     return ListView.builder(
       itemCount: perdidos.length,
       itemBuilder: (context, index) {
-        return _crearCartaPerdido(perdidos[index]);
+        return _crearCartaPerdido(context, perdidos[index]);
       },
     );
   }
 }
 
-Widget _crearCartaPerdido(Perdido p) {
+Widget _crearCartaPerdido(BuildContext context, Perdido p) {
   return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Card(
@@ -247,48 +161,23 @@ Widget _crearCartaPerdido(Perdido p) {
                   padding: const EdgeInsets.only(left: 10, top: 7.0),
                   child: Row(children: <Widget>[
                     Text("Motivo de pérdida: " + p.motivo),
-                    /*Spacer(),
-                    Padding(
-                        padding: const EdgeInsets.only(right: 0.0, top: 0.0),
-                        child: IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            print("TO DO");
-                          },
-                        ))*/
                   ])),
               Padding(
                   padding: const EdgeInsets.only(left: 10, top: 7.0),
                   child: Row(children: <Widget>[
                     Text("Color de cinta: " + p.colorCinta),
                   ])),
-              /*Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.only(left: 280.0, top: 0.0),
-                        child: IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            print("TO DO");
-                          },
-                        ))
-                  ]),*/
               Padding(
                   padding: const EdgeInsets.only(left: 280.0, top: 0.0),
                   child: IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
-                      print("TO DO");
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ActualizarPerdidoJB(p);
+                      }));
                     },
                   )),
-
-              /*Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
-                  child: Row(children: <Widget>[
-                    Text("Hora fin: " + e.fechaEntrega),
-                  ])),*/
               Placeholder(
                 fallbackHeight: 10,
                 fallbackWidth: 100,

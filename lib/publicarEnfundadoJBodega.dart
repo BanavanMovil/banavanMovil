@@ -266,7 +266,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                       child: Text("Guardar",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 15, color: Colors.white)),
-                      onPressed: uploadStatusEmpleo,
+                      onPressed: uploadStatusEnfundado,
                     ),
                   ],
                 ),
@@ -279,7 +279,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
     );
   }
 
-  void uploadStatusEmpleo() async {
+  void uploadStatusEnfundado() async {
     print(_formKey.currentState.validate());
     if (_formKey.currentState.validate()) {
       EnfundadoProvider ep = new EnfundadoProvider();

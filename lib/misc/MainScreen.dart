@@ -14,7 +14,7 @@ class MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return new SplashScreen(
-      image: new Image.asset('assets/logogif.gif'),
+      image: new Image.asset('assets/bana.png'),
       backgroundColor: Colors.white,
       styleTextUnderTheLoader: new TextStyle(),
       loaderColor: Colors.white,
@@ -29,9 +29,9 @@ class MainScreenState extends State<MainScreen> {
       gradientBackground: RadialGradient(
         radius: 1.5,
         colors: [
-          Colors.blue[100],
-          Colors.blue[300],
-          Colors.blue[500],
+          Colors.yellow[100],
+          Colors.yellow[300],
+          Colors.yellow[500],
         ],
       ),
     );

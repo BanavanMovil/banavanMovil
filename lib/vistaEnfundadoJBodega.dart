@@ -91,11 +91,11 @@ class _EnfundadoVistaState extends State<EnfundadoVista> {
           },
         ),
       ),
-      floatingActionButton: botonEmpleo(),
+      floatingActionButton: botonEnfundado(),
     );
   }
 
-  Widget botonEmpleo() {
+  Widget botonEnfundado() {
     //if (globals.isLoggedIn) {
     return FloatingActionButton(
       backgroundColor: Colors.orange,
