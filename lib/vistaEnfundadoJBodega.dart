@@ -1,3 +1,4 @@
+import 'package:banavanmov/actualizarEnfundadoJBodega.dart';
 import 'package:flutter/material.dart';
 //
 //
@@ -90,69 +91,25 @@ class _EnfundadoVistaState extends State<EnfundadoVista> {
           },
         ),
       ),
+      floatingActionButton: botonEmpleo(),
     );
   }
 
-  Widget _crearItem(Enfundado e) {
-    return Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Card(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 5.0),
-                    child: Row(children: <Widget>[
-                      Text(
-                        "Lote: " + e.lote.toString(),
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ])),
-                Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 5.0),
-                    child: Row(children: <Widget>[
-                      Text(
-                        e.trabajador.toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ])),
-                Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 5.0),
-                    child: Row(children: <Widget>[
-                      Text("Fecha de Entrega: " + e.fechaEntrega.toString()),
-                    ])),
-                Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 5.0),
-                    child: Row(children: <Widget>[
-                      Text("Número de Fundas Entregadas: " +
-                          e.fundasEntregadas.toString()),
-                      Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {
-                              print("vale aqui");
-                            }),
-                      )
-                    ])),
-                Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 5.0),
-                    child: Row(children: <Widget>[
-                      Text("Número de Fundas Recibidas: " +
-                          e.fundasRecibidas.toString()),
-                    ])),
-
-                Placeholder(
-                  fallbackHeight: 10,
-                  fallbackWidth: 100,
-                  color: Colors.transparent,
-                ),
-                //Text("Semana: " + e.semana.toString()),
-                //Text("Color de cinta: " + e.colorCinta)
-              ]),
-        ));
+  Widget botonEmpleo() {
+    //if (globals.isLoggedIn) {
+    return FloatingActionButton(
+      backgroundColor: Colors.orange,
+      onPressed: () {
+        //if (globals.isLoggedIn) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return PublicarEnfundadoJB();
+        }));
+      },
+      //},
+      child: const Icon(Icons.add),
+    );
+    //}
+    //return Row();
   }
 }
 
@@ -164,13 +121,13 @@ class EnfundadoList extends StatelessWidget {
     return ListView.builder(
       itemCount: enfundados.length,
       itemBuilder: (context, index) {
-        return _crearCartaEnfundado(enfundados[index]);
+        return _crearCartaEnfundado(context, enfundados[index]);
       },
     );
   }
 }
 
-Widget _crearCartaEnfundado(Enfundado e) {
+Widget _crearCartaEnfundado(BuildContext context, Enfundado e) {
   return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Card(
@@ -209,7 +166,10 @@ Widget _crearCartaEnfundado(Enfundado e) {
                         child: IconButton(
                           icon: Icon(Icons.edit),
                           onPressed: () {
-                            print("TO DO");
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ActualizarEnfundadoJB(e);
+                            }));
                           },
                         ))
                   ])),

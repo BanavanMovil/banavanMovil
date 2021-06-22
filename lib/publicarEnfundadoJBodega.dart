@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:banavanmov/model/enfundado.dart';
 import 'package:banavanmov/vistaEnfundadoJBodega.dart';
 import 'package:banavanmov/providers/enfundadoProvider.dart';
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 class PublicarEnfundadoJB extends StatefulWidget {
   @override
@@ -15,23 +16,29 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
   final _formKey = GlobalKey<FormState>();
   final globalKey = GlobalKey<ScaffoldState>();
   DateTime fecha_entrega;
-  var usuario = TextEditingController();
-  var semana = TextEditingController();
-  var fundas_entregadas = TextEditingController();
-  var fundas_recibidas = TextEditingController();
+  String usuario, usuarioResult;
+  String semana, semanaResult;
+  String lote, loteResult;
+  String fundas_entregadas, fundas_entregadasResult;
+  String fundas_recibidas, fundas_recibidasResult;
+  String color, colorResult;
 
-  List<String> _locations = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9'
-  ]; // Option 2
-  String _selectedLocation; // Option 2
+  @override
+  void initState() {
+    super.initState();
+    usuario = '';
+    semana = '';
+    fundas_entregadas = '';
+    fundas_recibidas = '';
+    lote = '';
+    color = '';
+    usuarioResult = '';
+    semanaResult = '';
+    fundas_entregadasResult = '';
+    fundas_recibidasResult = '';
+    loteResult = '';
+    colorResult = '';
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,53 +58,70 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
               child: Scrollbar(
                 child: ListView(
                   children: <Widget>[
-                    new ListTile(
-                        //leading: const Icon(Icons.title),
-                        title: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Usuario',
-                        //hintText: 'Ej: ',
-                      ),
-                      validator: (value) {
-                        return value.isEmpty
-                            ? 'Por favor, ingresa el usuario'
-                            : null;
-                      },
-                      onSaved: (value) {
-                        //return tfTitulo = value;
-                      },
-                    )),
-                    new ListTile(
-                        //leading: const Icon(Icons.contact_mail),
-                        title: Text(
-                      'Ingrese el número de lote',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 17, color: Colors.grey),
-                    )),
-                    new ListTile(
-                      title: DropdownButton(
-                        hint: Text(
-                            'Número de lote'), // Not necessary for Option 1
-                        value: _selectedLocation,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedLocation = newValue;
-                          });
-                        },
-                        items: _locations.map((location) {
-                          return DropdownMenuItem(
-                            child: new Text(location),
-                            value: location,
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                    Container(
+                        padding: EdgeInsets.all(10),
+                        child: DropDownFormField(
+                          titleText: 'Trabajador',
+                          hintText: 'Elija el Trabajador',
+                          value: usuario,
+                          validator: (value) {
+                            if (value == null) {
+                              return "Por favor seleccione un trabajador.";
+                            }
+                            return null;
+                          },
+                          onChanged: (newValue) {
+                            setState(() {
+                              usuario = newValue;
+                            });
+                          },
+                          onSaved: (value) {
+                            setState(() {
+                              usuario = value;
+                            });
+                          },
+                          dataSource: [
+                            {"display": "Carlos Salazar", "value": "1"},
+                            {"display": "Livingston Perez", "value": "5"}
+                          ],
+                          textField: 'display',
+                          valueField: 'value',
+                        )),
+                    Container(
+                        padding: EdgeInsets.all(10),
+                        child: DropDownFormField(
+                          titleText: 'Lote',
+                          hintText: 'Elija el Lote',
+                          value: lote,
+                          validator: (value) {
+                            if (value == null) {
+                              return "Por favor seleccione un lote";
+                            }
+                            return null;
+                          },
+                          onChanged: (newValue) {
+                            setState(() {
+                              lote = newValue;
+                            });
+                          },
+                          onSaved: (value) {
+                            setState(() {
+                              lote = value;
+                            });
+                          },
+                          dataSource: [
+                            {"display": "1", "value": "1"},
+                            {"display": "2", "value": "2"}
+                          ],
+                          textField: 'display',
+                          valueField: 'value',
+                        )),
                     new ListTile(
                         //leading: const Icon(Icons.star),
                         title: Row(
                       children: <Widget>[
                         Text(fecha_entrega == null
-                            ? "No ha seleccionado fecha de entrega"
+                            ? "No ha seleccionado fecha"
                             : fecha_entrega.toString()),
                         Spacer(),
                         ElevatedButton(
@@ -118,28 +142,57 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                             child: Icon(Icons.date_range))
                       ],
                     )),
-                    new ListTile(
-                      //leading: const Icon(Icons.monetization_on),
-                      title: TextFormField(
-                          //controller: _controller,
-                          keyboardType: TextInputType.number,
-                          controller: semana,
-                          inputFormatters: <TextInputFormatter>[
-                            WhitelistingTextInputFormatter.digitsOnly
+                    Container(
+                        padding: EdgeInsets.all(10),
+                        child: DropDownFormField(
+                          titleText: 'Semana',
+                          hintText: 'Elija la Semana',
+                          value: semana,
+                          validator: (value) {
+                            if (value == null) {
+                              return "Por favor elija una semana.";
+                            }
+                            return null;
+                          },
+                          onChanged: (newValue) {
+                            setState(() {
+                              semana = newValue;
+                            });
+                          },
+                          onSaved: (value) {
+                            setState(() {
+                              semana = value;
+                            });
+                          },
+                          dataSource: [
+                            {"display": "52", "value": "1"},
+                            {"display": "54", "value": "6"}
                           ],
-                          decoration: InputDecoration(
-                            labelText: "Número de Semana",
-                            //hintText: "whatever you want",
-                            //icon: Icon(Icons.phone_iphone)
-                          )),
-                    ),
+                          textField: 'display',
+                          valueField: 'value',
+                        )),
                     new ListTile(
                       //leading: const Icon(Icons.supervisor_account),
 
                       title: TextFormField(
                           //controller: _controller,
                           keyboardType: TextInputType.number,
-                          controller: fundas_entregadas,
+                          onChanged: (newValue) {
+                            setState(() {
+                              fundas_entregadas = newValue;
+                            });
+                          },
+                          onSaved: (value) {
+                            setState(() {
+                              fundas_entregadas = value;
+                            });
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Ingrese un valor.";
+                            }
+                            return null;
+                          },
                           inputFormatters: <TextInputFormatter>[
                             WhitelistingTextInputFormatter.digitsOnly
                           ],
@@ -155,7 +208,22 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                       title: TextFormField(
                           //controller: _controller,
                           keyboardType: TextInputType.number,
-                          controller: fundas_recibidas,
+                          onChanged: (newValue) {
+                            setState(() {
+                              fundas_recibidas = newValue;
+                            });
+                          },
+                          onSaved: (value) {
+                            setState(() {
+                              fundas_recibidas = value;
+                            });
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Por favor ingrese un valor.";
+                            }
+                            return null;
+                          },
                           inputFormatters: <TextInputFormatter>[
                             WhitelistingTextInputFormatter.digitsOnly
                           ],
@@ -165,13 +233,35 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                             //icon: Icon(Icons.phone_iphone)
                           )),
                     ),
-                    new ListTile(
-                        //leading: const Icon(Icons.contact_mail),
-                        title: Text(
-                      'Seleccione el color de cinta',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 17, color: Colors.grey),
-                    )),
+                    Container(
+                        padding: EdgeInsets.all(10),
+                        child: DropDownFormField(
+                          titleText: 'Color de cinta',
+                          hintText: 'Elija el Color',
+                          value: color,
+                          validator: (value) {
+                            if (value == null) {
+                              return "Por favor elija un color.";
+                            }
+                            return null;
+                          },
+                          onChanged: (newValue) {
+                            setState(() {
+                              color = newValue;
+                            });
+                          },
+                          onSaved: (value) {
+                            setState(() {
+                              color = value;
+                            });
+                          },
+                          dataSource: [
+                            {"display": "Rojo", "value": "6546"},
+                            {"display": "Verde", "value": "5416"}
+                          ],
+                          textField: 'display',
+                          valueField: 'value',
+                        )),
                     new ElevatedButton(
                       child: Text("Guardar",
                           textAlign: TextAlign.center,
@@ -189,49 +279,26 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
     );
   }
 
-  //Valida que esté todos los campos llenos
-  /*bool validarForm() {
-    final form = _formKey.currentState;
-    if (form.validate()) {
-      // Si el formulario es válido, queremos mostrar un Snackbar
-      form.save();
-      final snackBar = SnackBar(content: Text('Empleo Publicado'));
-      globalKey.currentState.showSnackBar(snackBar);
-      return true;
-    }
-    return false;
-  }*/
-
   void uploadStatusEmpleo() async {
-    //if (validarForm()) {
-    // guardarToDatabase();
-    // Navigator.pop(context);
+    print(_formKey.currentState.validate());
     if (_formKey.currentState.validate()) {
       EnfundadoProvider ep = new EnfundadoProvider();
       //ep.postEnfundado(e);
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Enfundado Creado')));
     }
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+    /*Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
       //return Footer();
       return EnfundadoVista();
-    }));
+    }));*/
     // }
   }
 
-  TextFormField textFormFieldFunction(
-      String labelText, String hintText, String tfTexto, String msgError) {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: labelText,
-        hintText: hintText,
-      ),
-      validator: (value) {
-        return value.isEmpty ? msgError : null;
-      },
-      onSaved: (value) {
-        return tfTexto = value;
-      },
-    );
+  cargarTrabajadores() {
+    //TODO
+  }
+
+  cargarLotes() {
+    //TODO
   }
 }

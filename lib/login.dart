@@ -1,5 +1,9 @@
 //https://flutter-es.io/docs/cookbook/navigation/navigation-basics
+import 'dart:convert';
+
 import 'package:banavanmov/mainJCampo.dart';
+import 'package:banavanmov/mainJBodega.dart';
+import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:banavanmov/mainGeneral.dart';
 
@@ -18,7 +22,9 @@ class _LoginState extends State<Login> {
   final _formLogin = GlobalKey<FormState>();
   //SingingCharacter _character = SingingCharacter.empleo;
   final globalKey = GlobalKey<ScaffoldState>();
-
+  var userController = TextEditingController();
+  var passController = TextEditingController();
+  bool isLoading = false;
   //List<Usuario> usuarioList = [];
 
   @override
@@ -26,12 +32,10 @@ class _LoginState extends State<Login> {
     super.initState();
   }
 
-  final myController = TextEditingController();
-  final myControllerCon = TextEditingController();
   @override
   void dispose() {
-    myController.dispose();
-    myControllerCon.dispose();
+    userController.dispose();
+    passController.dispose();
     super.dispose();
   }
 
@@ -81,7 +85,7 @@ class _LoginState extends State<Login> {
                     new ListTile(
                         //leading: const Icon(Icons.person),
                         title: TextFormField(
-                      controller: myController,
+                      controller: userController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Usuario',
@@ -98,7 +102,7 @@ class _LoginState extends State<Login> {
                     new ListTile(
                       //leading: const Icon(Icons.lock),
                       title: TextFormField(
-                        controller: myControllerCon,
+                        controller: passController,
                         //keyboardType: TextInputType.multiline,
                         obscureText: true,
                         //maxLines: null,
@@ -116,13 +120,13 @@ class _LoginState extends State<Login> {
                     ),
                     SizedBox(height: 20.0),
                     new RaisedButton(
-                      disabledColor: Colors.white,
-                      child: Text("Ingresar",
+                      disabledColor: Colors.black,
+                      child: Text(isLoading ? 'Cargando' : "Ingresar",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 15, color: Colors.white)),
                       splashColor: Colors.white,
                       color: Colors.blueGrey,
-                      onPressed: ingresarMain,
+                      onPressed: isLoading ? null : ingresarMain,
                     ),
                     SizedBox(height: 10.0),
                   ],
@@ -146,7 +150,20 @@ class _LoginState extends State<Login> {
     return false;
   }
 
-  _showDialogConfirm(BuildContext ctx) {
+  _showErrorMsg(msg) {
+    final snackBar = SnackBar(
+      content: Text(msg),
+      action: SnackBarAction(
+        label: 'Close',
+        onPressed: () {
+          // Some code to undo the change!
+        },
+      ),
+    );
+    Scaffold.of(context).showSnackBar(snackBar);
+  }
+
+  _showDialogConfirm(BuildContext ctx, dynamic body) {
     showDialog(
         context: ctx,
         builder: (context) {
@@ -160,7 +177,7 @@ class _LoginState extends State<Login> {
                 color: Colors.transparent,
               ),
               //Center(child: Text("")),
-              Center(child: Text("Bienvenido: " + myController.text)),
+              Center(child: Text("Bienvenido: " + userController.text)),
 
               Placeholder(
                 fallbackHeight: 10,
@@ -172,37 +189,47 @@ class _LoginState extends State<Login> {
                   child: RaisedButton(
                       child: Text("Ok"),
                       onPressed: () {
-                        myController.clear();
-                        myControllerCon.clear();
+                        userController.clear();
+                        passController.clear();
                         Navigator.pop(ctx);
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          //globals.isLoggedIn = true;
-                          //return MainJCampo();
-                          //return JBodegaVista();
-
-                          return GeneralVista();
-                        }));
+                        if (body['rol'] == 'JC') {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return MainJCampo();
+                          }));
+                        } else {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return JBodegaVista();
+                          }));
+                        }
+                        ;
                       })),
             ],
           );
         });
   }
 
-  void ingresarMain() {
+  void ingresarMain() async {
     if (validarForm()) {
-      _showDialogConfirm(context);
-      //if (validarLogin() == "true") {
-      //myController.clear();
-      //myControllerCon.clear();
-      //Navigator.push(context, MaterialPageRoute(builder: (context) {
-      //globals.isLoggedIn = true;
-      //return MainJCampo();
-      //return JBodegaVista();
-      //  return GeneralVista();
-      //}));
-      //} else {
-      //  _showDialog(context);
+      setState(() {
+        isLoading = true;
+      });
+
+      var data = {'user': userController.text, 'pass': passController.text};
+
+      var res = await LoginProvider().login(data);
+      var body = jsonDecode(res.body);
+
+      if (body['message'].toString().isNotEmpty) {
+        print('Login exitoso');
+        _showDialogConfirm(context, body);
+      } else {
+        _showErrorMsg(body['message']);
+      }
+      setState(() {
+        isLoading = false;
+      });
     }
     //}
   }
