@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:banavanmov/response.dart';
 import 'package:banavanmov/repositories/enfundadoRepository.dart';
 import 'package:banavanmov/model/enfundado.dart';
+import 'package:sentry/sentry.dart';
 
 class EnfundadoBloc {
   EnfundadoRepository enfundadoRepository;
@@ -23,7 +24,11 @@ class EnfundadoBloc {
       List<Enfundado> enfundados =
           await enfundadoRepository.fetchAllEnfundados();
       movieListSink.add(Response.completed(enfundados));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      await Sentry.captureException(
+        e,
+        stackTrace: stackTrace,
+      );
       movieListSink.add(Response.error(e.toString()));
       print(e);
     }
