@@ -35,7 +35,7 @@ class EnfundadoProvider {
       final resp = await http.get(baseUrl);
       responseJson = _response(resp);
     } on SocketException {
-      throw FetchDataException('No Internet connection');
+      throw FetchDataException('Sin Conexion');
     }
     return responseJson;
   }
