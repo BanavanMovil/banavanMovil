@@ -3,6 +3,7 @@ import 'package:banavanmov/providers/perdidoProvider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:banavanmov/vistaPerdidosJBodega.dart';
 
 class ActualizarPerdidoJB extends StatefulWidget {
   Perdido perdido;
@@ -57,6 +58,10 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
       PerdidoProvider pp = new PerdidoProvider();
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Perdido Actualizado')));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        //return Footer();
+        return PerdidosVista();
+      }));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('No hay cambios en los campos')));
@@ -101,8 +106,14 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                           });
                         },
                         dataSource: [
-                          {"display": "52", "value": "1"},
-                          {"display": "54", "value": "6"}
+                          {
+                            "display": "Carlos Salazar",
+                            "value": "Carlos Salazar"
+                          },
+                          {
+                            "display": "Livingston Perez",
+                            "value": "Livingston Perez"
+                          }
                         ],
                         textField: 'display',
                         valueField: 'value',
@@ -131,7 +142,9 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                         },
                         dataSource: [
                           {"display": "1", "value": "1"},
-                          {"display": "2", "value": "2"}
+                          {"display": "2", "value": "2"},
+                          {"display": "3", "value": "3"},
+                          {"display": "4", "value": "4"}
                         ],
                         textField: 'display',
                         valueField: 'value',
@@ -192,8 +205,12 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                           });
                         },
                         dataSource: [
-                          {"display": "52", "value": "1"},
-                          {"display": "54", "value": "6"}
+                          {"display": "52", "value": "52"},
+                          {"display": "53", "value": "53"},
+                          {"display": "54", "value": "54"},
+                          {"display": "55", "value": "55"},
+                          {"display": "56", "value": "56"},
+                          {"display": "57", "value": "57"}
                         ],
                         textField: 'display',
                         valueField: 'value',
@@ -215,8 +232,18 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                           });
                         },
                         dataSource: [
-                          {"display": "52", "value": "1"},
-                          {"display": "54", "value": "6"}
+                          {
+                            "display": "Mal Apuntalado",
+                            "value": "Mal Apuntalado"
+                          },
+                          {
+                            "display": "Eliminación de planta",
+                            "value": "Eliminación de planta"
+                          },
+                          {
+                            "display": "Caido del fruto",
+                            "value": "Caida del fruto"
+                          }
                         ],
                         textField: 'display',
                         valueField: 'value',

@@ -3,6 +3,7 @@ import 'package:banavanmov/providers/enfundadoProvider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:banavanmov/vistaEnfundadoJBodega.dart';
 
 class ActualizarEnfundadoJB extends StatefulWidget {
   Enfundado enfunde;
@@ -45,6 +46,7 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
     fundas_recibidasResult = '';
     loteResult = '';
     colorResult = '';
+    trabajadorResult = '';
   }
 
   validarCampos() {
@@ -52,16 +54,27 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
         trabajadorResult != null ||
         semanaResult != null ||
         fundas_entregadasResult != null ||
-        fundas_recibidas != null ||
+        fundas_recibidasResult != null ||
         fecha_entrega != null;
   }
 
   _saveForm() {
     print(validarCampos());
+    //print(trabajadorResult);
+    //print(semanaResult);
+    //print(fundas_entregadasResult);
+    //print(fundas_recibidasResult);
+    //print(fecha_entrega);
+
     if (validarCampos()) {
       EnfundadoProvider ep = new EnfundadoProvider();
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Enfundado Actualizado')));
+      //trabajadorResult = "null";
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        //return Footer();
+        return EnfundadoVista();
+      }));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('No hay cambios en los campos')));
@@ -95,20 +108,26 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                       child: DropDownFormField(
                         titleText: 'Trabajador Actual: ' + enfundado.trabajador,
                         hintText: 'Elija un Nuevo Trabajador',
-                        value: trabajador,
+                        value: trabajadorResult,
                         onChanged: (newValue) {
                           setState(() {
-                            trabajador = newValue;
+                            trabajadorResult = newValue;
                           });
                         },
                         onSaved: (value) {
                           setState(() {
-                            trabajador = value;
+                            trabajadorResult = value;
                           });
                         },
                         dataSource: [
-                          {"display": "52", "value": "1"},
-                          {"display": "54", "value": "6"}
+                          {
+                            "display": "Carlos Salazar",
+                            "value": "Carlos Salazar"
+                          },
+                          {
+                            "display": "Livingston Perez",
+                            "value": "Livingston Perez"
+                          }
                         ],
                         textField: 'display',
                         valueField: 'value',
@@ -118,7 +137,7 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                       child: DropDownFormField(
                         titleText: 'Lote Actual: ' + enfundado.lote.toString(),
                         hintText: 'Elija el Lote',
-                        value: lote,
+                        value: loteResult,
                         validator: (value) {
                           if (value == null) {
                             return "Por favor seleccione un lote";
@@ -127,17 +146,19 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                         },
                         onChanged: (newValue) {
                           setState(() {
-                            lote = newValue;
+                            loteResult = newValue;
                           });
                         },
                         onSaved: (value) {
                           setState(() {
-                            lote = value;
+                            loteResult = value;
                           });
                         },
                         dataSource: [
                           {"display": "1", "value": "1"},
-                          {"display": "2", "value": "2"}
+                          {"display": "2", "value": "2"},
+                          {"display": "3", "value": "3"},
+                          {"display": "4", "value": "4"}
                         ],
                         textField: 'display',
                         valueField: 'value',
@@ -180,7 +201,7 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                         titleText:
                             'Semana Actual: ' + enfundado.semana.toString(),
                         hintText: 'Elija la Semana',
-                        value: semana,
+                        value: semanaResult,
                         validator: (value) {
                           if (value == null) {
                             return "Por favor elija una semana.";
@@ -189,17 +210,21 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                         },
                         onChanged: (newValue) {
                           setState(() {
-                            semana = newValue;
+                            semanaResult = newValue;
                           });
                         },
                         onSaved: (value) {
                           setState(() {
-                            semana = value;
+                            semanaResult = value;
                           });
                         },
                         dataSource: [
-                          {"display": "52", "value": "1"},
-                          {"display": "54", "value": "6"}
+                          {"display": "52", "value": "52"},
+                          {"display": "53", "value": "53"},
+                          {"display": "54", "value": "54"},
+                          {"display": "55", "value": "55"},
+                          {"display": "56", "value": "56"},
+                          {"display": "57", "value": "57"}
                         ],
                         textField: 'display',
                         valueField: 'value',
@@ -220,12 +245,12 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                           keyboardType: TextInputType.number,
                           onChanged: (newValue) {
                             setState(() {
-                              fundas_recibidas = newValue;
+                              fundas_recibidasResult = newValue;
                             });
                           },
                           onSaved: (value) {
                             setState(() {
-                              fundas_recibidas = value;
+                              fundas_recibidasResult = value;
                             });
                           },
                           decoration: InputDecoration(
@@ -249,12 +274,12 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                           keyboardType: TextInputType.number,
                           onChanged: (newValue) {
                             setState(() {
-                              fundas_entregadas = newValue;
+                              fundas_entregadasResult = newValue;
                             });
                           },
                           onSaved: (value) {
                             setState(() {
-                              fundas_entregadas = value;
+                              fundas_entregadasResult = value;
                             });
                           },
                           decoration: InputDecoration(
