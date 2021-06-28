@@ -7,8 +7,8 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="banavanmov"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Banavan"
+        android:icon="@mipmap/bana">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

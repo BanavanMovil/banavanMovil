@@ -133,8 +133,12 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                             });
                           },
                           dataSource: [
-                            {"display": "52", "value": "1"},
-                            {"display": "54", "value": "6"}
+                            {"display": "52", "value": "52"},
+                            {"display": "53", "value": "53"},
+                            {"display": "54", "value": "54"},
+                            {"display": "55", "value": "55"},
+                            {"display": "56", "value": "56"},
+                            {"display": "57", "value": "57"}
                           ],
                           textField: 'display',
                           valueField: 'value',
@@ -163,7 +167,9 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                           },
                           dataSource: [
                             {"display": "1", "value": "1"},
-                            {"display": "2", "value": "2"}
+                            {"display": "2", "value": "2"},
+                            {"display": "3", "value": "3"},
+                            {"display": "4", "value": "4"}
                           ],
                           textField: 'display',
                           valueField: 'value',
@@ -191,8 +197,10 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                             });
                           },
                           dataSource: [
-                            {"display": "Rojo", "value": "6546"},
-                            {"display": "Verde", "value": "5416"}
+                            {"display": "Rojo", "value": "Rojo"},
+                            {"display": "Verde", "value": "Verde"},
+                            {"display": "Azul", "value": "Azul"},
+                            {"display": "Amarillo", "value": "Amarillo"}
                           ],
                           textField: 'display',
                           valueField: 'value',
@@ -220,8 +228,18 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                             });
                           },
                           dataSource: [
-                            {"display": "Rojo", "value": "6546"},
-                            {"display": "Verde", "value": "5416"}
+                            {
+                              "display": "Mal Apuntalado",
+                              "value": "Mal Apuntalado"
+                            },
+                            {
+                              "display": "Eliminación de planta",
+                              "value": "Eliminación de planta"
+                            },
+                            {
+                              "display": "Caido del fruto",
+                              "value": "Caida del fruto"
+                            }
                           ],
                           textField: 'display',
                           valueField: 'value',

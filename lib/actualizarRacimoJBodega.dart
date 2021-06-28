@@ -3,6 +3,7 @@ import 'package:banavanmov/providers/cosechadoProvider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:banavanmov/vistaRacimosJBodega.dart';
 
 class ActualizarCosechadoJB extends StatefulWidget {
   Cosechado cosechado;
@@ -52,6 +53,10 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
       CosechadoProvider cp = new CosechadoProvider();
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Cosechado Actualizado')));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        //return Footer();
+        return RacimosVista();
+      }));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('No hay cambios en los campos')));
@@ -104,7 +109,9 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                         },
                         dataSource: [
                           {"display": "1", "value": "1"},
-                          {"display": "2", "value": "2"}
+                          {"display": "2", "value": "2"},
+                          {"display": "3", "value": "3"},
+                          {"display": "4", "value": "4"}
                         ],
                         textField: 'display',
                         valueField: 'value',
@@ -133,8 +140,12 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                           });
                         },
                         dataSource: [
-                          {"display": "52", "value": "1"},
-                          {"display": "54", "value": "6"}
+                          {"display": "52", "value": "52"},
+                          {"display": "53", "value": "53"},
+                          {"display": "54", "value": "54"},
+                          {"display": "55", "value": "55"},
+                          {"display": "56", "value": "56"},
+                          {"display": "57", "value": "57"}
                         ],
                         textField: 'display',
                         valueField: 'value',
