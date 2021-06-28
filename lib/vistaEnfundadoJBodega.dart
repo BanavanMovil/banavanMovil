@@ -139,7 +139,7 @@ Widget _crearCartaEnfundado(BuildContext context, Enfundado e) {
                   padding: const EdgeInsets.only(left: 10, top: 5.0),
                   child: Row(children: <Widget>[
                     Text(
-                      "Lote: " + e.lote.toString(),
+                      "Lote: " + e.lote_id.toString(),
                       style: TextStyle(fontSize: 10),
                     ),
                   ])),
@@ -147,19 +147,19 @@ Widget _crearCartaEnfundado(BuildContext context, Enfundado e) {
                   padding: const EdgeInsets.only(left: 10, top: 5.0),
                   child: Row(children: <Widget>[
                     Text(
-                      e.trabajador,
+                      e.user_id.toString(),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ])),
               Padding(
                   padding: const EdgeInsets.only(left: 10, top: 5.0),
                   child: Row(children: <Widget>[
-                    Text("Semana: " + e.semana.toString()),
+                    Text("Semana: " + e.semana_id.toString()),
                   ])),
               Padding(
                   padding: const EdgeInsets.only(left: 10, top: 5.0),
                   child: Row(children: <Widget>[
-                    Text("Color de Cinta: " + e.colorCinta),
+                    Text("Color de Cinta: " + e.semana_id.toString()),
                     Spacer(),
                     Padding(
                         padding: const EdgeInsets.only(right: 10.0),
@@ -176,7 +176,7 @@ Widget _crearCartaEnfundado(BuildContext context, Enfundado e) {
               Padding(
                   padding: const EdgeInsets.only(left: 10, top: 5.0),
                   child: Row(children: <Widget>[
-                    Text("Hora fin: " + e.fechaEntrega),
+                    Text("Hora fin: " + e.fecha),
                   ])),
               Placeholder(
                 fallbackHeight: 10,

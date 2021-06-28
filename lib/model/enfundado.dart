@@ -16,42 +16,34 @@ class EnfundadoResponse {
 
 class Enfundado {
   int id;
-  int lote;
-  int semana;
-  String colorCinta;
-  String trabajador;
-  String fechaEntrega;
-  int fundasRecibidas;
-  int fundasEntregadas;
+  int lote_id;
+  int semana_id;
+  String user_id;
+  String fecha;
+  int fundas_entregadas;
 
   Enfundado(
       {this.id,
-      this.lote,
-      this.semana,
-      this.colorCinta,
-      this.trabajador,
-      this.fechaEntrega,
-      this.fundasRecibidas,
-      this.fundasEntregadas});
+      this.lote_id,
+      this.semana_id,
+      this.user_id,
+      this.fecha,
+      this.fundas_entregadas});
 
   factory Enfundado.fromJson(Map<String, dynamic> json) => Enfundado(
       id: json['id'],
-      lote: json['lote'],
-      semana: json['semana'],
-      colorCinta: json['colorCinta'],
-      trabajador: json['nombre'],
-      fechaEntrega: json['fechaEntrega'],
-      fundasRecibidas: json['fundasRecibidas'],
-      fundasEntregadas: json['fundasEntregadas']);
+      lote_id: json['lote_id'],
+      semana_id: json['semana_id'],
+      user_id: json['user_id'],
+      fecha: json['fecha'],
+      fundas_entregadas: json['fundas_entregadas']);
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'lote': lote,
-        'semana': semana,
-        'colorCinta': colorCinta,
-        'nombre': trabajador,
-        'fechaEntrega': fechaEntrega,
-        'fundasRecibidas': fundasRecibidas,
-        'fundasEntregadas': fundasEntregadas
+        'lote_id': lote_id,
+        'semana_id': semana_id,
+        'user_id': user_id,
+        'fecha': fecha,
+        'fundas_entregadas': fundas_entregadas,
       };
 }

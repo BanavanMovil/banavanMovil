@@ -27,7 +27,7 @@ class _HistorialJCState extends State<HistorialJC> {
       body: RefreshIndicator(
         onRefresh: () => _bloc.fetchAllDailyInfo(),
         child: StreamBuilder<Response<List<JefeCampoModel>>>(
-          stream: _bloc.movieListStream,
+          stream: _bloc.jcListStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               switch (snapshot.data.status) {

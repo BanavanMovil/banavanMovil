@@ -7,9 +7,9 @@ class JCampoBloc {
   JCampoRepository jCampoRepository;
   StreamController jCListController;
 
-  StreamSink<Response<List<JefeCampoModel>>> get movieListSink =>
+  StreamSink<Response<List<JefeCampoModel>>> get jcListSink =>
       jCListController.sink;
-  Stream<Response<List<JefeCampoModel>>> get movieListStream =>
+  Stream<Response<List<JefeCampoModel>>> get jcListStream =>
       jCListController.stream;
   JCampoBloc() {
     jCListController = StreamController<Response<List<JefeCampoModel>>>();
@@ -18,12 +18,12 @@ class JCampoBloc {
   }
 
   fetchAllDailyInfo() async {
-    movieListSink.add(Response.loading('Fetching Data of Workers'));
+    jcListSink.add(Response.loading('Fetching Data of Workers'));
     try {
       List<JefeCampoModel> movies = await jCampoRepository.fetchAllDailyInfo();
-      movieListSink.add(Response.completed(movies));
+      jcListSink.add(Response.completed(movies));
     } catch (e) {
-      movieListSink.add(Response.error(e.toString()));
+      jcListSink.add(Response.error(e.toString()));
       print(e);
     }
   }

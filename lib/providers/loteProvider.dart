@@ -1,33 +1,12 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:async';
 import 'dart:convert';
-import 'package:banavanmov/model/enfundado.dart';
 import 'package:banavanmov/exception/customException.dart';
+import 'package:banavanmov/model/lote.dart';
 
-class EnfundadoProvider {
-  final String baseUrl = 'http://demo7764382.mockable.io/enfundados/';
-
-  //POST
-  Future<bool> postEnfundado(Enfundado enfundado) async {
-    final response = await http.post(baseUrl, body: enfundado.toJson());
-    final decodeData = json.decode(response.body);
-
-    print(decodeData);
-    return true;
-  }
-
-  //PUT
-  Future<bool> updateEnfundado(Enfundado enfundado) async {
-    final response = await http.put(baseUrl + enfundado.id.toString(),
-        body: enfundado.toJson());
-    final decodeData = json.decode(response.body);
-
-    print(decodeData);
-    return true;
-  }
+class LoteProvider {
+  final String baseUrl = 'https://api.jsonbin.io/b/60b12f05a5cd4a5576a9933e';
 
   Future<List<dynamic>> getAll() async {
     var responseJson;

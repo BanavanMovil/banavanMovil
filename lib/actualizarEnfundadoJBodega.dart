@@ -19,13 +19,11 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
   Enfundado enfundado;
   final _formKey = GlobalKey<FormState>();
   final globalKey = GlobalKey<ScaffoldState>();
-  String trabajador, trabajadorResult;
+  String user, userResult;
   String lote, loteResult;
-  DateTime fecha_entrega;
+  DateTime fecha;
   String semana, semanaResult;
-  String fundas_recibidas, fundas_recibidasResult;
   String fundas_entregadas, fundas_entregadasResult;
-  String color, colorResult;
   ActualizarEnfundadoJBState(Enfundado enfunde) {
     this.enfundado = enfunde;
   }
@@ -33,27 +31,22 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
   @override
   void initState() {
     super.initState();
-    trabajador = '';
+    user = '';
     semana = '';
     fundas_entregadas = '';
-    fundas_recibidas = '';
     lote = '';
-    color = '';
-    trabajador = '';
+    userResult = '';
     semanaResult = '';
     fundas_entregadasResult = '';
-    fundas_recibidasResult = '';
     loteResult = '';
-    colorResult = '';
   }
 
   validarCampos() {
     return loteResult.isNotEmpty ||
-        trabajadorResult != null ||
+        userResult != null ||
         semanaResult != null ||
         fundas_entregadasResult != null ||
-        fundas_recibidas != null ||
-        fecha_entrega != null;
+        fecha != null;
   }
 
   _saveForm() {
@@ -93,17 +86,18 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                   Container(
                       padding: EdgeInsets.all(10),
                       child: DropDownFormField(
-                        titleText: 'Trabajador Actual: ' + enfundado.trabajador,
+                        titleText: 'Trabajador Actual: ' +
+                            enfundado.user_id.toString(),
                         hintText: 'Elija un Nuevo Trabajador',
-                        value: trabajador,
+                        value: user,
                         onChanged: (newValue) {
                           setState(() {
-                            trabajador = newValue;
+                            user = newValue;
                           });
                         },
                         onSaved: (value) {
                           setState(() {
-                            trabajador = value;
+                            user = value;
                           });
                         },
                         dataSource: [
@@ -116,7 +110,8 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                   Container(
                       padding: EdgeInsets.all(10),
                       child: DropDownFormField(
-                        titleText: 'Lote Actual: ' + enfundado.lote.toString(),
+                        titleText:
+                            'Lote Actual: ' + enfundado.lote_id.toString(),
                         hintText: 'Elija el Lote',
                         value: lote,
                         validator: (value) {
@@ -145,26 +140,25 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                   Container(
                     child: Column(
                       children: <Widget>[
-                        Text("Fecha de Enfundado Actual: " +
-                            enfundado.fechaEntrega),
+                        Text("Fecha de Enfundado Actual: " + enfundado.fecha),
                         Row(
                           children: <Widget>[
-                            Text(fecha_entrega == null
+                            Text(fecha == null
                                 ? "No ha seleccionado fecha"
-                                : fecha_entrega.toString()),
+                                : fecha.toString()),
                             Spacer(),
                             ElevatedButton(
                                 onPressed: () {
                                   showDatePicker(
                                           context: context,
-                                          initialDate: fecha_entrega == null
+                                          initialDate: fecha == null
                                               ? DateTime.now()
-                                              : fecha_entrega,
+                                              : fecha,
                                           firstDate: DateTime(2001),
                                           lastDate: DateTime(2222))
                                       .then((date) {
                                     setState(() {
-                                      fecha_entrega = date;
+                                      fecha = date;
                                     });
                                   });
                                 },
@@ -178,7 +172,7 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                       padding: EdgeInsets.all(10),
                       child: DropDownFormField(
                         titleText:
-                            'Semana Actual: ' + enfundado.semana.toString(),
+                            'Semana Actual: ' + enfundado.semana_id.toString(),
                         hintText: 'Elija la Semana',
                         value: semana,
                         validator: (value) {
@@ -209,37 +203,8 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                     Padding(
                       padding: EdgeInsets.only(left: 5.0),
                       child: Text(
-                        "Fundas Recibidas Actual: " +
-                            enfundado.fundasRecibidas.toString(),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                    new ListTile(
-                      title: TextFormField(
-                          //controller: _controller,
-                          keyboardType: TextInputType.number,
-                          onChanged: (newValue) {
-                            setState(() {
-                              fundas_recibidas = newValue;
-                            });
-                          },
-                          onSaved: (value) {
-                            setState(() {
-                              fundas_recibidas = value;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            labelText: "Número de Fundas Recibidas",
-                          )),
-                    ),
-                  ])),
-                  Container(
-                      child: Column(children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 5.0),
-                      child: Text(
                         "Fundas Entregadas Actual: " +
-                            enfundado.fundasEntregadas.toString(),
+                            enfundado.fundas_entregadas.toString(),
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -274,7 +239,6 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
           ),
         ),
       ),
-      //backgroundColor: Colors.green,
     );
   }
 }

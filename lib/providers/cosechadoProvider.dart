@@ -28,21 +28,6 @@ class CosechadoProvider {
     return true;
   }
 
-  /*Future<List<Cosechado>> getAllCosechado() async {
-    final response = await http.get(url);
-    final List<dynamic> decodedData = json.decode(response.body);
-    final List<Cosechado> cosechados = new List();
-
-    if (decodedData == null) return [];
-
-    decodedData.forEach((dona) {
-      final cosecha = Cosechado.fromJson(dona);
-      cosechados.add(cosecha);
-      //print(cosecha.id.toString() + ' ' + cosecha.colorCinta);
-    });
-    return cosechados;
-  }*/
-
   Future<List<dynamic>> getAll() async {
     var responseJson;
     try {
