@@ -47,7 +47,7 @@ class SolicitudJCState extends State<SolicitudJC> {
             style: TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.white, fontSize: 15),
           ),
-          backgroundColor: Colors.blue.shade600,
+          backgroundColor: Colors.orange,
           centerTitle: true,
         ),
         body: Center(

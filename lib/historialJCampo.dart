@@ -22,7 +22,7 @@ class _HistorialJCState extends State<HistorialJC> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Historial de Cosecha'),
-        backgroundColor: Colors.blue.shade200,
+        backgroundColor: Colors.orange,
       ),
       body: RefreshIndicator(
         onRefresh: () => _bloc.fetchAllDailyInfo(),

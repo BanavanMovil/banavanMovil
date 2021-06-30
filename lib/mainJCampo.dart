@@ -28,7 +28,7 @@ class _MainJCampoState extends State<MainJCampo> {
         key: globalKey,
         appBar: AppBar(
           title: Text('Jefe de Campo'),
-          backgroundColor: Colors.blue.shade600,
+          backgroundColor: Colors.orange,
           centerTitle: true,
         ),
         body: Padding(

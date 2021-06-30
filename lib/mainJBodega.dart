@@ -42,13 +42,13 @@ class _JBodegaVista extends State<JBodegaVista> {
                     fallbackWidth: 100,
                     color: Colors.transparent,
                   ),
-                  new RaisedButton(
-                    disabledColor: Colors.white,
+                  new ElevatedButton(
+                    //disabledColor: Colors.white,
                     child: Text("Enfundado",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15, color: Colors.white)),
-                    splashColor: Colors.white,
-                    color: Colors.blueGrey,
+                    //splashColor: Colors.white,
+                    //color: Colors.blueGrey,
                     onPressed: ingresarEnfundado,
                   ),
                   Placeholder(
@@ -56,13 +56,13 @@ class _JBodegaVista extends State<JBodegaVista> {
                     fallbackWidth: 100,
                     color: Colors.transparent,
                   ),
-                  new RaisedButton(
-                    disabledColor: Colors.white,
+                  new ElevatedButton(
+                    //disabledColor: Colors.white,
                     child: Text("Racimos Cosechados",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15, color: Colors.white)),
-                    splashColor: Colors.white,
-                    color: Colors.blueGrey,
+                    //splashColor: Colors.white,
+                    //color: Colors.blueGrey,
                     onPressed: ingresarRacimos,
                   ),
                   Placeholder(
@@ -70,13 +70,13 @@ class _JBodegaVista extends State<JBodegaVista> {
                     fallbackWidth: 100,
                     color: Colors.transparent,
                   ),
-                  new RaisedButton(
-                    disabledColor: Colors.white,
+                  new ElevatedButton(
+                    //disabledColor: Colors.white,
                     child: Text("Racimos Perdidos",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15, color: Colors.white)),
-                    splashColor: Colors.white,
-                    color: Colors.blueGrey,
+                    //splashColor: Colors.white,
+                    //color: Colors.blueGrey,
                     onPressed: ingresarPerdidos,
                   ),
                   SizedBox(height: 10.0),

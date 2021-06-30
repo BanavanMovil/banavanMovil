@@ -98,7 +98,7 @@ class _RacimosVistaState extends State<RacimosVista> {
   Widget botonCosechado() {
     //if (globals.isLoggedIn) {
     return FloatingActionButton(
-      backgroundColor: Colors.blue[900],
+      backgroundColor: Colors.orange,
       onPressed: () {
         //if (globals.isLoggedIn) {
         Navigator.push(context, MaterialPageRoute(builder: (context) {

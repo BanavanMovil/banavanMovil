@@ -103,13 +103,13 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     SizedBox(height: 20.0),
-                    new RaisedButton(
-                      disabledColor: Colors.black,
+                    new ElevatedButton(
+                      //disabledColor: Colors.black,
                       child: Text(isLoading ? 'Cargando' : "Ingresar",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 15, color: Colors.white)),
-                      splashColor: Colors.white,
-                      color: Colors.blueGrey,
+                      //splashColor: Colors.white,
+                      //color: Colors.blueGrey,
                       onPressed: isLoading ? null : ingresarMain,
                     ),
                     SizedBox(height: 10.0),
@@ -176,7 +176,7 @@ class _LoginState extends State<Login> {
                         userController.clear();
                         passController.clear();
                         Navigator.pop(ctx);
-                        if (body['rol'] != 'JB') {
+                        if (body['rol'] != 'JC') {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return MainJCampo();

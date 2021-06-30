@@ -99,7 +99,7 @@ class _PerdidosVistaState extends State<PerdidosVista> {
   Widget botonPerdido() {
     //if (globals.isLoggedIn) {
     return FloatingActionButton(
-      backgroundColor: Colors.blue[900],
+      backgroundColor: Colors.orange,
       onPressed: () {
         //if (globals.isLoggedIn) {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
