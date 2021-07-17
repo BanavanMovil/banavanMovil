@@ -1,4 +1,8 @@
 //https://flutter-es.io/docs/cookbook/navigation/navigation-basics
+import 'package:banavanmov/model/color.dart';
+import 'package:banavanmov/model/lote.dart';
+import 'package:banavanmov/providers/colorProvider.dart';
+import 'package:banavanmov/providers/loteProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +23,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
   String usuario, usuarioResult;
   String semana, semanaResult;
   String lote, loteResult;
+  String lote2;
   String fundas_entregadas, fundas_entregadasResult;
   String fundas_recibidas, fundas_recibidasResult;
   String color, colorResult;
@@ -124,6 +129,45 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                           textField: 'display',
                           valueField: 'value',
                         )),
+                    Center(
+                      child: FutureBuilder(
+                        future: ColorProvider().getAll(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Colour>> snapshot) {
+                          if (snapshot.hasData) {
+                            var colores = snapshot.data;
+                            var coloresDS = crearDataSourceLote(colores);
+                            return Container(
+                                padding: EdgeInsets.all(10),
+                                child: DropDownFormField(
+                                  titleText: 'Color',
+                                  hintText: 'Elija el Color',
+                                  value: lote2,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Por favor seleccione un lote";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      lote2 = newValue;
+                                    });
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      lote2 = value;
+                                    });
+                                  },
+                                  dataSource: coloresDS,
+                                  textField: 'display',
+                                  valueField: 'value',
+                                ));
+                          }
+                          return CircularProgressIndicator();
+                        },
+                      ),
+                    ),
                     new ListTile(
                         //leading: const Icon(Icons.star),
                         title: Row(
@@ -310,6 +354,27 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
       return EnfundadoVista();
     }));*/
     // }
+  }
+
+  crearDataSourceLote(List<Colour> colores) {
+    var lista = [];
+    var lista2 = [
+      {"display": "Rojo", "value": "Rojo"},
+      {"display": "Verde", "value": "Verde"},
+      {"display": "Azul", "value": "Azul"},
+      {"display": "Amarillo", "value": "Amarillo"}
+    ];
+    print(lista2);
+    colores.forEach((element) {
+      print(element.id.toString() + element.nombre.toString());
+      var pedazo = {
+        "display": element.nombre.toString(),
+        "value": element.nombre.toString()
+      };
+      lista.add(pedazo);
+    });
+    print(lista);
+    return lista;
   }
 
   cargarTrabajadores() {

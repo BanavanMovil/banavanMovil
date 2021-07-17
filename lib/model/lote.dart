@@ -1,8 +1,8 @@
-class JefeCampoResponse {
+class LoteResponse {
   List<Lote> results;
-  JefeCampoResponse({this.results});
+  LoteResponse({this.results});
 
-  JefeCampoResponse.fromJson(List<dynamic> json) {
+  LoteResponse.fromJson(List<dynamic> json) {
     if (json.isNotEmpty) {
       results = <Lote>[];
       json.forEach((v) {
