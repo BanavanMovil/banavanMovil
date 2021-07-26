@@ -7,6 +7,9 @@ import 'package:banavanmov/vistaRacimosJBodega.dart';
 import 'package:banavanmov/providers/cosechadoProvider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
+import 'package:banavanmov/model/color.dart';
+import 'package:banavanmov/providers/colorProvider.dart';
+
 class PublicarRacimoJB extends StatefulWidget {
   @override
   _PublicarRacimoJBState createState() => _PublicarRacimoJBState();
@@ -146,7 +149,46 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                           textField: 'display',
                           valueField: 'value',
                         )),
-                    Container(
+                    Center(
+                      child: FutureBuilder(
+                        future: ColorProvider().getAll(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Colour>> snapshot) {
+                          if (snapshot.hasData) {
+                            var colores = snapshot.data;
+                            var coloresDS = crearDataSourceLote(colores);
+                            return Container(
+                                padding: EdgeInsets.all(10),
+                                child: DropDownFormField(
+                                  titleText: 'Color',
+                                  hintText: 'Elija el Color',
+                                  value: colorResult,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Por favor seleccione un lote";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      colorResult = newValue;
+                                    });
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      colorResult = value;
+                                    });
+                                  },
+                                  dataSource: coloresDS,
+                                  textField: 'display',
+                                  valueField: 'value',
+                                ));
+                          }
+                          return CircularProgressIndicator();
+                        },
+                      ),
+                    ),
+                    /*Container(
                         padding: EdgeInsets.all(10),
                         child: DropDownFormField(
                           titleText: 'Color de cinta',
@@ -176,7 +218,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                           ],
                           textField: 'display',
                           valueField: 'value',
-                        )),
+                        )),*/
                     new ElevatedButton(
                       child: Text("Guardar",
                           textAlign: TextAlign.center,
@@ -205,5 +247,26 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
         return RacimosVista();
       }));
     }
+  }
+
+  crearDataSourceLote(List<Colour> colores) {
+    var lista = [];
+    /*var lista2 = [
+      {"display": "Rojo", "value": "Rojo"},
+      {"display": "Verde", "value": "Verde"},
+      {"display": "Azul", "value": "Azul"},
+      {"display": "Amarillo", "value": "Amarillo"}
+    ];
+    print(lista2);*/
+    colores.forEach((element) {
+      //print(element.id.toString() + element.nombre.toString());
+      var pedazo = {
+        "display": element.nombre.toString(),
+        "value": element.nombre.toString()
+      };
+      lista.add(pedazo);
+    });
+    //print(lista);
+    return lista;
   }
 }

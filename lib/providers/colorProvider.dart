@@ -7,17 +7,17 @@ import 'package:banavanmov/exception/customException.dart';
 import 'package:banavanmov/model/lote.dart';
 
 class ColorProvider {
-  final String baseUrl = 'https://coco-backend-api.herokuapp.com/api/color/get';
+  final String baseUrl = 'https://coco-backend-api.herokuapp.com/api/color/';
 
   Future<List<Colour>> getAll() async {
     var responseJson;
     try {
-      final resp = await http.get(baseUrl);
+      final resp = await http.get(baseUrl + 'get');
       responseJson = _response(resp);
     } on SocketException {
       throw FetchDataException('Sin Conexion');
     }
-    print(responseJson);
+    //print(responseJson);
     return ColourResponse.fromJson(responseJson).results;
   }
 

@@ -129,7 +129,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                           textField: 'display',
                           valueField: 'value',
                         )),
-                    Center(
+                    /*Center(
                       child: FutureBuilder(
                         future: ColorProvider().getAll(),
                         builder: (BuildContext context,
@@ -167,7 +167,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                           return CircularProgressIndicator();
                         },
                       ),
-                    ),
+                    ),*/
                     new ListTile(
                         //leading: const Icon(Icons.star),
                         title: Row(
@@ -289,7 +289,46 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                             //icon: Icon(Icons.phone_iphone)
                           )),
                     ),
-                    Container(
+                    Center(
+                      child: FutureBuilder(
+                        future: ColorProvider().getAll(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Colour>> snapshot) {
+                          if (snapshot.hasData) {
+                            var colores = snapshot.data;
+                            var coloresDS = crearDataSourceLote(colores);
+                            return Container(
+                                padding: EdgeInsets.all(10),
+                                child: DropDownFormField(
+                                  titleText: 'Color',
+                                  hintText: 'Elija el Color',
+                                  value: colorResult,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Por favor seleccione un lote";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      colorResult = newValue;
+                                    });
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      colorResult = value;
+                                    });
+                                  },
+                                  dataSource: coloresDS,
+                                  textField: 'display',
+                                  valueField: 'value',
+                                ));
+                          }
+                          return CircularProgressIndicator();
+                        },
+                      ),
+                    ),
+                    /*Container(
                         padding: EdgeInsets.all(10),
                         child: DropDownFormField(
                           titleText: 'Color de cinta',
@@ -319,7 +358,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                           ],
                           textField: 'display',
                           valueField: 'value',
-                        )),
+                        )),*/
                     new ElevatedButton(
                       child: Text("Guardar",
                           textAlign: TextAlign.center,
@@ -338,7 +377,8 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
   }
 
   void uploadStatusEnfundado() async {
-    print(_formKey.currentState.validate());
+    //print(_formKey.currentState.validate());
+    //print(colorResult);
     if (_formKey.currentState.validate()) {
       EnfundadoProvider ep = new EnfundadoProvider();
       //ep.postEnfundado(e);
@@ -358,22 +398,22 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
 
   crearDataSourceLote(List<Colour> colores) {
     var lista = [];
-    var lista2 = [
+    /*var lista2 = [
       {"display": "Rojo", "value": "Rojo"},
       {"display": "Verde", "value": "Verde"},
       {"display": "Azul", "value": "Azul"},
       {"display": "Amarillo", "value": "Amarillo"}
     ];
-    print(lista2);
+    print(lista2);*/
     colores.forEach((element) {
-      print(element.id.toString() + element.nombre.toString());
+      //print(element.id.toString() + element.nombre.toString());
       var pedazo = {
         "display": element.nombre.toString(),
         "value": element.nombre.toString()
       };
       lista.add(pedazo);
     });
-    print(lista);
+    //print(lista);
     return lista;
   }
 
