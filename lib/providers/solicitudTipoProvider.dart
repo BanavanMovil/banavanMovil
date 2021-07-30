@@ -7,7 +7,7 @@ import 'package:banavanmov/model/solicitudTipo.dart';
 
 class SolicitudTipoProvider {
   final String baseUrl =
-      'https://coco-backend-api.herokuapp.com/api/solicitud_tipos/';
+      'https://coco-backend-api.herokuapp.com/api/tipoSolicitud/';
 
   //GET
   Future<List<SolicitudTipo>> getAll() async {

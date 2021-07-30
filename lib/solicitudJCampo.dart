@@ -62,7 +62,7 @@ class SolicitudJCState extends State<SolicitudJC> {
             key: formKey,
             child: SingleChildScrollView(
               child: Column(children: <Widget>[
-                /*Container(
+                Container(
                     padding: EdgeInsets.all(10),
                     child: FutureBuilder(
                       future: SolicitudTipoProvider().getAll(),
@@ -100,7 +100,7 @@ class SolicitudJCState extends State<SolicitudJC> {
                           return CircularProgressIndicator();
                         }
                       },
-                    )),*/
+                    )),
                 Container(
                     padding: EdgeInsets.all(10),
                     child: FutureBuilder(

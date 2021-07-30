@@ -1,3 +1,4 @@
+import 'package:banavanmov/actividadesJCampo.dart';
 import 'package:banavanmov/solicitudJCampo.dart';
 import 'package:banavanmov/historialJCampo.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,7 @@ class _MainJCampoState extends State<MainJCampo> {
                             textAlign: TextAlign.center,
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
-                        onPressed: solicitudGerente,
+                        onPressed: actividades,
                       ),
                       SizedBox(height: 10.0)
                     ]))))));
@@ -95,6 +96,13 @@ class _MainJCampoState extends State<MainJCampo> {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       //globals.isLoggedIn = true;
       return SolicitudJC();
+    }));
+  }
+
+  void actividades() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      //globals.isLoggedIn = true;
+      return ActividadesJC();
     }));
   }
 
