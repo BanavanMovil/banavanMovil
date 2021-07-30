@@ -19,7 +19,7 @@ class ActividadProvider {
     } on SocketException {
       throw FetchDataException('Sin Conexion');
     }
-    return ActividadResponse.fromJson(responseJson).results;
+    return ActividadResponse.fromJson(responseJson['Actividades']).results;
   }
 
   //POST

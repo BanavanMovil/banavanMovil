@@ -75,6 +75,18 @@ class _MainJCampoState extends State<MainJCampo> {
                                 TextStyle(fontSize: 15, color: Colors.white)),
                         onPressed: solicitudGerente,
                       ),
+                      Placeholder(
+                        fallbackHeight: 50,
+                        fallbackWidth: 100,
+                        color: Colors.transparent,
+                      ),
+                      new ElevatedButton(
+                        child: Text("Actividades",
+                            textAlign: TextAlign.center,
+                            style:
+                                TextStyle(fontSize: 15, color: Colors.white)),
+                        onPressed: solicitudGerente,
+                      ),
                       SizedBox(height: 10.0)
                     ]))))));
   }

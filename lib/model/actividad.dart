@@ -18,7 +18,7 @@ class Actividad {
   Actividad({this.id, this.nombre});
 
   factory Actividad.fromJson(Map<String, dynamic> json) =>
-      Actividad(id: json['id'], nombre: json['titulo']);
+      Actividad(id: json['id'], nombre: json['nombre']);
 
   Map<String, dynamic> toJson() => {
         'id': id,

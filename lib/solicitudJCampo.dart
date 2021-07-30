@@ -1,6 +1,10 @@
 import 'package:banavanmov/mainJCampo.dart';
+import 'package:banavanmov/model/actividad.dart';
 import 'package:banavanmov/model/lote.dart';
+import 'package:banavanmov/model/solicitudTipo.dart';
+import 'package:banavanmov/providers/actividadProvider.dart';
 import 'package:banavanmov/providers/loteProvider.dart';
+import 'package:banavanmov/providers/solicitudTipoProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
@@ -19,7 +23,7 @@ class SolicitudJCState extends State<SolicitudJC> {
   String _selectedLote, _selectedLoteResult;
   int _selectedTrabajadores, _selectedTrabajadoresResult;
   String _selectedMensaje, _selectedMensajeResult;
-  LoteProvider lp = new LoteProvider();
+  String _selectedActividad, _selectedActividadResult;
   final formKey = new GlobalKey<FormState>();
   @override
   void initState() {
@@ -41,22 +45,6 @@ class SolicitudJCState extends State<SolicitudJC> {
     }
   }
 
-  crearDataSourceLote(List<Lote> lotes) {
-    var lista = [];
-
-    //print(lista2);
-    lotes.forEach((element) {
-      print(element.id.toString() + element.numero.toString());
-      var pedazo = {
-        "display": element.numero.toString(),
-        "value": element.id.toString()
-      };
-      lista.add(pedazo);
-    });
-    print(lista);
-    return lista;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,36 +62,45 @@ class SolicitudJCState extends State<SolicitudJC> {
             key: formKey,
             child: SingleChildScrollView(
               child: Column(children: <Widget>[
-                Container(
+                /*Container(
                     padding: EdgeInsets.all(10),
-                    child: DropDownFormField(
-                      titleText: 'Tipo de Solicitud',
-                      hintText: 'Elija un tipo',
-                      value: _selectedTipo,
-                      validator: (value) {
-                        if (value == null) {
-                          return "Por favor seleccione un valor";
+                    child: FutureBuilder(
+                      future: SolicitudTipoProvider().getAll(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<SolicitudTipo>> snapshot) {
+                        if (snapshot.hasData) {
+                          var tipos = snapshot.data;
+                          var tiposDS = crearDataSourceSolicitudTipo(tipos);
+                          return DropDownFormField(
+                            titleText: 'Solicitud',
+                            hintText: 'Elija el tipo de Solicitud',
+                            value: _selectedTipo,
+                            validator: (value) {
+                              if (value == null) {
+                                return "Por favor seleccion un valor";
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedTipo = newValue;
+                              });
+                            },
+                            onSaved: (value) {
+                              setState(() {
+                                _selectedTipo = value;
+                              });
+                            },
+                            dataSource: tiposDS,
+                            textField: 'display',
+                            valueField: 'value',
+                          );
                         } else {
-                          return null;
+                          return CircularProgressIndicator();
                         }
                       },
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedTipo = newValue;
-                        });
-                      },
-                      onSaved: (value) {
-                        setState(() {
-                          _selectedTipo = value;
-                        });
-                      },
-                      dataSource: [
-                        {"display": "Cosecha", "value": "Cosecha"},
-                        {"display": "Personal", "value": "Personal"}
-                      ],
-                      textField: 'display',
-                      valueField: 'value',
-                    )),
+                    )),*/
                 Container(
                     padding: EdgeInsets.all(10),
                     child: FutureBuilder(
@@ -135,6 +132,46 @@ class SolicitudJCState extends State<SolicitudJC> {
                               });
                             },
                             dataSource: loteDS,
+                            textField: 'display',
+                            valueField: 'value',
+                          );
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
+                    )),
+                Container(
+                    padding: EdgeInsets.all(10),
+                    child: FutureBuilder(
+                      future: ActividadProvider().getAll(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Actividad>> snapshot) {
+                        if (snapshot.hasData) {
+                          var actividades = snapshot.data;
+                          var actividadesDS =
+                              crearDataSourceActividad(actividades);
+                          return DropDownFormField(
+                            titleText: 'Actividad',
+                            hintText: 'Elija la Actividad',
+                            value: _selectedActividad,
+                            validator: (value) {
+                              if (value == null) {
+                                return "Por favor seleccion un valor";
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedActividad = newValue;
+                              });
+                            },
+                            onSaved: (value) {
+                              setState(() {
+                                _selectedActividad = value;
+                              });
+                            },
+                            dataSource: actividadesDS,
                             textField: 'display',
                             valueField: 'value',
                           );
@@ -191,5 +228,53 @@ class SolicitudJCState extends State<SolicitudJC> {
             ),
           ),
         ));
+  }
+
+  crearDataSourceLote(List<Lote> lotes) {
+    var lista = [];
+
+    //print(lista2);
+    lotes.forEach((element) {
+      print(element.id.toString() + element.numero.toString());
+      var pedazo = {
+        "display": element.numero.toString(),
+        "value": element.id.toString()
+      };
+      lista.add(pedazo);
+    });
+    print(lista);
+    return lista;
+  }
+
+  crearDataSourceSolicitudTipo(List<SolicitudTipo> tipos) {
+    var lista = [];
+
+    //print(lista2);
+    tipos.forEach((element) {
+      print(element.id.toString() + element.titulo.toString());
+      var pedazo = {
+        "display": element.titulo.toString(),
+        "value": element.id.toString()
+      };
+      lista.add(pedazo);
+    });
+    print(lista);
+    return lista;
+  }
+
+  crearDataSourceActividad(List<Actividad> actividades) {
+    var lista = [];
+
+    //print(lista2);
+    actividades.forEach((element) {
+      print(element.id.toString() + element.nombre.toString());
+      var pedazo = {
+        "display": element.nombre.toString(),
+        "value": element.id.toString()
+      };
+      lista.add(pedazo);
+    });
+    print(lista);
+    return lista;
   }
 }
