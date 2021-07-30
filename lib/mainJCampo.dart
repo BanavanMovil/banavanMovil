@@ -57,7 +57,19 @@ class _MainJCampoState extends State<MainJCampo> {
                         color: Colors.transparent,
                       ),
                       new ElevatedButton(
-                        child: Text("Solicitud a Gerente",
+                        child: Text("Crear Solicitud",
+                            textAlign: TextAlign.center,
+                            style:
+                                TextStyle(fontSize: 15, color: Colors.white)),
+                        onPressed: solicitudGerente,
+                      ),
+                      Placeholder(
+                        fallbackHeight: 50,
+                        fallbackWidth: 100,
+                        color: Colors.transparent,
+                      ),
+                      new ElevatedButton(
+                        child: Text("Mis Solicitudes",
                             textAlign: TextAlign.center,
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),

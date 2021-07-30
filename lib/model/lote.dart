@@ -25,8 +25,8 @@ class Lote {
 
   factory Lote.fromJson(Map<String, dynamic> json) => Lote(
         id: json['id'],
-        numero: json['numero'],
-        superficie: json['superficie'],
+        numero: int.parse(json['numero']),
+        superficie: int.parse(json['superficie']),
       );
 
   Map<String, dynamic> toJson() => {

@@ -3,32 +3,28 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:banavanmov/exception/customException.dart';
-import 'package:banavanmov/model/lote.dart';
+import 'package:banavanmov/model/solicitud.dart';
 
-class LoteProvider {
-  final String baseUrl = 'https://coco-backend-api.herokuapp.com/api/lote/';
-
-  Future<List<dynamic>> getAll() async {
+class SolicitudProvider {
+  final String baseUrl =
+      'https://coco-backend-api.herokuapp.com/api/solicitud/';
+  //GET
+  Future<List<Solicitud>> getAll() async {
     var responseJson;
     try {
       final resp = await http.get(baseUrl + 'get');
       responseJson = _response(resp);
+      print(responseJson);
     } on SocketException {
       throw FetchDataException('Sin Conexion');
     }
-    return responseJson;
+    return SolicitudResponse.fromJson(responseJson).results;
   }
 
-  Future<List<Lote>> todosLosLotes() async {
-    var responseJson;
-    try {
-      final resp = await http.get(baseUrl + 'get');
-      responseJson = _response(resp);
-      print(responseJson['lotes']);
-    } on SocketException {
-      throw FetchDataException('Sin Conexion');
-    }
-    return LoteResponse.fromJson(responseJson['lotes']).results;
+  //POST
+  Future<bool> sendSolicitud(Solicitud solicitud) async {
+    //TODO
+    return true;
   }
 
   dynamic _response(http.Response response) {

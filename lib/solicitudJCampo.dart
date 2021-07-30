@@ -1,6 +1,9 @@
 import 'package:banavanmov/mainJCampo.dart';
+import 'package:banavanmov/model/lote.dart';
+import 'package:banavanmov/providers/loteProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
+import 'package:flutter_number_picker/flutter_number_picker.dart';
 
 class SolicitudJC extends StatefulWidget {
   @override
@@ -16,7 +19,7 @@ class SolicitudJCState extends State<SolicitudJC> {
   String _selectedLote, _selectedLoteResult;
   int _selectedTrabajadores, _selectedTrabajadoresResult;
   String _selectedMensaje, _selectedMensajeResult;
-
+  LoteProvider lp = new LoteProvider();
   final formKey = new GlobalKey<FormState>();
   @override
   void initState() {
@@ -36,6 +39,22 @@ class SolicitudJCState extends State<SolicitudJC> {
         _selectedMensajeResult = _selectedMensaje;
       });
     }
+  }
+
+  crearDataSourceLote(List<Lote> lotes) {
+    var lista = [];
+
+    //print(lista2);
+    lotes.forEach((element) {
+      print(element.id.toString() + element.numero.toString());
+      var pedazo = {
+        "display": element.numero.toString(),
+        "value": element.id.toString()
+      };
+      lista.add(pedazo);
+    });
+    print(lista);
+    return lista;
   }
 
   @override
@@ -87,55 +106,60 @@ class SolicitudJCState extends State<SolicitudJC> {
                     )),
                 Container(
                     padding: EdgeInsets.all(10),
-                    child: DropDownFormField(
-                      titleText: 'Lote',
-                      hintText: 'Elija un lote',
-                      value: _selectedLote,
-                      validator: (value) {
-                        if (value == null) {
-                          return "Por favor seleccion un valor";
+                    child: FutureBuilder(
+                      future: LoteProvider().todosLosLotes(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Lote>> snapshot) {
+                        if (snapshot.hasData) {
+                          var lotes = snapshot.data;
+                          var loteDS = crearDataSourceLote(lotes);
+                          return DropDownFormField(
+                            titleText: 'Lote',
+                            hintText: 'Elija un lote',
+                            value: _selectedLote,
+                            validator: (value) {
+                              if (value == null) {
+                                return "Por favor seleccion un valor";
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedLote = newValue;
+                              });
+                            },
+                            onSaved: (value) {
+                              setState(() {
+                                _selectedLote = value;
+                              });
+                            },
+                            dataSource: loteDS,
+                            textField: 'display',
+                            valueField: 'value',
+                          );
                         } else {
-                          return null;
+                          return CircularProgressIndicator();
                         }
                       },
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedLote = newValue;
-                        });
-                      },
-                      onSaved: (value) {
-                        setState(() {
-                          _selectedLote = value;
-                        });
-                      },
-                      dataSource: [
-                        {"display": "1", "value": "1"},
-                        {"display": "2", "value": "2"}
-                      ],
-                      textField: 'display',
-                      valueField: 'value',
                     )),
                 Container(
-                  padding: EdgeInsets.all(10),
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        labelText: 'Trabajadores',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.only(top: 10, bottom: 10)),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Por favor seleccion un valor";
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      setState(() {
-                        _selectedTrabajadores = int.parse(value);
-                      });
-                    },
-                  ),
-                ),
+                    padding: EdgeInsets.all(10),
+                    child: Column(children: [
+                      Text(
+                        "Numero de Trabajadores:",
+                        textAlign: TextAlign.left,
+                      ),
+                      CustomNumberPicker(
+                        initialValue: 0,
+                        maxValue: 10000,
+                        minValue: 0,
+                        onValue: (value) {
+                          this._selectedTrabajadores = value;
+                          print(this._selectedTrabajadores);
+                        },
+                      )
+                    ])),
                 Container(
                   padding: EdgeInsets.all(10),
                   child: TextFormField(
