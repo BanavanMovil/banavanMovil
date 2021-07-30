@@ -1,24 +1,25 @@
 import 'dart:io';
 
-import 'package:banavanmov/model/color.dart';
+import 'package:banavanmov/model/personnel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:banavanmov/exception/customException.dart';
-import 'package:banavanmov/model/lote.dart';
+//import 'package:banavanmov/model/lote.dart';
 
-class ColorProvider {
-  final String baseUrl = 'https://coco-backend-api.herokuapp.com/api/color/';
+class PersonnelProvider {
+  final String baseUrl =
+      'https://coco-backend-api.herokuapp.com/api/personnel/';
 
-  Future<List<Colour>> getAll() async {
+  Future<List<Personnel>> getAll() async {
     var responseJson;
     try {
-      final resp = await http.get(baseUrl + 'get');
+      final resp = await http.get(baseUrl + 'get?isActive=0');
       responseJson = _response(resp);
     } on SocketException {
       throw FetchDataException('Sin Conexion');
     }
     //print(responseJson);
-    return ColourResponse.fromJson(responseJson).results;
+    return PersonnelResponse.fromJson(responseJson).results;
   }
 
   dynamic _response(http.Response response) {
