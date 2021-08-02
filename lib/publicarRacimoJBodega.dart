@@ -9,6 +9,10 @@ import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 import 'package:banavanmov/model/color.dart';
 import 'package:banavanmov/providers/colorProvider.dart';
+import 'package:banavanmov/model/lote.dart';
+import 'package:banavanmov/model/semana.dart';
+import 'package:banavanmov/providers/semanaProvider.dart';
+import 'package:banavanmov/providers/loteProvider.dart';
 
 class PublicarRacimoJB extends StatefulWidget {
   @override
@@ -85,70 +89,84 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                             //icon: Icon(Icons.phone_iphone)
                           )),
                     ),
-                    Container(
-                        padding: EdgeInsets.all(10),
-                        child: DropDownFormField(
-                          titleText: 'Semana',
-                          hintText: 'Elija la Semana',
-                          value: semana,
-                          validator: (value) {
-                            if (value == null) {
-                              return "Por favor elija una semana.";
-                            }
-                            return null;
-                          },
-                          onChanged: (newValue) {
-                            setState(() {
-                              semana = newValue;
-                            });
-                          },
-                          onSaved: (value) {
-                            setState(() {
-                              semana = value;
-                            });
-                          },
-                          dataSource: [
-                            {"display": "52", "value": "52"},
-                            {"display": "53", "value": "53"},
-                            {"display": "54", "value": "54"},
-                            {"display": "55", "value": "55"},
-                            {"display": "56", "value": "56"},
-                            {"display": "57", "value": "57"}
-                          ],
-                          textField: 'display',
-                          valueField: 'value',
-                        )),
-                    Container(
-                        padding: EdgeInsets.all(10),
-                        child: DropDownFormField(
-                          titleText: 'Lote',
-                          hintText: 'Elija el Lote',
-                          value: lote,
-                          validator: (value) {
-                            if (value == null) {
-                              return "Por favor seleccione un lote";
-                            }
-                            return null;
-                          },
-                          onChanged: (newValue) {
-                            setState(() {
-                              lote = newValue;
-                            });
-                          },
-                          onSaved: (value) {
-                            setState(() {
-                              lote = value;
-                            });
-                          },
-                          dataSource: [
-                            {"display": "1", "value": "1"},
-                            {"display": "2", "value": "2"},
-                            {"display": "3", "value": "3"},
-                            {"display": "4", "value": "4"}
-                          ],
-                          textField: 'display',
-                          valueField: 'value',
-                        )),
+                    Center(
+                      child: FutureBuilder(
+                        future: SemanaProvider().getAll(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Semana>> snapshot) {
+                          if (snapshot.hasData) {
+                            var semana = snapshot.data;
+                            var semanaDS = crearDataSourceSemana(semana);
+                            return Container(
+                                padding: EdgeInsets.all(10),
+                                child: DropDownFormField(
+                                  titleText: 'Semana',
+                                  hintText: 'Elija la Semana',
+                                  value: semanaResult,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Por favor seleccione una semana";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      semanaResult = newValue;
+                                    });
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      semanaResult = value;
+                                    });
+                                  },
+                                  dataSource: semanaDS,
+                                  textField: 'display',
+                                  valueField: 'value',
+                                ));
+                          }
+                          return CircularProgressIndicator();
+                        },
+                      ),
+                    ),
+                    Center(
+                      child: FutureBuilder(
+                        future: LoteProvider().todosLosLotes(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Lote>> snapshot) {
+                          if (snapshot.hasData) {
+                            var lote = snapshot.data;
+                            var loteDS = crearDataSourceLote(lote);
+                            return Container(
+                                padding: EdgeInsets.all(10),
+                                child: DropDownFormField(
+                                  titleText: 'Lote',
+                                  hintText: 'Elija el Lote',
+                                  value: loteResult,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Por favor seleccione un lote";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      loteResult = newValue;
+                                    });
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      loteResult = value;
+                                    });
+                                  },
+                                  dataSource: loteDS,
+                                  textField: 'display',
+                                  valueField: 'value',
+                                ));
+                          }
+                          return CircularProgressIndicator();
+                        },
+                      ),
+                    ),
                     Center(
                       child: FutureBuilder(
                         future: ColorProvider().getAll(),
@@ -156,7 +174,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                             AsyncSnapshot<List<Colour>> snapshot) {
                           if (snapshot.hasData) {
                             var colores = snapshot.data;
-                            var coloresDS = crearDataSourceLote(colores);
+                            var coloresDS = crearDataSourceColor(colores);
                             return Container(
                                 padding: EdgeInsets.all(10),
                                 child: DropDownFormField(
@@ -165,7 +183,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                                   value: colorResult,
                                   validator: (value) {
                                     if (value == null) {
-                                      return "Por favor seleccione un lote";
+                                      return "Por favor seleccione un color";
                                     }
                                     return null;
                                   },
@@ -188,37 +206,6 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                         },
                       ),
                     ),
-                    /*Container(
-                        padding: EdgeInsets.all(10),
-                        child: DropDownFormField(
-                          titleText: 'Color de cinta',
-                          hintText: 'Elija el Color',
-                          value: color,
-                          validator: (value) {
-                            if (value == null) {
-                              return "Por favor elija un color.";
-                            }
-                            return null;
-                          },
-                          onChanged: (newValue) {
-                            setState(() {
-                              color = newValue;
-                            });
-                          },
-                          onSaved: (value) {
-                            setState(() {
-                              color = value;
-                            });
-                          },
-                          dataSource: [
-                            {"display": "Rojo", "value": "Rojo"},
-                            {"display": "Verde", "value": "Verde"},
-                            {"display": "Azul", "value": "Azul"},
-                            {"display": "Amarillo", "value": "Amarillo"}
-                          ],
-                          textField: 'display',
-                          valueField: 'value',
-                        )),*/
                     new ElevatedButton(
                       child: Text("Guardar",
                           textAlign: TextAlign.center,
@@ -249,24 +236,44 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
     }
   }
 
-  crearDataSourceLote(List<Colour> colores) {
+  crearDataSourceColor(List<Colour> colores) {
     var lista = [];
-    /*var lista2 = [
-      {"display": "Rojo", "value": "Rojo"},
-      {"display": "Verde", "value": "Verde"},
-      {"display": "Azul", "value": "Azul"},
-      {"display": "Amarillo", "value": "Amarillo"}
-    ];
-    print(lista2);*/
+
     colores.forEach((element) {
-      //print(element.id.toString() + element.nombre.toString());
       var pedazo = {
         "display": element.nombre.toString(),
         "value": element.nombre.toString()
       };
       lista.add(pedazo);
     });
-    //print(lista);
+    return lista;
+  }
+
+  crearDataSourceSemana(List<Semana> semanas) {
+    var lista = [];
+
+    semanas.forEach((element) {
+      var pedazo = {
+        "display": element.numero.toString(),
+        "value": element.numero.toString()
+      };
+
+      lista.add(pedazo);
+    });
+    return lista;
+  }
+
+  crearDataSourceLote(List<Lote> lotes) {
+    var lista = [];
+
+    lotes.forEach((element) {
+      var pedazo = {
+        "display": element.numero.toString(),
+        "value": element.numero.toString()
+      };
+
+      lista.add(pedazo);
+    });
     return lista;
   }
 }

@@ -5,6 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:banavanmov/vistaRacimosJBodega.dart';
 
+import 'package:banavanmov/model/lote.dart';
+import 'package:banavanmov/model/semana.dart';
+import 'package:banavanmov/providers/semanaProvider.dart';
+import 'package:banavanmov/providers/loteProvider.dart';
+
 class ActualizarCosechadoJB extends StatefulWidget {
   Cosechado cosechado;
   ActualizarCosechadoJB(Cosechado cosechado) {
@@ -85,71 +90,86 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                       padding: EdgeInsets.all(10),
                       child:
                           Text('Id de Cosechado: ' + cosechado.id.toString())),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      child: DropDownFormField(
-                        titleText: 'Lote Actual: ' + cosechado.lote.toString(),
-                        hintText: 'Elija el Lote',
-                        value: lote,
-                        validator: (value) {
-                          if (value == null) {
-                            return "Por favor seleccione un lote";
-                          }
-                          return null;
-                        },
-                        onChanged: (newValue) {
-                          setState(() {
-                            lote = newValue;
-                          });
-                        },
-                        onSaved: (value) {
-                          setState(() {
-                            lote = value;
-                          });
-                        },
-                        dataSource: [
-                          {"display": "1", "value": "1"},
-                          {"display": "2", "value": "2"},
-                          {"display": "3", "value": "3"},
-                          {"display": "4", "value": "4"}
-                        ],
-                        textField: 'display',
-                        valueField: 'value',
-                      )),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      child: DropDownFormField(
-                        titleText:
-                            'Semana Actual: ' + cosechado.semana.toString(),
-                        hintText: 'Elija la Semana',
-                        value: semana,
-                        validator: (value) {
-                          if (value == null) {
-                            return "Por favor elija una semana.";
-                          }
-                          return null;
-                        },
-                        onChanged: (newValue) {
-                          setState(() {
-                            semana = newValue;
-                          });
-                        },
-                        onSaved: (value) {
-                          setState(() {
-                            semana = value;
-                          });
-                        },
-                        dataSource: [
-                          {"display": "52", "value": "52"},
-                          {"display": "53", "value": "53"},
-                          {"display": "54", "value": "54"},
-                          {"display": "55", "value": "55"},
-                          {"display": "56", "value": "56"},
-                          {"display": "57", "value": "57"}
-                        ],
-                        textField: 'display',
-                        valueField: 'value',
-                      )),
+                  Center(
+                    child: FutureBuilder(
+                      future: LoteProvider().todosLosLotes(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Lote>> snapshot) {
+                        if (snapshot.hasData) {
+                          var lote = snapshot.data;
+                          var loteDS = crearDataSourceLote(lote);
+                          return Container(
+                              padding: EdgeInsets.all(10),
+                              child: DropDownFormField(
+                                titleText:
+                                    'Lote Actual: ' + cosechado.lote.toString(),
+                                hintText: 'Elija el Lote',
+                                value: loteResult,
+                                validator: (value) {
+                                  if (value == null) {
+                                    return "Por favor seleccione un lote";
+                                  }
+                                  return null;
+                                },
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    loteResult = newValue;
+                                  });
+                                },
+                                onSaved: (value) {
+                                  setState(() {
+                                    loteResult = value;
+                                  });
+                                },
+                                dataSource: loteDS,
+                                textField: 'display',
+                                valueField: 'value',
+                              ));
+                        }
+                        return CircularProgressIndicator();
+                      },
+                    ),
+                  ),
+                  Center(
+                    child: FutureBuilder(
+                      future: SemanaProvider().getAll(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Semana>> snapshot) {
+                        if (snapshot.hasData) {
+                          var semana = snapshot.data;
+                          var semanaDS = crearDataSourceSemana(semana);
+                          return Container(
+                              padding: EdgeInsets.all(10),
+                              child: DropDownFormField(
+                                titleText: 'Semana Actual: ' +
+                                    cosechado.semana.toString(),
+                                hintText: 'Elija la Semana',
+                                value: semanaResult,
+                                validator: (value) {
+                                  if (value == null) {
+                                    return "Por favor seleccione una semana";
+                                  }
+                                  return null;
+                                },
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    semanaResult = newValue;
+                                  });
+                                },
+                                onSaved: (value) {
+                                  setState(() {
+                                    semanaResult = value;
+                                  });
+                                },
+                                dataSource: semanaDS,
+                                textField: 'display',
+                                valueField: 'value',
+                              ));
+                        }
+                        return CircularProgressIndicator();
+                      },
+                    ),
+                  ),
                   Container(
                       child: Column(children: <Widget>[
                     Padding(
@@ -192,5 +212,33 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
         ),
       ),
     );
+  }
+
+  crearDataSourceSemana(List<Semana> semanas) {
+    var lista = [];
+
+    semanas.forEach((element) {
+      var pedazo = {
+        "display": element.numero.toString(),
+        "value": element.numero.toString()
+      };
+
+      lista.add(pedazo);
+    });
+    return lista;
+  }
+
+  crearDataSourceLote(List<Lote> lotes) {
+    var lista = [];
+
+    lotes.forEach((element) {
+      var pedazo = {
+        "display": element.numero.toString(),
+        "value": element.numero.toString()
+      };
+
+      lista.add(pedazo);
+    });
+    return lista;
   }
 }

@@ -15,7 +15,7 @@ class PerdidoProvider {
     final response = await http.post(url, body: perdido.toJson());
     final decodeData = json.decode(response.body);
 
-    print(decodeData);
+    //print(decodeData);
     return true;
   }
 
@@ -25,7 +25,7 @@ class PerdidoProvider {
         await http.put(url + perdido.id.toString(), body: perdido.toJson());
     final decodeData = json.decode(response.body);
 
-    print(decodeData);
+    //print(decodeData);
     return true;
   }
 
@@ -59,7 +59,7 @@ class PerdidoProvider {
     switch (response.statusCode) {
       case 200:
         var responseJson = json.decode(response.body.toString());
-        print(responseJson);
+        //print(responseJson);
         return responseJson;
       case 400:
         throw BadRequestException(response.body.toString());

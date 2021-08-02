@@ -25,7 +25,7 @@ class CosechadoBloc {
       movieListSink.add(Response.completed(cosechados));
     } catch (e) {
       movieListSink.add(Response.error(e.toString()));
-      print(e);
+      //print(e);
     }
   }
 

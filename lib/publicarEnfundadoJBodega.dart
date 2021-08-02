@@ -106,77 +106,11 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                         },
                       ),
                     ),
-                    /*Container(
-                        padding: EdgeInsets.all(10),
-                        child: DropDownFormField(
-                          titleText: 'Trabajador',
-                          hintText: 'Elija el Trabajador',
-                          value: usuario,
-                          validator: (value) {
-                            if (value == null) {
-                              return "Por favor seleccione un trabajador.";
-                            }
-                            return null;
-                          },
-                          onChanged: (newValue) {
-                            setState(() {
-                              usuario = newValue;
-                            });
-                          },
-                          onSaved: (value) {
-                            setState(() {
-                              usuario = value;
-                            });
-                          },
-                          dataSource: [
-                            {
-                              "display": "Carlos Salazar",
-                              "value": "Carlos Salazar"
-                            },
-                            {
-                              "display": "Livingston Perez",
-                              "value": "Livingston Perez"
-                            }
-                          ],
-                          textField: 'display',
-                          valueField: 'value',
-                        )),*/
-                    Container(
-                        padding: EdgeInsets.all(10),
-                        child: DropDownFormField(
-                          titleText: 'Lote',
-                          hintText: 'Elija el Lote',
-                          value: lote,
-                          validator: (value) {
-                            if (value == null) {
-                              return "Por favor seleccione un lote";
-                            }
-                            return null;
-                          },
-                          onChanged: (newValue) {
-                            setState(() {
-                              lote = newValue;
-                            });
-                          },
-                          onSaved: (value) {
-                            setState(() {
-                              lote = value;
-                            });
-                          },
-                          dataSource: [
-                            {"display": "1", "value": "1"},
-                            {"display": "2", "value": "2"},
-                            {"display": "3", "value": "3"},
-                            {"display": "4", "value": "4"}
-                          ],
-                          textField: 'display',
-                          valueField: 'value',
-                        )),
-                    /*Center(
+                    Center(
                       child: FutureBuilder(
                         future: LoteProvider().todosLosLotes(),
                         builder: (BuildContext context,
-                            AsyncSnapshot<Map<String, List<Lote>>> snapshot) {
+                            AsyncSnapshot<List<Lote>> snapshot) {
                           if (snapshot.hasData) {
                             var lote = snapshot.data;
                             var loteDS = crearDataSourceLote(lote);
@@ -210,46 +144,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                           return CircularProgressIndicator();
                         },
                       ),
-                    ),*/
-                    /*Center(
-                      child: FutureBuilder(
-                        future: ColorProvider().getAll(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<Colour>> snapshot) {
-                          if (snapshot.hasData) {
-                            var colores = snapshot.data;
-                            var coloresDS = crearDataSourceLote(colores);
-                            return Container(
-                                padding: EdgeInsets.all(10),
-                                child: DropDownFormField(
-                                  titleText: 'Color',
-                                  hintText: 'Elija el Color',
-                                  value: lote2,
-                                  validator: (value) {
-                                    if (value == null) {
-                                      return "Por favor seleccione un lote";
-                                    }
-                                    return null;
-                                  },
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      lote2 = newValue;
-                                    });
-                                  },
-                                  onSaved: (value) {
-                                    setState(() {
-                                      lote2 = value;
-                                    });
-                                  },
-                                  dataSource: coloresDS,
-                                  textField: 'display',
-                                  valueField: 'value',
-                                ));
-                          }
-                          return CircularProgressIndicator();
-                        },
-                      ),
-                    ),*/
+                    ),
                     new ListTile(
                         //leading: const Icon(Icons.star),
                         title: Row(
@@ -276,44 +171,10 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                             child: Icon(Icons.date_range))
                       ],
                     )),
-                    /*Container(
-                        padding: EdgeInsets.all(10),
-                        child: DropDownFormField(
-                          titleText: 'Semana',
-                          hintText: 'Elija la Semana',
-                          value: semana,
-                          validator: (value) {
-                            if (value == null) {
-                              return "Por favor elija una semana.";
-                            }
-                            return null;
-                          },
-                          onChanged: (newValue) {
-                            setState(() {
-                              semana = newValue;
-                            });
-                          },
-                          onSaved: (value) {
-                            setState(() {
-                              semana = value;
-                            });
-                          },
-                          dataSource: [
-                            {"display": "52", "value": "52"},
-                            {"display": "53", "value": "53"},
-                            {"display": "54", "value": "54"},
-                            {"display": "55", "value": "55"},
-                            {"display": "56", "value": "56"},
-                            {"display": "57", "value": "57"}
-                          ],
-                          textField: 'display',
-                          valueField: 'value',
-                        )),*/
                     Center(
                       child: FutureBuilder(
                         future: SemanaProvider().getAll(),
                         builder: (BuildContext context,
-                            //AsyncSnapshot<Map<String, List<Semana>>> snapshot) {
                             AsyncSnapshot<List<Semana>> snapshot) {
                           if (snapshot.hasData) {
                             var semana = snapshot.data;
@@ -427,7 +288,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                                   value: colorResult,
                                   validator: (value) {
                                     if (value == null) {
-                                      return "Por favor seleccione un lote";
+                                      return "Por favor seleccione un color";
                                     }
                                     return null;
                                   },
@@ -450,37 +311,6 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
                         },
                       ),
                     ),
-                    /*Container(
-                        padding: EdgeInsets.all(10),
-                        child: DropDownFormField(
-                          titleText: 'Color de cinta',
-                          hintText: 'Elija el Color',
-                          value: color,
-                          validator: (value) {
-                            if (value == null) {
-                              return "Por favor elija un color.";
-                            }
-                            return null;
-                          },
-                          onChanged: (newValue) {
-                            setState(() {
-                              color = newValue;
-                            });
-                          },
-                          onSaved: (value) {
-                            setState(() {
-                              color = value;
-                            });
-                          },
-                          dataSource: [
-                            {"display": "Rojo", "value": "Rojo"},
-                            {"display": "Verde", "value": "Verde"},
-                            {"display": "Azul", "value": "Azul"},
-                            {"display": "Amarillo", "value": "Amarillo"}
-                          ],
-                          textField: 'display',
-                          valueField: 'value',
-                        )),*/
                     new ElevatedButton(
                       child: Text("Guardar",
                           textAlign: TextAlign.center,
@@ -520,36 +350,21 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
 
   crearDataSourceColor(List<Colour> colores) {
     var lista = [];
-    /*var lista2 = [
-      {"display": "Rojo", "value": "Rojo"},
-      {"display": "Verde", "value": "Verde"},
-      {"display": "Azul", "value": "Azul"},
-      {"display": "Amarillo", "value": "Amarillo"}
-    ];
-    print(lista2);*/
+
     colores.forEach((element) {
-      //print(element.id.toString() + element.nombre.toString());
       var pedazo = {
         "display": element.nombre.toString(),
         "value": element.nombre.toString()
       };
       lista.add(pedazo);
     });
-    //print(lista);
     return lista;
   }
 
   crearDataSourcePersonnel(List<Personnel> personal) {
     var lista = [];
-    /*var lista2 = [
-      {"display": "Rojo", "value": "Rojo"},
-      {"display": "Verde", "value": "Verde"},
-      {"display": "Azul", "value": "Azul"},
-      {"display": "Amarillo", "value": "Amarillo"}
-    ];
-    print(lista2);*/
+
     personal.forEach((element) {
-      //print(element.id.toString() + element.nombre.toString());
       var pedazo = {
         "display":
             element.nombres.toString() + ' ' + element.apellidos.toString(),
@@ -559,28 +374,13 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
         lista.add(pedazo);
       }
     });
-    //print(lista);
     return lista;
   }
-
-  //cargarSemana() {
-  //  print(SemanaProvider().getAll());
-  //}
 
   crearDataSourceSemana(List<Semana> semanas) {
-    //print(semanas);
     var lista = [];
-    /*var lista2 = [
-      {"display": "Rojo", "value": "Rojo"},
-      {"display": "Verde", "value": "Verde"},
-      {"display": "Azul", "value": "Azul"},
-      {"display": "Amarillo", "value": "Amarillo"}
-    ];
-    print(lista2);*/
-    //List<Semana> semana = semanas["semanas"];
-    //print(semana);
+
     semanas.forEach((element) {
-      //print(element.id.toString() + element.nombre.toString());
       var pedazo = {
         "display": element.numero.toString(),
         "value": element.numero.toString()
@@ -588,22 +388,13 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
 
       lista.add(pedazo);
     });
-    //print(lista);
     return lista;
   }
-  /*crearDataSourceLote(Map<String, List<Lote>> lotes) {
+
+  crearDataSourceLote(List<Lote> lotes) {
     var lista = [];
-    /*var lista2 = [
-      {"display": "Rojo", "value": "Rojo"},
-      {"display": "Verde", "value": "Verde"},
-      {"display": "Azul", "value": "Azul"},
-      {"display": "Amarillo", "value": "Amarillo"}
-    ];
-    print(lista2);*/
-    //print(lote);
-    var lote = lotes["lotes"];
-    lote.forEach((element) {
-      //print(element.id.toString() + element.nombre.toString());
+
+    lotes.forEach((element) {
       var pedazo = {
         "display": element.numero.toString(),
         "value": element.numero.toString()
@@ -611,7 +402,6 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
 
       lista.add(pedazo);
     });
-    //print(lista);
     return lista;
-  }*/
+  }
 }
