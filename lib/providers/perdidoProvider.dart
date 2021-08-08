@@ -8,7 +8,7 @@ import 'package:banavanmov/exception/customException.dart';
 
 class PerdidoProvider {
   final String url = 'https://api.jsonbin.io/b/60b12f05a5cd4a5576a9933e';
-  //final String url = 'https://api.jsonbin.io/b/60b2c67392af611956f5da02';
+  //final String url = 'https://coco-backend-api.herokuapp.com/api/perdido/';
 
   //POST
   Future<bool> postPerdido(Perdido perdido) async {

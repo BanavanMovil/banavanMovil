@@ -112,8 +112,8 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                           return Container(
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
-                                titleText:
-                                    'Trabajador Actual: ' + perdido.trabajador,
+                                titleText: 'Trabajador Actual: ' +
+                                    perdido.trabajador.toString(),
                                 hintText: 'Elija el Trabajador',
                                 value: personnelResult,
                                 validator: (value) {

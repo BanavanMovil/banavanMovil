@@ -226,7 +226,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                                   value: colorResult,
                                   validator: (value) {
                                     if (value == null) {
-                                      return "Por favor seleccione un lote";
+                                      return "Por favor seleccione un color";
                                     }
                                     return null;
                                   },

@@ -8,20 +8,35 @@ import 'package:banavanmov/blocs/cosechadoBloc.dart';
 import 'package:banavanmov/providers/cosechadoProvider.dart';
 import 'package:banavanmov/actualizarRacimoJBodega.dart';
 
+import 'package:banavanmov/model/lote.dart';
+import 'package:banavanmov/providers/loteProvider.dart';
+
+import 'package:banavanmov/model/color.dart';
+import 'package:banavanmov/providers/colorProvider.dart';
+
 class RacimosVista extends StatefulWidget {
   @override
   _RacimosVistaState createState() => _RacimosVistaState();
 }
+
+Map<String, String> todosLotes = {};
+Map<String, String> todosColores = {};
 
 class _RacimosVistaState extends State<RacimosVista> {
   final CosechadoProvider cv = new CosechadoProvider();
   bool isBusqueda = false;
   CosechadoBloc _bloc;
 
+  //List<String> lista = [];
+
+  //var newRanger = Map<String, String>();
+
   @override
   void initState() {
     super.initState();
     _bloc = CosechadoBloc();
+    cargarDatosLotes();
+    cargarDatosColores();
   }
 
   @override
@@ -111,6 +126,30 @@ class _RacimosVistaState extends State<RacimosVista> {
     //}
     //return Row();
   }
+
+  void cargarDatosLotes() async {
+    LoteProvider _provider = LoteProvider();
+    Future<List<Lote>> _futureOfList = _provider.todosLosLotes();
+    List<Lote> list = await _futureOfList;
+    list.forEach((element) {
+      var newLote = Map<String, String>();
+      newLote[element.id.toString()] = element.numero.toString();
+      todosLotes.addAll(newLote);
+    });
+  }
+
+  void cargarDatosColores() async {
+    ColorProvider _provider = ColorProvider();
+    Future<List<Colour>> _futureOfList = _provider.getAll();
+    List<Colour> list = await _futureOfList;
+    list.forEach((element) {
+      var newColor = Map<String, String>();
+      newColor[element.id.toString()] = element.nombre.toString();
+      todosColores.addAll(newColor);
+    });
+    //var powerRanger = todosColores["17"];
+    //print(powerRanger);
+  }
 }
 
 class CosechadoList extends StatelessWidget {
@@ -160,7 +199,7 @@ Widget _crearCartaCosechado(BuildContext context, Cosechado c) {
               Padding(
                   padding: const EdgeInsets.only(left: 10, top: 7.0),
                   child: Row(children: <Widget>[
-                    Text("Color de Cinta: " + c.colorCinta),
+                    Text("Color de Cinta: " + todosColores["18"]),
                   ])),
               Padding(
                   padding: const EdgeInsets.only(left: 280.0, top: 0.0),
