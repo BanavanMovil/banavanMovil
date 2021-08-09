@@ -24,7 +24,7 @@ class PerdidoBloc {
       movieListSink.add(Response.completed(perdidos));
     } catch (e) {
       movieListSink.add(Response.error(e.toString()));
-      print(e);
+      //print(e);
     }
   }
 

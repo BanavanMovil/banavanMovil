@@ -30,7 +30,7 @@ class EnfundadoBloc {
         stackTrace: stackTrace,
       );
       movieListSink.add(Response.error(e.toString()));
-      print(e);
+      //print(e);
     }
   }
 

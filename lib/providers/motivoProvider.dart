@@ -1,43 +1,24 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:banavanmov/model/motivo.dart';
 import 'package:http/http.dart' as http;
-import 'dart:async';
 import 'dart:convert';
-import 'package:banavanmov/model/enfundado.dart';
 import 'package:banavanmov/exception/customException.dart';
 
-class EnfundadoProvider {
-  final String baseUrl = 'http://demo7764382.mockable.io/enfundados/';
+class MotivoProvider {
+  final String baseUrl =
+      'https://coco-backend-api.herokuapp.com/api/perdidaMotivo/';
 
-  //POST
-  Future<bool> postEnfundado(Enfundado enfundado) async {
-    final response = await http.post(baseUrl, body: enfundado.toJson());
-    final decodeData = json.decode(response.body);
-
-    //print(decodeData);
-    return true;
-  }
-
-  //PUT
-  Future<bool> updateEnfundado(Enfundado enfundado) async {
-    final response = await http.put(baseUrl + enfundado.id.toString(),
-        body: enfundado.toJson());
-    final decodeData = json.decode(response.body);
-
-    //print(decodeData);
-    return true;
-  }
-
-  Future<List<dynamic>> getAll() async {
+  Future<List<Motivo>> getAll() async {
     var responseJson;
     try {
-      final resp = await http.get(baseUrl);
+      final resp = await http.get(baseUrl + 'get');
       responseJson = _response(resp);
     } on SocketException {
       throw FetchDataException('Sin Conexion');
     }
-    return responseJson;
+
+    return MotivoResponse.fromJson(responseJson).results;
   }
 
   dynamic _response(http.Response response) {

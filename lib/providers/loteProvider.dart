@@ -24,7 +24,7 @@ class LoteProvider {
     try {
       final resp = await http.get(baseUrl + 'get');
       responseJson = _response(resp);
-      // print(responseJson['lotes']);
+      //print(responseJson['lotes']);
     } on SocketException {
       throw FetchDataException('Sin Conexion');
     }

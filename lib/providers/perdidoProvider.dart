@@ -8,14 +8,14 @@ import 'package:banavanmov/exception/customException.dart';
 
 class PerdidoProvider {
   final String url = 'https://api.jsonbin.io/b/60b12f05a5cd4a5576a9933e';
-  //final String url = 'https://api.jsonbin.io/b/60b2c67392af611956f5da02';
+  //final String url = 'https://coco-backend-api.herokuapp.com/api/perdido/';
 
   //POST
   Future<bool> postPerdido(Perdido perdido) async {
     final response = await http.post(url, body: perdido.toJson());
     final decodeData = json.decode(response.body);
 
-    print(decodeData);
+    //print(decodeData);
     return true;
   }
 
@@ -25,7 +25,7 @@ class PerdidoProvider {
         await http.put(url + perdido.id.toString(), body: perdido.toJson());
     final decodeData = json.decode(response.body);
 
-    print(decodeData);
+    //print(decodeData);
     return true;
   }
 
@@ -59,7 +59,7 @@ class PerdidoProvider {
     switch (response.statusCode) {
       case 200:
         var responseJson = json.decode(response.body.toString());
-        print(responseJson);
+        //print(responseJson);
         return responseJson;
       case 400:
         throw BadRequestException(response.body.toString());

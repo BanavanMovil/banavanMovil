@@ -14,7 +14,7 @@ class CosechadoProvider {
     final response = await http.post(url, body: cosechado.toJson());
     final decodeData = json.decode(response.body);
 
-    print(decodeData);
+    //print(decodeData);
     return true;
   }
 
@@ -24,7 +24,7 @@ class CosechadoProvider {
         await http.put(url + cosechado.id.toString(), body: cosechado.toJson());
     final decodeData = json.decode(response.body);
 
-    print(decodeData);
+    //print(decodeData);
     return true;
   }
 
@@ -43,7 +43,7 @@ class CosechadoProvider {
     switch (response.statusCode) {
       case 200:
         var responseJson = json.decode(response.body.toString());
-        print(responseJson);
+        //print(responseJson);
         return responseJson;
       case 400:
         throw BadRequestException(response.body.toString());
