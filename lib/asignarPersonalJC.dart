@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-class AsignarPersonalJC extends StatefulWidget {}
+class AsignarPersonalJC extends StatefulWidget {
+  @override
+  _AsignarPersonalJCState createState() => _AsignarPersonalJCState();
+}
 
 class _AsignarPersonalJCState extends State<AsignarPersonalJC> {
   @override
