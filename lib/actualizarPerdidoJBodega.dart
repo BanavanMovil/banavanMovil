@@ -1,12 +1,11 @@
 import 'package:banavanmov/model/perdido.dart';
 import 'package:banavanmov/providers/perdidoProvider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:banavanmov/vistaPerdidosJBodega.dart';
 
 import 'package:banavanmov/model/color.dart';
-import 'package:banavanmov/providers/colorProvider.dart';
 
 import 'package:banavanmov/model/lote.dart';
 import 'package:banavanmov/model/personnel.dart';
@@ -33,6 +32,7 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
   final globalKey = GlobalKey<ScaffoldState>();
   String trabajador, personnelResult;
   String lote, loteResult;
+  // ignore: non_constant_identifier_names
   DateTime fecha_registro;
   String semana, semanaResult;
   String color, colorResult;

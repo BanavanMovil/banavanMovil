@@ -1,13 +1,13 @@
 import 'package:banavanmov/model/enfundado.dart';
 import 'package:banavanmov/providers/enfundadoProvider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:banavanmov/vistaEnfundadoJBodega.dart';
 
 import 'package:banavanmov/model/color.dart';
 import 'package:banavanmov/model/lote.dart';
-import 'package:banavanmov/providers/colorProvider.dart';
+
 import 'package:banavanmov/model/personnel.dart';
 import 'package:banavanmov/providers/personnelProvider.dart';
 import 'package:banavanmov/model/semana.dart';

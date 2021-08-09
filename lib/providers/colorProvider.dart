@@ -4,7 +4,6 @@ import 'package:banavanmov/model/color.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:banavanmov/exception/customException.dart';
-import 'package:banavanmov/model/lote.dart';
 
 class ColorProvider {
   final String baseUrl = 'https://coco-backend-api.herokuapp.com/api/color/';

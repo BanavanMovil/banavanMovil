@@ -8,9 +8,9 @@ import 'package:banavanmov/model/semana.dart';
 import 'package:banavanmov/providers/semanaProvider.dart';
 import 'package:banavanmov/providers/loteProvider.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:flutter/services.dart';
-import 'package:banavanmov/model/enfundado.dart';
+
 import 'package:banavanmov/vistaEnfundadoJBodega.dart';
 import 'package:banavanmov/providers/enfundadoProvider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
@@ -23,12 +23,15 @@ class PublicarEnfundadoJB extends StatefulWidget {
 class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
   final _formKey = GlobalKey<FormState>();
   final globalKey = GlobalKey<ScaffoldState>();
+  // ignore: non_constant_identifier_names
   DateTime fecha_entrega;
   String usuario, personnelResult;
   String semana, semanaResult;
   String lote, loteResult;
   String lote2;
+  // ignore: non_constant_identifier_names
   String fundas_entregadas, fundas_entregadasResult;
+  // ignore: non_constant_identifier_names
   String fundas_recibidas, fundas_recibidasResult;
   String color, colorResult;
 

@@ -1,8 +1,8 @@
 //https://flutter-es.io/docs/cookbook/navigation/navigation-basics
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:flutter/services.dart';
-import 'package:banavanmov/model/cosechado.dart';
+
 import 'package:banavanmov/vistaRacimosJBodega.dart';
 import 'package:banavanmov/providers/cosechadoProvider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';

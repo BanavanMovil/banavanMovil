@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -32,7 +31,7 @@ class PerdidoProvider {
   Future<List<Perdido>> getAllPerdido() async {
     final response = await http.get(url);
     final List<dynamic> decodedData = json.decode(response.body);
-    final List<Perdido> perdidos = new List();
+    final List<Perdido> perdidos = [];
 
     if (decodedData == null) return [];
 

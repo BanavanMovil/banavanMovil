@@ -66,7 +66,7 @@ class Response<T> {
   T data;
   String message;
 
-  Response() {}
+  Response();
   Response.loading(this.message) : status = Status.LOADING;
   Response.completed(this.data) : status = Status.COMPLETED;
   Response.error(this.message) : status = Status.ERROR;

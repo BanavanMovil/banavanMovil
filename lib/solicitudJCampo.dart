@@ -1,16 +1,13 @@
-import 'dart:io';
 import 'package:banavanmov/model/solicitud.dart';
 import 'package:banavanmov/providers/solicitudProvider.dart';
-import 'package:http/http.dart' as http;
-import 'package:banavanmov/exception/customException.dart';
-import 'package:banavanmov/mainJCampo.dart';
+
 import 'package:banavanmov/model/actividad.dart';
 import 'package:banavanmov/model/lote.dart';
 import 'package:banavanmov/model/solicitudTipo.dart';
 import 'package:banavanmov/providers/actividadProvider.dart';
 import 'package:banavanmov/providers/loteProvider.dart';
 import 'package:banavanmov/providers/solicitudTipoProvider.dart';
-import 'package:banavanmov/response.dart';
+
 import 'package:flutter/material.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';

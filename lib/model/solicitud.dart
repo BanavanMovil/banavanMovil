@@ -16,28 +16,46 @@ class SolicitudResponse {
 
 class Solicitud {
   int id;
+  // ignore: non_constant_identifier_names
   int user_id;
+  // ignore: non_constant_identifier_names
   int solicitud_tipo_id;
   String mensaje;
+  // ignore: non_constant_identifier_names
   int personal_requerido;
+  // ignore: non_constant_identifier_names
   int lote_id;
+  // ignore: non_constant_identifier_names
   String fecha_actividad;
+  // ignore: non_constant_identifier_names
   bool is_accepted;
+  // ignore: non_constant_identifier_names
   bool is_answered;
+  // ignore: non_constant_identifier_names
   bool is_used;
+  // ignore: non_constant_identifier_names
   int actividad_id;
 
   Solicitud(
       {this.id,
+      // ignore: non_constant_identifier_names
       this.user_id,
+      // ignore: non_constant_identifier_names
       this.solicitud_tipo_id,
       this.mensaje,
+      // ignore: non_constant_identifier_names
       this.personal_requerido,
+      // ignore: non_constant_identifier_names
       this.lote_id,
+      // ignore: non_constant_identifier_names
       this.fecha_actividad,
+      // ignore: non_constant_identifier_names
       this.is_accepted,
+      // ignore: non_constant_identifier_names
       this.is_answered,
+      // ignore: non_constant_identifier_names
       this.is_used,
+      // ignore: non_constant_identifier_names
       this.actividad_id});
 
   factory Solicitud.fromJson(Map<String, dynamic> json) => Solicitud(

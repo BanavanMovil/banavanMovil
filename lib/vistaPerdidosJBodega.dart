@@ -9,10 +9,6 @@ import 'package:banavanmov/blocs/perdidoBloc.dart';
 import 'package:banavanmov/response.dart';
 import 'package:banavanmov/actualizarPerdidoJBodega.dart';
 
-import 'package:banavanmov/model/motivo.dart';
-import 'package:banavanmov/providers/motivoProvider.dart';
-import 'package:dropdown_formfield/dropdown_formfield.dart';
-
 class PerdidosVista extends StatefulWidget {
   @override
   _PerdidosVistaState createState() => _PerdidosVistaState();
