@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class EnfundadoResponse {
   List<Enfundado> results;
   EnfundadoResponse({this.results});
@@ -16,18 +14,26 @@ class EnfundadoResponse {
 
 class Enfundado {
   int id;
+  // ignore: non_constant_identifier_names
   int lote_id;
+  // ignore: non_constant_identifier_names
   int semana_id;
+  // ignore: non_constant_identifier_names
   String user_id;
   String fecha;
+  // ignore: non_constant_identifier_names
   int fundas_entregadas;
 
   Enfundado(
       {this.id,
+      // ignore: non_constant_identifier_names
       this.lote_id,
+      // ignore: non_constant_identifier_names
       this.semana_id,
+      // ignore: non_constant_identifier_names
       this.user_id,
       this.fecha,
+      // ignore: non_constant_identifier_names
       this.fundas_entregadas});
 
   factory Enfundado.fromJson(Map<String, dynamic> json) => Enfundado(

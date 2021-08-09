@@ -15,12 +15,14 @@ class ColourResponse {
 class Colour {
   int id;
   String nombre;
+  // ignore: non_constant_identifier_names
   String hex_code;
   String numero;
 
   Colour({
     this.id,
     this.nombre,
+    // ignore: non_constant_identifier_names
     this.hex_code,
     this.numero,
   });

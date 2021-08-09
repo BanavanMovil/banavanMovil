@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class SolicitudResponse {
   List<Solicitud> results;
   SolicitudResponse({this.results});
@@ -40,16 +42,16 @@ class Solicitud {
 
   factory Solicitud.fromJson(Map<String, dynamic> json) => Solicitud(
       id: json['id'],
-      lote_id: json['lote_id'],
-      solicitud_tipo_id: json['solicitud_tipo_id'],
-      user_id: json['user_id'],
+      lote_id: int.parse(json['lote_id']),
+      solicitud_tipo_id: int.parse(json['solicitud_tipo_id']),
+      user_id: int.parse(json['user_id']),
       mensaje: json['mensaje'],
-      personal_requerido: json['personal_requerido'],
+      personal_requerido: int.parse(json['personal_requerido']),
       fecha_actividad: json['fecha_actividad'],
-      is_accepted: json['is_accepted'],
-      is_answered: json['is_answered'],
-      is_used: json['is_used'],
-      actividad_id: json['actividad_id']);
+      is_accepted: json['is_accepted'] == "0" ? false : true,
+      is_answered: json['is_answered'] == "0" ? false : true,
+      is_used: json['is_used'] == "0" ? false : true,
+      actividad_id: int.parse(json['actividad_id']));
 
   Map<String, dynamic> toJson() => {
         'id': id,

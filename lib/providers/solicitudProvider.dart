@@ -18,13 +18,25 @@ class SolicitudProvider {
     } on SocketException {
       throw FetchDataException('Sin Conexion');
     }
-    return SolicitudResponse.fromJson(responseJson).results;
+    return SolicitudResponse.fromJson(responseJson['solicitudes']).results;
   }
 
   //POST
   Future<bool> sendSolicitud(Solicitud solicitud) async {
-    //TODO
-    return true;
+    print("Aqui esta la solicitud:" + solicitud.toJson().toString());
+    final response = await http.post(baseUrl + "create",
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: json.encode(solicitud.toJson()));
+    if (response.statusCode == 200) {
+      print("Este es el status code: " + response.statusCode.toString());
+      print("Solicitud Creada");
+      return true;
+    } else {
+      print(response.body);
+      print("Este es el status code: " + response.statusCode.toString());
+      print("Algo paso");
+      return false;
+    }
   }
 
   dynamic _response(http.Response response) {

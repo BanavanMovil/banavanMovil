@@ -1,6 +1,7 @@
 import 'package:banavanmov/actividadesJCampo.dart';
 import 'package:banavanmov/solicitudJCampo.dart';
 import 'package:banavanmov/historialJCampo.dart';
+import 'package:banavanmov/vistaSolicitudesJC.dart';
 import 'package:flutter/material.dart';
 
 class MainJCampo extends StatefulWidget {
@@ -74,7 +75,7 @@ class _MainJCampoState extends State<MainJCampo> {
                             textAlign: TextAlign.center,
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
-                        onPressed: solicitudGerente,
+                        onPressed: misSolicitudes,
                       ),
                       Placeholder(
                         fallbackHeight: 50,
@@ -110,6 +111,13 @@ class _MainJCampoState extends State<MainJCampo> {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       //globals.isLoggedIn = true;
       return HistorialJC();
+    }));
+  }
+
+  void misSolicitudes() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      //globals.isLoggedIn = true;
+      return SolicitudesJC();
     }));
   }
 }

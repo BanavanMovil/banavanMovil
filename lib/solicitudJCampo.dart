@@ -1,3 +1,8 @@
+import 'dart:io';
+import 'package:banavanmov/model/solicitud.dart';
+import 'package:banavanmov/providers/solicitudProvider.dart';
+import 'package:http/http.dart' as http;
+import 'package:banavanmov/exception/customException.dart';
 import 'package:banavanmov/mainJCampo.dart';
 import 'package:banavanmov/model/actividad.dart';
 import 'package:banavanmov/model/lote.dart';
@@ -5,6 +10,7 @@ import 'package:banavanmov/model/solicitudTipo.dart';
 import 'package:banavanmov/providers/actividadProvider.dart';
 import 'package:banavanmov/providers/loteProvider.dart';
 import 'package:banavanmov/providers/solicitudTipoProvider.dart';
+import 'package:banavanmov/response.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
@@ -15,24 +21,35 @@ class SolicitudJC extends StatefulWidget {
 }
 
 class SolicitudJCState extends State<SolicitudJC> {
-  List<dynamic> tipoSolicitud = [
-    {"display": "Cosecha", "value": "Cosecha"},
-    {"display": "Cosecha", "value": "Cosecha"}
-  ];
+  List<Lote> lotes;
+  String prueba;
   String _selectedTipo, _selectedTipoResult;
   String _selectedLote, _selectedLoteResult;
   int _selectedTrabajadores, _selectedTrabajadoresResult;
   String _selectedMensaje, _selectedMensajeResult;
   String _selectedActividad, _selectedActividadResult;
+  DateTime _selectedFecha, _selectedFechaResult;
+  SolicitudProvider sp;
   final formKey = new GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
     _selectedTipo = '';
     _selectedTipoResult = '';
+    _selectedLote = '';
+    _selectedLoteResult = '';
+    _selectedTrabajadores = 0;
+    _selectedTrabajadoresResult = 0;
+    _selectedMensaje = '';
+    _selectedMensajeResult = '';
+    _selectedActividad = '';
+    _selectedActividadResult = '';
+
+    sp = new SolicitudProvider();
   }
 
-  _saveForm() {
+  _saveForm(/*BuildContext context*/) {
+    print("Entra al boton guardar");
     var form = formKey.currentState;
     if (form.validate()) {
       form.save();
@@ -41,7 +58,32 @@ class SolicitudJCState extends State<SolicitudJC> {
         _selectedLoteResult = _selectedLote;
         _selectedTrabajadoresResult = _selectedTrabajadores;
         _selectedMensajeResult = _selectedMensaje;
+        _selectedActividadResult = _selectedActividad;
+        _selectedFechaResult = _selectedFecha;
       });
+
+      Solicitud s = new Solicitud(
+          id: -1,
+          lote_id: int.parse(_selectedLoteResult),
+          solicitud_tipo_id: int.parse(_selectedTipoResult),
+          user_id: 1,
+          mensaje: _selectedMensajeResult,
+          personal_requerido: _selectedTrabajadoresResult,
+          fecha_actividad: _selectedFecha.toString(),
+          is_accepted: false,
+          is_answered: false,
+          is_used: false,
+          actividad_id: int.parse(_selectedActividadResult));
+
+      sp.sendSolicitud(s);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Solicitud Creada'),
+          action: SnackBarAction(
+            label: 'Cerrar',
+            onPressed: () {
+              // Code to execute.
+            },
+          )));
     }
   }
 
@@ -197,6 +239,34 @@ class SolicitudJCState extends State<SolicitudJC> {
                         },
                       )
                     ])),
+                new ListTile(
+                    //leading: const Icon(Icons.star),
+                    title: Row(
+                  children: <Widget>[
+                    Text(_selectedFecha == null
+                        ? "No ha seleccionado fecha"
+                        : _selectedFecha.toString()),
+                    Spacer(),
+                    ElevatedButton(
+                        onPressed: () {
+                          showDatePicker(
+                                  context: context,
+                                  initialDate: _selectedFecha == null
+                                      ? DateTime.now()
+                                      : _selectedFecha,
+                                  firstDate: DateTime(2001),
+                                  lastDate: DateTime(2222))
+                              .then((date) {
+                            setState(() {
+                              _selectedFecha = date;
+                              print(_selectedFecha);
+                              //_selectedFechaResult = _selectedFecha;
+                            });
+                          });
+                        },
+                        child: Icon(Icons.date_range))
+                  ],
+                )),
                 Container(
                   padding: EdgeInsets.all(10),
                   child: TextFormField(
@@ -221,9 +291,8 @@ class SolicitudJCState extends State<SolicitudJC> {
                   ),
                 ),
                 Center(
-                  child: ElevatedButton(
-                      child: Text('Guardar'), onPressed: _saveForm),
-                )
+                    child: ElevatedButton(
+                        child: Text('Guardar'), onPressed: _saveForm)),
               ]),
             ),
           ),
@@ -235,14 +304,14 @@ class SolicitudJCState extends State<SolicitudJC> {
 
     //print(lista2);
     lotes.forEach((element) {
-      print(element.id.toString() + element.numero.toString());
+      //print(element.id.toString() + element.numero.toString());
       var pedazo = {
         "display": element.numero.toString(),
         "value": element.id.toString()
       };
       lista.add(pedazo);
     });
-    print(lista);
+    //print(lista);
     return lista;
   }
 
@@ -251,14 +320,14 @@ class SolicitudJCState extends State<SolicitudJC> {
 
     //print(lista2);
     tipos.forEach((element) {
-      print(element.id.toString() + element.titulo.toString());
+      //print(element.id.toString() + element.titulo.toString());
       var pedazo = {
         "display": element.titulo.toString(),
         "value": element.id.toString()
       };
       lista.add(pedazo);
     });
-    print(lista);
+    //print(lista);
     return lista;
   }
 
@@ -267,14 +336,14 @@ class SolicitudJCState extends State<SolicitudJC> {
 
     //print(lista2);
     actividades.forEach((element) {
-      print(element.id.toString() + element.nombre.toString());
+      //print(element.id.toString() + element.nombre.toString());
       var pedazo = {
         "display": element.nombre.toString(),
         "value": element.id.toString()
       };
       lista.add(pedazo);
     });
-    print(lista);
+    //print(lista);
     return lista;
   }
 }

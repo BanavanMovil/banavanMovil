@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class PerdidoResponse {
   List<Perdido> results;
   PerdidoResponse({this.results});

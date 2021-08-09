@@ -1,4 +1,5 @@
-import 'package:banavanmov/blocs/actividadBloc.dart';
+import 'package:banavanmov/blocs/solicitudesBloc.dart';
+import 'package:banavanmov/model/solicitud.dart';
 import 'package:banavanmov/providers/actividadProvider.dart';
 import 'package:banavanmov/response.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,20 +7,20 @@ import 'package:flutter/material.dart';
 
 import 'model/actividad.dart';
 
-class ActividadesJC extends StatefulWidget {
+class SolicitudesJC extends StatefulWidget {
   @override
-  _ActividadesJCState createState() => _ActividadesJCState();
+  _SolicitudesJCState createState() => _SolicitudesJCState();
 }
 
-class _ActividadesJCState extends State<ActividadesJC> {
+class _SolicitudesJCState extends State<SolicitudesJC> {
   final ActividadProvider ap = new ActividadProvider();
   bool isBusqueda = false;
-  ActividadBloc _bloc;
+  SolicitudBloc _bloc;
 
   @override
   void initState() {
     super.initState();
-    _bloc = ActividadBloc();
+    _bloc = SolicitudBloc();
   }
 
   @override
@@ -29,7 +30,7 @@ class _ActividadesJCState extends State<ActividadesJC> {
         backgroundColor: Colors.orange,
         centerTitle: true,
         title: !isBusqueda
-            ? Text('Jefe de Bodega \n    Enfundado')
+            ? Text('Jefe de Campo')
             : TextField(
                 onChanged: (value) {
                   //_filterEmpleos(value);
@@ -65,9 +66,9 @@ class _ActividadesJCState extends State<ActividadesJC> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => _bloc.fetchAllActividades(),
-        child: StreamBuilder<Response<List<Actividad>>>(
-          stream: _bloc.actividadListStream,
+        onRefresh: () => _bloc.fetchAllSolicitudes(),
+        child: StreamBuilder<Response<List<Solicitud>>>(
+          stream: _bloc.solicitudListStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               switch (snapshot.data.status) {
@@ -75,12 +76,12 @@ class _ActividadesJCState extends State<ActividadesJC> {
                   return Loading(loadingMessage: snapshot.data.message);
                   break;
                 case Status.COMPLETED:
-                  return ActividadList(actividades: snapshot.data.data);
+                  return SolicitudList(solicitudes: snapshot.data.data);
                   break;
                 case Status.ERROR:
                   return Error(
                     errorMessage: snapshot.data.message,
-                    onRetryPressed: () => _bloc.fetchAllActividades(),
+                    onRetryPressed: () => _bloc.fetchAllSolicitudes(),
                   );
                   break;
               }
@@ -89,7 +90,7 @@ class _ActividadesJCState extends State<ActividadesJC> {
           },
         ),
       ),
-      floatingActionButton: botonNuevaActividad(context),
+      //floatingActionButton: botonNuevaActividad(context),
     );
   }
 
@@ -161,20 +162,22 @@ class _ActividadesJCState extends State<ActividadesJC> {
   }
 }
 
-class ActividadList extends StatelessWidget {
-  final List<Actividad> actividades;
-  const ActividadList({Key key, this.actividades}) : super(key: key);
+class SolicitudList extends StatelessWidget {
+  final List<Solicitud> solicitudes;
+  const SolicitudList({Key key, this.solicitudes}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: actividades.length,
-      itemBuilder: (context, index) {
-        return _crearCartaActividad(context, actividades[index]);
-      },
-    );
+    return solicitudes == null
+        ? Text("No se encontraron Solicitudes")
+        : ListView.builder(
+            itemCount: solicitudes.length,
+            itemBuilder: (context, index) {
+              return _crearCartaActividad(context, solicitudes[index]);
+            },
+          );
   }
 
-  Widget _crearCartaActividad(BuildContext context, Actividad e) {
+  Widget _crearCartaActividad(BuildContext context, Solicitud e) {
     return Padding(
         padding: const EdgeInsets.all(5.0),
         child: Card(
@@ -186,24 +189,81 @@ class ActividadList extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 10, top: 5.0),
                     child: Row(children: <Widget>[
                       Text(
-                        "Actividad ID: " + e.id.toString(),
+                        "Solicitud ID: " + e.id.toString(),
                         style: TextStyle(fontSize: 10),
                       ),
                       Spacer(),
                       Padding(
                           padding: const EdgeInsets.only(right: 10.0),
                           child: IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {
-                              createAlertDialog(context, e);
-                            },
+                            icon: Icon(Icons.edit),
+                            onPressed: () {},
                           ))
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 5.0),
                     child: Row(children: <Widget>[
+                      Text("Trabajadores Requeridos: "),
                       Text(
-                        e.nombre,
+                        e.personal_requerido.toString(),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ])),
+                Placeholder(
+                  fallbackHeight: 10,
+                  fallbackWidth: 100,
+                  color: Colors.transparent,
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text("Numero de Lote: "),
+                      Text(
+                        e.lote_id.toString(),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ])),
+                Placeholder(
+                  fallbackHeight: 10,
+                  fallbackWidth: 100,
+                  color: Colors.transparent,
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text("Fecha: "),
+                      Text(
+                        e.fecha_actividad.toString(),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ])),
+                Placeholder(
+                  fallbackHeight: 10,
+                  fallbackWidth: 100,
+                  color: Colors.transparent,
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text("Mensaje: "),
+                      Text(
+                        e.mensaje,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ])),
+                Placeholder(
+                  fallbackHeight: 10,
+                  fallbackWidth: 100,
+                  color: Colors.transparent,
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text("Estado: "),
+                      Text(
+                        e.is_answered
+                            ? (e.is_accepted ? "Aceptado" : "Rechazado")
+                            : "En espera",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ])),

@@ -15,7 +15,7 @@ class ActividadProvider {
     try {
       final resp = await http.get(baseUrl + 'get');
       responseJson = _response(resp);
-      print(responseJson);
+      //print(responseJson);
     } on SocketException {
       throw FetchDataException('Sin Conexion');
     }
@@ -24,8 +24,19 @@ class ActividadProvider {
 
   //POST
   Future<bool> createActividad(Actividad actividad) async {
-    //TODO
-    return true;
+    final response = await http.post(baseUrl + "create",
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: json.encode(actividad.toJson()));
+    if (response.statusCode == 200) {
+      print("Este es el status code: " + response.statusCode.toString());
+      print("Actividad Creada");
+      return true;
+    } else {
+      print(response.body);
+      print("Este es el status code: " + response.statusCode.toString());
+      print("Algo MALO paso");
+      return false;
+    }
   }
 
   //DELETE

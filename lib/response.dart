@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:banavanmov/exception/customException.dart';
 
 class Error extends StatelessWidget {
   final String errorMessage;
@@ -63,6 +66,7 @@ class Response<T> {
   T data;
   String message;
 
+  Response() {}
   Response.loading(this.message) : status = Status.LOADING;
   Response.completed(this.data) : status = Status.COMPLETED;
   Response.error(this.message) : status = Status.ERROR;
@@ -70,6 +74,26 @@ class Response<T> {
   @override
   String toString() {
     return "Status : $status \n Message : $message \n Data : $data";
+  }
+
+  dynamic response(http.Response response) {
+    switch (response.statusCode) {
+      case 200:
+        var responseJson = json.decode(response.body.toString());
+        //print(responseJson);
+        return responseJson;
+      case 400:
+        throw BadRequestException(response.body.toString());
+      case 401:
+
+      case 403:
+        throw UnauthorisedException(response.body.toString());
+      case 500:
+
+      default:
+        throw FetchDataException(
+            'Error occured while Communication with Server with StatusCode : ${response.statusCode}');
+    }
   }
 }
 

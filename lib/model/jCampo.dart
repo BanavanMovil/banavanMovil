@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class JefeCampoResponse {
   List<JefeCampoModel> results;
   JefeCampoResponse({this.results});

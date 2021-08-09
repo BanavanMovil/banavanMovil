@@ -15,7 +15,7 @@ class SolicitudTipoProvider {
     try {
       final resp = await http.get(baseUrl + 'get');
       responseJson = _response(resp);
-      print(responseJson);
+      //print(responseJson);
     } on SocketException {
       throw FetchDataException('Sin Conexion');
     }
