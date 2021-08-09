@@ -157,68 +157,70 @@ class CosechadoList extends StatelessWidget {
   const CosechadoList({Key key, this.cosechados}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: cosechados.length,
-      itemBuilder: (context, index) {
-        return _crearCartaCosechado(context, cosechados[index]);
-      },
-    );
+    return cosechados == null
+        ? Text("No se encontraron Racimos Cosechados")
+        : ListView.builder(
+            itemCount: cosechados.length,
+            itemBuilder: (context, index) {
+              return _crearCartaCosechado(context, cosechados[index]);
+            },
+          );
   }
-}
 
-Widget _crearCartaCosechado(BuildContext context, Cosechado c) {
-  return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Card(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 10.0),
-                  child: Row(children: <Widget>[
-                    Text(
-                      "Lote: " + c.lote.toString(),
-                      style: TextStyle(fontSize: 10),
-                    ),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 7.0),
-                  child: Row(children: <Widget>[
-                    Text(
-                      "Número de racimos cosechados: " +
-                          c.numRacimos.toString(),
-                      style: TextStyle(),
-                    ),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 7.0),
-                  child: Row(children: <Widget>[
-                    Text("Semana: " + c.semana.toString()),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 7.0),
-                  child: Row(children: <Widget>[
-                    Text("Color de Cinta: " + todosColores["18"]),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 280.0, top: 0.0),
-                  child: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return ActualizarCosechadoJB(c);
-                      }));
-                    },
-                  )),
-              Placeholder(
-                fallbackHeight: 10,
-                fallbackWidth: 100,
-                color: Colors.transparent,
-              ),
-            ]),
-      ));
+  Widget _crearCartaCosechado(BuildContext context, Cosechado c) {
+    return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Card(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 10.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Lote: " + c.lote_id.toString(),
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 7.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Número de racimos cosechados: " +
+                            c.cantidad.toString(),
+                        style: TextStyle(),
+                      ),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 7.0),
+                    child: Row(children: <Widget>[
+                      Text("Semana: " + c.semana_id.toString()),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 7.0),
+                    child: Row(children: <Widget>[
+                      Text("Color de Cinta: " + todosColores["18"]),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 280.0, top: 0.0),
+                    child: IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ActualizarCosechadoJB(c);
+                        }));
+                      },
+                    )),
+                Placeholder(
+                  fallbackHeight: 10,
+                  fallbackWidth: 100,
+                  color: Colors.transparent,
+                ),
+              ]),
+        ));
+  }
 }
 
 class Error extends StatelessWidget {

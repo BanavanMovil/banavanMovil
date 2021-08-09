@@ -14,39 +14,40 @@ class PerdidoResponse {
 
 class Perdido {
   int id;
-  int lote;
-  int semana;
-  String colorCinta;
-  String trabajador;
-  String fechaRegistro;
-  String motivo;
+  int lote_id;
+  int cantidad;
+  int user_id;
+  int perdida_motivo_id;
+  int semana_id;
+  String fecha;
 
   Perdido({
     this.id,
-    this.lote,
-    this.semana,
-    this.colorCinta,
-    this.trabajador,
-    this.fechaRegistro,
-    this.motivo,
+    this.lote_id,
+    this.cantidad,
+    this.user_id,
+    this.perdida_motivo_id,
+    this.semana_id,
+    this.fecha,
   });
 
   factory Perdido.fromJson(Map<String, dynamic> json) => Perdido(
-      id: json['id'],
-      lote: json['lote'],
-      semana: json['semana'],
-      colorCinta: json['colorCinta'],
-      trabajador: json['nombre'],
-      fechaRegistro: json['fechaRegistro'],
-      motivo: json['motivo']);
+        id: json['id'],
+        lote_id: json['lote_id'],
+        cantidad: json['cantidad'],
+        user_id: json['user_id'],
+        perdida_motivo_id: json['perdida_motivo_id'],
+        semana_id: json['semana_id'],
+        fecha: json['fecha'],
+      );
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'lote': lote,
-        'semana': semana,
-        'colorCinta': colorCinta,
-        'nombre': trabajador,
-        'fechaRegistro': fechaRegistro,
-        'motivo': motivo
+        'lote_id': lote_id,
+        'cantidad': cantidad,
+        'user_id': user_id,
+        'perdida_motivo_id': perdida_motivo_id,
+        'semana_id': semana_id,
+        'fecha': fecha,
       };
 }

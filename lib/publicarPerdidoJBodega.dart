@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:banavanmov/vistaPerdidosJBodega.dart';
 import 'package:banavanmov/providers/perdidoProvider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
+import 'package:banavanmov/model/perdido.dart';
+
+import 'package:flutter_number_picker/flutter_number_picker.dart';
 
 import 'package:banavanmov/model/color.dart';
 import 'package:banavanmov/providers/colorProvider.dart';
@@ -22,30 +25,83 @@ class PublicarPerdidoJB extends StatefulWidget {
 }
 
 class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
-  final _formKey = GlobalKey<FormState>();
   final globalKey = GlobalKey<ScaffoldState>();
-  String usuario, personnelResult;
-  DateTime fecha_entrega;
-  String semana, semanaResult;
-  String lote, loteResult;
-  String color, colorResult;
-  String motivo, motivoResult;
+
+  String _selectedLote, _selectedLoteResult;
+  int _selectedCantidad, _selectedCantidadResult;
+  String _selectedUser, _selectedUserResult;
+  String _selectedPerdidaMotivo, _selectedPerdidaMotivoResult;
+  DateTime _selectedFecha, _selectedFechaResult;
+  String _selectedSemana, _selectedSemanaResult;
+
+  PerdidoProvider pp;
+
+  final formKey = GlobalKey<FormState>();
+
+  //String usuario, personnelResult;
+  //DateTime fecha_entrega;
+  //String semana, semanaResult;
+  //String lote, loteResult;
+  //String color, colorResult;
+  //String motivo, motivoResult;
 
   @override
   void initState() {
     super.initState();
-    usuario = '';
-    semana = '';
-    lote = '';
-    color = '';
-    motivo = '';
-    personnelResult = '';
-    semanaResult = '';
-    loteResult = '';
-    colorResult = '';
-    motivoResult = '';
+
+    _selectedLote = '';
+    _selectedLoteResult = '';
+    _selectedCantidad = 0;
+    _selectedCantidadResult = 0;
+    _selectedUser = '';
+    _selectedUserResult = '';
+    _selectedPerdidaMotivo = '';
+    _selectedPerdidaMotivoResult = '';
+    _selectedSemana = '';
+    _selectedSemanaResult = '';
+
+    pp = new PerdidoProvider();
   }
 
+  _saveForm(/*BuildContext context*/) {
+    print("Entra al boton guardar");
+    var form = formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      setState(() {
+        _selectedLoteResult = _selectedLote;
+        _selectedCantidadResult = _selectedCantidad;
+        _selectedUserResult = _selectedUser;
+        _selectedPerdidaMotivoResult = _selectedPerdidaMotivo;
+        _selectedFechaResult = _selectedFecha;
+        _selectedSemanaResult = _selectedSemana;
+      });
+
+      List<String> _arrayNewFecha = _selectedFechaResult.toString().split(' ');
+
+      Perdido p = new Perdido(
+          id: -1,
+          lote_id: int.parse(_selectedLoteResult),
+          cantidad: _selectedCantidadResult,
+          user_id: int.parse(_selectedUserResult),
+          perdida_motivo_id: int.parse(_selectedPerdidaMotivoResult),
+          //fecha: _selectedFechaResult.toString(),
+          fecha: _arrayNewFecha[0],
+          semana_id: int.parse(_selectedSemanaResult));
+
+      pp.sendPerdido(p);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Racimo Perdido Creado'),
+          action: SnackBarAction(
+            label: 'Cerrar',
+            onPressed: () {
+              // Code to execute.
+            },
+          )));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: globalKey,
@@ -60,7 +116,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
           child: Padding(
             padding: const EdgeInsets.all(5.0),
             child: Form(
-              key: _formKey,
+              key: formKey,
               child: Scrollbar(
                 child: ListView(
                   children: <Widget>[
@@ -77,7 +133,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                                 child: DropDownFormField(
                                   titleText: 'Trabajador',
                                   hintText: 'Elija el Trabajador',
-                                  value: personnelResult,
+                                  value: _selectedUser,
                                   validator: (value) {
                                     if (value == null) {
                                       return "Por favor seleccione un trabajador";
@@ -86,12 +142,12 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                                   },
                                   onChanged: (newValue) {
                                     setState(() {
-                                      personnelResult = newValue;
+                                      _selectedUser = newValue;
                                     });
                                   },
                                   onSaved: (value) {
                                     setState(() {
-                                      personnelResult = value;
+                                      _selectedUser = value;
                                     });
                                   },
                                   dataSource: personalDS,
@@ -107,22 +163,22 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                         //leading: const Icon(Icons.star),
                         title: Row(
                       children: <Widget>[
-                        Text(fecha_entrega == null
+                        Text(_selectedFecha == null
                             ? "No ha seleccionado fecha"
-                            : fecha_entrega.toString()),
+                            : _selectedFecha.toString()),
                         Spacer(),
                         ElevatedButton(
                             onPressed: () {
                               showDatePicker(
                                       context: context,
-                                      initialDate: fecha_entrega == null
+                                      initialDate: _selectedFecha == null
                                           ? DateTime.now()
-                                          : fecha_entrega,
+                                          : _selectedFecha,
                                       firstDate: DateTime(2001),
                                       lastDate: DateTime(2222))
                                   .then((date) {
                                 setState(() {
-                                  fecha_entrega = date;
+                                  _selectedFecha = date;
                                 });
                               });
                             },
@@ -142,7 +198,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                                 child: DropDownFormField(
                                   titleText: 'Semana',
                                   hintText: 'Elija la Semana',
-                                  value: semanaResult,
+                                  value: _selectedSemana,
                                   validator: (value) {
                                     if (value == null) {
                                       return "Por favor seleccione una semana";
@@ -151,12 +207,12 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                                   },
                                   onChanged: (newValue) {
                                     setState(() {
-                                      semanaResult = newValue;
+                                      _selectedSemana = newValue;
                                     });
                                   },
                                   onSaved: (value) {
                                     setState(() {
-                                      semanaResult = value;
+                                      _selectedSemana = value;
                                     });
                                   },
                                   dataSource: semanaDS,
@@ -181,7 +237,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                                 child: DropDownFormField(
                                   titleText: 'Lote',
                                   hintText: 'Elija el Lote',
-                                  value: loteResult,
+                                  value: _selectedLote,
                                   validator: (value) {
                                     if (value == null) {
                                       return "Por favor seleccione un lote";
@@ -190,12 +246,12 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                                   },
                                   onChanged: (newValue) {
                                     setState(() {
-                                      loteResult = newValue;
+                                      _selectedLote = newValue;
                                     });
                                   },
                                   onSaved: (value) {
                                     setState(() {
-                                      loteResult = value;
+                                      _selectedLote = value;
                                     });
                                   },
                                   dataSource: loteDS,
@@ -207,7 +263,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                         },
                       ),
                     ),
-                    Center(
+                    /*Center(
                       child: FutureBuilder(
                         future: ColorProvider().getAll(),
                         builder: (BuildContext context,
@@ -245,7 +301,24 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                           return CircularProgressIndicator();
                         },
                       ),
-                    ),
+                    ),*/
+                    Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(children: [
+                          Text(
+                            "Cantidad:",
+                            textAlign: TextAlign.left,
+                          ),
+                          CustomNumberPicker(
+                            initialValue: 0,
+                            maxValue: 10000,
+                            minValue: 0,
+                            onValue: (value) {
+                              this._selectedCantidad = value;
+                              print(this._selectedCantidad);
+                            },
+                          )
+                        ])),
                     Center(
                       child: FutureBuilder(
                         future: MotivoProvider().getAll(),
@@ -259,7 +332,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                                 child: DropDownFormField(
                                   titleText: 'Motivo',
                                   hintText: 'Elija el Motivo',
-                                  value: motivoResult,
+                                  value: _selectedPerdidaMotivo,
                                   validator: (value) {
                                     if (value == null) {
                                       return "Por favor seleccione un motivo";
@@ -268,12 +341,12 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                                   },
                                   onChanged: (newValue) {
                                     setState(() {
-                                      motivoResult = newValue;
+                                      _selectedPerdidaMotivo = newValue;
                                     });
                                   },
                                   onSaved: (value) {
                                     setState(() {
-                                      motivoResult = value;
+                                      _selectedPerdidaMotivo = value;
                                     });
                                   },
                                   dataSource: motivosDS,
@@ -285,12 +358,15 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                         },
                       ),
                     ),
-                    new ElevatedButton(
+                    /*new ElevatedButton(
                       child: Text("Guardar",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 15, color: Colors.white)),
                       onPressed: uploadStatusPerdido,
-                    ),
+                    )*/
+                    Center(
+                        child: ElevatedButton(
+                            child: Text('Guardar'), onPressed: _saveForm)),
                   ],
                 ),
               ),
@@ -301,7 +377,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
     );
   }
 
-  void uploadStatusPerdido() async {
+  /*void uploadStatusPerdido() async {
     print(_formKey.currentState.validate());
     if (_formKey.currentState.validate()) {
       PerdidoProvider pp = new PerdidoProvider();
@@ -313,9 +389,9 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
         return PerdidosVista();
       }));
     }
-  }
+  }*/
 
-  crearDataSourceColor(List<Colour> colores) {
+  /*crearDataSourceColor(List<Colour> colores) {
     var lista = [];
 
     colores.forEach((element) {
@@ -326,7 +402,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
       lista.add(pedazo);
     });
     return lista;
-  }
+  }*/
 
   crearDataSourcePersonnel(List<Personnel> personal) {
     var lista = [];
@@ -335,7 +411,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
       var pedazo = {
         "display":
             element.nombres.toString() + ' ' + element.apellidos.toString(),
-        "value": element.nombres.toString() + ' ' + element.apellidos.toString()
+        "value": element.id.toString()
       };
       if (element.activo.toString() == '1') {
         lista.add(pedazo);
@@ -350,7 +426,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
     semanas.forEach((element) {
       var pedazo = {
         "display": element.numero.toString(),
-        "value": element.numero.toString()
+        "value": element.id.toString()
       };
 
       lista.add(pedazo);
@@ -364,7 +440,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
     lotes.forEach((element) {
       var pedazo = {
         "display": element.numero.toString(),
-        "value": element.numero.toString()
+        "value": element.id.toString()
       };
 
       lista.add(pedazo);
@@ -378,7 +454,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
     motivos.forEach((element) {
       var pedazo = {
         "display": element.titulo.toString(),
-        "value": element.titulo.toString()
+        "value": element.id.toString()
       };
 
       lista.add(pedazo);

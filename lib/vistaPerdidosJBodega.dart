@@ -119,72 +119,75 @@ class PerdidoList extends StatelessWidget {
   const PerdidoList({Key key, this.perdidos}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: perdidos.length,
-      itemBuilder: (context, index) {
-        return _crearCartaPerdido(context, perdidos[index]);
-      },
-    );
+    return perdidos == null
+        ? Text("No se encontraron Racimos Perdidos")
+        : ListView.builder(
+            itemCount: perdidos.length,
+            itemBuilder: (context, index) {
+              return _crearCartaPerdido(context, perdidos[index]);
+            },
+          );
   }
-}
 
-Widget _crearCartaPerdido(BuildContext context, Perdido p) {
-  return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Card(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 10.0),
-                  child: Row(children: <Widget>[
-                    Text(
-                      "Lote: " + p.lote.toString(),
-                      style: TextStyle(fontSize: 10),
-                    ),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 7.0),
-                  child: Row(children: <Widget>[
-                    Text(
-                      "Reportado por: " + p.trabajador.toString(),
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 7.0),
-                  child: Row(children: <Widget>[
-                    Text("Fecha de Reporte: " + p.fechaRegistro.toString()),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 7.0),
-                  child: Row(children: <Widget>[
-                    Text("Motivo de pérdida: " + p.motivo),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 7.0),
-                  child: Row(children: <Widget>[
-                    Text("Color de cinta: " + p.colorCinta),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 280.0, top: 0.0),
-                  child: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return ActualizarPerdidoJB(p);
-                      }));
-                    },
-                  )),
-              Placeholder(
-                fallbackHeight: 10,
-                fallbackWidth: 100,
-                color: Colors.transparent,
-              ),
-            ]),
-      ));
+  Widget _crearCartaPerdido(BuildContext context, Perdido p) {
+    return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Card(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 10.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Lote: " + p.lote_id.toString(),
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 7.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Reportado por: " + p.user_id.toString(),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 7.0),
+                    child: Row(children: <Widget>[
+                      Text("Fecha de Reporte: " + p.fecha.toString()),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 7.0),
+                    child: Row(children: <Widget>[
+                      Text("Motivo de pérdida: " +
+                          p.perdida_motivo_id.toString()),
+                    ])),
+                /*Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 7.0),
+                    child: Row(children: <Widget>[
+                      Text("Color de cinta: " + p.colorCinta),
+                    ])),*/
+                Padding(
+                    padding: const EdgeInsets.only(left: 280.0, top: 0.0),
+                    child: IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ActualizarPerdidoJB(p);
+                        }));
+                      },
+                    )),
+                Placeholder(
+                  fallbackHeight: 10,
+                  fallbackWidth: 100,
+                  color: Colors.transparent,
+                ),
+              ]),
+        ));
+  }
 }
 
 class Error extends StatelessWidget {

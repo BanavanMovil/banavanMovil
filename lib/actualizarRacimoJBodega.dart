@@ -101,8 +101,8 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                           return Container(
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
-                                titleText:
-                                    'Lote Actual: ' + cosechado.lote.toString(),
+                                titleText: 'Lote Actual: ' +
+                                    cosechado.lote_id.toString(),
                                 hintText: 'Elija el Lote',
                                 value: loteResult,
                                 validator: (value) {
@@ -142,7 +142,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
                                 titleText: 'Semana Actual: ' +
-                                    cosechado.semana.toString(),
+                                    cosechado.semana_id.toString(),
                                 hintText: 'Elija la Semana',
                                 value: semanaResult,
                                 validator: (value) {
@@ -176,7 +176,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                       padding: EdgeInsets.only(left: 5.0),
                       child: Text(
                         "Número de Racimos Actual: " +
-                            cosechado.numRacimos.toString(),
+                            cosechado.cantidad.toString(),
                         textAlign: TextAlign.left,
                       ),
                     ),

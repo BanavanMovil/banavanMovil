@@ -8,11 +8,51 @@ import 'package:banavanmov/providers/cosechadoProvider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 import 'package:banavanmov/model/color.dart';
+import 'package:banavanmov/model/cosechado.dart';
 import 'package:banavanmov/providers/colorProvider.dart';
 import 'package:banavanmov/model/lote.dart';
 import 'package:banavanmov/model/semana.dart';
 import 'package:banavanmov/providers/semanaProvider.dart';
 import 'package:banavanmov/providers/loteProvider.dart';
+import 'package:flutter_number_picker/flutter_number_picker.dart';
+import 'package:banavanmov/model/personnel.dart';
+import 'package:banavanmov/providers/personnelProvider.dart';
+
+class NewObject {
+  int id;
+  int lote_id;
+  int cantidad;
+  int user_id;
+  String fecha;
+  int color_id;
+
+  NewObject({
+    this.id,
+    this.lote_id,
+    this.cantidad,
+    this.user_id,
+    this.color_id,
+    this.fecha,
+  });
+
+  factory NewObject.fromJson(Map<String, dynamic> json) => NewObject(
+        id: json['id'],
+        lote_id: json['lote_id'],
+        cantidad: json['cantidad'],
+        user_id: json['user_id'],
+        color_id: json['color_id'],
+        fecha: json['fecha'],
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'lote_id': lote_id,
+        'cantidad': cantidad,
+        'user_id': user_id,
+        'color_id': color_id,
+        'fecha': fecha,
+      };
+}
 
 class PublicarRacimoJB extends StatefulWidget {
   @override
@@ -20,31 +60,105 @@ class PublicarRacimoJB extends StatefulWidget {
 }
 
 class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
-  final _formKey = GlobalKey<FormState>();
   final globalKey = GlobalKey<ScaffoldState>();
-  String semana, semanaResult;
-  String lote, loteResult;
-  String color, colorResult;
-  String numRacimo, numRacimoResult;
+
+  String _selectedLote, _selectedLoteResult;
+  int _selectedCantidad, _selectedCantidadResult;
+  String _selectedUser, _selectedUserResult;
+  DateTime _selectedFecha, _selectedFechaResult;
+  //String _selectedSemana, _selectedSemanaResult;
+
+  String _selectedColor, _selectedColorResult;
+
+  CosechadoProvider cp;
+
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    semana = '';
-    lote = '';
-    color = '';
-    numRacimo = '';
-    semanaResult = '';
-    loteResult = '';
-    colorResult = '';
-    numRacimoResult = '';
+
+    _selectedLote = '';
+    _selectedLoteResult = '';
+    _selectedCantidad = 0;
+    _selectedCantidadResult = 0;
+    _selectedUser = '';
+    _selectedUserResult = '';
+    //_selectedSemana = '';
+    //_selectedSemanaResult = '';
+    _selectedColor = '';
+    _selectedColorResult = '';
+
+    cp = new CosechadoProvider();
   }
 
+  _saveForm(/*BuildContext context*/) {
+    print("Entra al boton guardar");
+    var form = formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      setState(() {
+        _selectedLoteResult = _selectedLote;
+        _selectedCantidadResult = _selectedCantidad;
+        _selectedUserResult = _selectedUser;
+        _selectedFechaResult = _selectedFecha;
+        //_selectedSemanaResult = _selectedSemana;
+        _selectedColorResult = _selectedColor;
+      });
+
+      List<String> _arrayNewFecha = _selectedFechaResult.toString().split(' ');
+
+      NewObject no = new NewObject(
+          id: -1,
+          lote_id: int.parse(_selectedLoteResult),
+          cantidad: _selectedCantidadResult,
+          user_id: int.parse(_selectedUserResult),
+          //fecha: _selectedFechaResult.toString(),
+          fecha: _arrayNewFecha[0],
+          color_id: int.parse(_selectedColorResult));
+
+      cp.sendCosechado(no);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Racimo Cosechado Creado'),
+          action: SnackBarAction(
+            label: 'Cerrar',
+            onPressed: () {
+              // Code to execute.
+            },
+          )));
+
+      /*Cosechado c = new Cosechado(
+          id: -1,
+          lote_id: int.parse(_selectedLoteResult),
+          cantidad: _selectedCantidadResult,
+          user_id: int.parse(_selectedUserResult),
+          //fecha: _selectedFechaResult.toString(),
+          fecha: _arrayNewFecha[0],
+          semana_id: int.parse(_selectedSemanaResult));*/
+
+      /*cp.sendCosechado(c);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Racimo Cosechado Creado'),
+          action: SnackBarAction(
+            label: 'Cerrar',
+            onPressed: () {
+              // Code to execute.
+            },
+          )));*/
+
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        //return Footer();
+        return RacimosVista();
+      }));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: globalKey,
       appBar: AppBar(
-        title: Text('Registro Racimo'),
+        title: Text('Registro Racimo Cosechado'),
         backgroundColor: Colors.orange,
         centerTitle: true,
       ),
@@ -54,11 +168,11 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
           child: Padding(
             padding: const EdgeInsets.all(5.0),
             child: Form(
-              key: _formKey,
+              key: formKey,
               child: Scrollbar(
                 child: ListView(
                   children: <Widget>[
-                    new ListTile(
+                    /*new ListTile(
                       //leading: const Icon(Icons.contact_phone),
 
                       title: TextFormField(
@@ -66,12 +180,12 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                           keyboardType: TextInputType.number,
                           onChanged: (newValue) {
                             setState(() {
-                              numRacimo = newValue;
+                              _selectedCantidad = newValue;
                             });
                           },
                           onSaved: (value) {
                             setState(() {
-                              numRacimo = value;
+                              _selectedCantidad = value;
                             });
                           },
                           validator: (value) {
@@ -88,8 +202,9 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                             //hintText: "whatever you want",
                             //icon: Icon(Icons.phone_iphone)
                           )),
-                    ),
-                    Center(
+                    ),*/
+
+                    /*Center(
                       child: FutureBuilder(
                         future: SemanaProvider().getAll(),
                         builder: (BuildContext context,
@@ -102,7 +217,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                                 child: DropDownFormField(
                                   titleText: 'Semana',
                                   hintText: 'Elija la Semana',
-                                  value: semanaResult,
+                                  value: _selectedSemana,
                                   validator: (value) {
                                     if (value == null) {
                                       return "Por favor seleccione una semana";
@@ -111,12 +226,12 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                                   },
                                   onChanged: (newValue) {
                                     setState(() {
-                                      semanaResult = newValue;
+                                      _selectedSemana = newValue;
                                     });
                                   },
                                   onSaved: (value) {
                                     setState(() {
-                                      semanaResult = value;
+                                      _selectedSemana = value;
                                     });
                                   },
                                   dataSource: semanaDS,
@@ -127,7 +242,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                           return CircularProgressIndicator();
                         },
                       ),
-                    ),
+                    ),*/
                     Center(
                       child: FutureBuilder(
                         future: LoteProvider().todosLosLotes(),
@@ -141,7 +256,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                                 child: DropDownFormField(
                                   titleText: 'Lote',
                                   hintText: 'Elija el Lote',
-                                  value: loteResult,
+                                  value: _selectedLote,
                                   validator: (value) {
                                     if (value == null) {
                                       return "Por favor seleccione un lote";
@@ -150,12 +265,12 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                                   },
                                   onChanged: (newValue) {
                                     setState(() {
-                                      loteResult = newValue;
+                                      _selectedLote = newValue;
                                     });
                                   },
                                   onSaved: (value) {
                                     setState(() {
-                                      loteResult = value;
+                                      _selectedLote = value;
                                     });
                                   },
                                   dataSource: loteDS,
@@ -167,6 +282,88 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                         },
                       ),
                     ),
+                    Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(children: [
+                          Text(
+                            "Cantidad:",
+                            textAlign: TextAlign.left,
+                          ),
+                          CustomNumberPicker(
+                            initialValue: 0,
+                            maxValue: 10000,
+                            minValue: 0,
+                            onValue: (value) {
+                              this._selectedCantidad = value;
+                              print(this._selectedCantidad);
+                            },
+                          )
+                        ])),
+                    Center(
+                      child: FutureBuilder(
+                        future: PersonnelProvider().getAll(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Personnel>> snapshot) {
+                          if (snapshot.hasData) {
+                            var personal = snapshot.data;
+                            var personalDS = crearDataSourcePersonnel(personal);
+                            return Container(
+                                padding: EdgeInsets.all(10),
+                                child: DropDownFormField(
+                                  titleText: 'Trabajador',
+                                  hintText: 'Elija el Trabajador',
+                                  value: _selectedUser,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Por favor seleccione un trabajador";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedUser = newValue;
+                                    });
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      _selectedUser = value;
+                                    });
+                                  },
+                                  dataSource: personalDS,
+                                  textField: 'display',
+                                  valueField: 'value',
+                                ));
+                          }
+                          return CircularProgressIndicator();
+                        },
+                      ),
+                    ),
+                    new ListTile(
+                        //leading: const Icon(Icons.star),
+                        title: Row(
+                      children: <Widget>[
+                        Text(_selectedFecha == null
+                            ? "No ha seleccionado fecha"
+                            : _selectedFecha.toString()),
+                        Spacer(),
+                        ElevatedButton(
+                            onPressed: () {
+                              showDatePicker(
+                                      context: context,
+                                      initialDate: _selectedFecha == null
+                                          ? DateTime.now()
+                                          : _selectedFecha,
+                                      firstDate: DateTime(2001),
+                                      lastDate: DateTime(2222))
+                                  .then((date) {
+                                setState(() {
+                                  _selectedFecha = date;
+                                });
+                              });
+                            },
+                            child: Icon(Icons.date_range))
+                      ],
+                    )),
                     Center(
                       child: FutureBuilder(
                         future: ColorProvider().getAll(),
@@ -180,7 +377,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                                 child: DropDownFormField(
                                   titleText: 'Color',
                                   hintText: 'Elija el Color',
-                                  value: colorResult,
+                                  value: _selectedColor,
                                   validator: (value) {
                                     if (value == null) {
                                       return "Por favor seleccione un color";
@@ -189,12 +386,12 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                                   },
                                   onChanged: (newValue) {
                                     setState(() {
-                                      colorResult = newValue;
+                                      _selectedColor = newValue;
                                     });
                                   },
                                   onSaved: (value) {
                                     setState(() {
-                                      colorResult = value;
+                                      _selectedColor = value;
                                     });
                                   },
                                   dataSource: coloresDS,
@@ -206,12 +403,15 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                         },
                       ),
                     ),
-                    new ElevatedButton(
+                    /*new ElevatedButton(
                       child: Text("Guardar",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 15, color: Colors.white)),
                       onPressed: uploadStatusRacimo,
-                    ),
+                    ),*/
+                    Center(
+                        child: ElevatedButton(
+                            child: Text('Guardar'), onPressed: _saveForm)),
                   ],
                 ),
               ),
@@ -222,7 +422,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
     );
   }
 
-  void uploadStatusRacimo() async {
+  /*void uploadStatusRacimo() async {
     print(_formKey.currentState.validate());
     if (_formKey.currentState.validate()) {
       CosechadoProvider cp = new CosechadoProvider();
@@ -234,6 +434,22 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
         return RacimosVista();
       }));
     }
+  }*/
+
+  crearDataSourcePersonnel(List<Personnel> personal) {
+    var lista = [];
+
+    personal.forEach((element) {
+      var pedazo = {
+        "display":
+            element.nombres.toString() + ' ' + element.apellidos.toString(),
+        "value": element.id.toString()
+      };
+      if (element.activo.toString() == '1') {
+        lista.add(pedazo);
+      }
+    });
+    return lista;
   }
 
   crearDataSourceColor(List<Colour> colores) {
@@ -242,26 +458,26 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
     colores.forEach((element) {
       var pedazo = {
         "display": element.nombre.toString(),
-        "value": element.nombre.toString()
+        "value": element.id.toString()
       };
       lista.add(pedazo);
     });
     return lista;
   }
 
-  crearDataSourceSemana(List<Semana> semanas) {
+  /*crearDataSourceSemana(List<Semana> semanas) {
     var lista = [];
 
     semanas.forEach((element) {
       var pedazo = {
         "display": element.numero.toString(),
-        "value": element.numero.toString()
+        "value": element.id.toString()
       };
 
       lista.add(pedazo);
     });
     return lista;
-  }
+  }*/
 
   crearDataSourceLote(List<Lote> lotes) {
     var lista = [];
@@ -269,7 +485,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
     lotes.forEach((element) {
       var pedazo = {
         "display": element.numero.toString(),
-        "value": element.numero.toString()
+        "value": element.id.toString()
       };
 
       lista.add(pedazo);

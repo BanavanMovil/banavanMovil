@@ -6,16 +6,25 @@ import 'dart:io';
 import 'package:banavanmov/exception/customException.dart';
 
 class PerdidoProvider {
-  final String url = 'https://api.jsonbin.io/b/60b12f05a5cd4a5576a9933e';
-  //final String url = 'https://coco-backend-api.herokuapp.com/api/perdido/';
+  //final String url = 'https://api.jsonbin.io/b/60b12f05a5cd4a5576a9933e';
+  final String url = 'https://coco-backend-api.herokuapp.com/api/perdido/';
 
   //POST
-  Future<bool> postPerdido(Perdido perdido) async {
-    final response = await http.post(url, body: perdido.toJson());
-    final decodeData = json.decode(response.body);
-
-    //print(decodeData);
-    return true;
+  Future<bool> sendPerdido(Perdido perdido) async {
+    print("Aqui esta el racimo perdido:" + perdido.toJson().toString());
+    /*final response = await http.post(url + "create",
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: json.encode(perdido.toJson()));
+    if (response.statusCode == 200) {
+      print("Este es el status code: " + response.statusCode.toString());
+      print("Racimo Perdido Creado");
+      return true;
+    } else {
+      print(response.body);
+      print("Este es el status code: " + response.statusCode.toString());
+      print("Algo paso");
+      return false;
+    }*/
   }
 
   //PUT
@@ -29,7 +38,7 @@ class PerdidoProvider {
   }
 
   Future<List<Perdido>> getAllPerdido() async {
-    final response = await http.get(url);
+    final response = await http.get(url + 'get');
     final List<dynamic> decodedData = json.decode(response.body);
     final List<Perdido> perdidos = [];
 
@@ -46,12 +55,12 @@ class PerdidoProvider {
   Future<List<dynamic>> getAll() async {
     var responseJson;
     try {
-      final resp = await http.get(url);
+      final resp = await http.get(url + 'get');
       responseJson = _response(resp);
     } on SocketException {
       throw FetchDataException('No Internet connection');
     }
-    return responseJson;
+    return responseJson["registros"];
   }
 
   dynamic _response(http.Response response) {

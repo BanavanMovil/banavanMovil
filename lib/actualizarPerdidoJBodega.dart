@@ -113,7 +113,7 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
                                 titleText: 'Trabajador Actual: ' +
-                                    perdido.trabajador.toString(),
+                                    perdido.user_id.toString(),
                                 hintText: 'Elija el Trabajador',
                                 value: personnelResult,
                                 validator: (value) {
@@ -152,8 +152,8 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                           return Container(
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
-                                titleText:
-                                    'Lote Actual: ' + perdido.lote.toString(),
+                                titleText: 'Lote Actual: ' +
+                                    perdido.lote_id.toString(),
                                 hintText: 'Elija el Lote',
                                 value: loteResult,
                                 validator: (value) {
@@ -184,8 +184,7 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                   Container(
                     child: Column(
                       children: <Widget>[
-                        Text("Fecha de Enfundado Actual: " +
-                            perdido.fechaRegistro),
+                        Text("Fecha de Enfundado Actual: " + perdido.fecha),
                         Row(
                           children: <Widget>[
                             Text(fecha_registro == null
@@ -225,7 +224,7 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
                                 titleText: 'Semana Actual: ' +
-                                    perdido.semana.toString(),
+                                    perdido.semana_id.toString(),
                                 hintText: 'Elija la Semana',
                                 value: semanaResult,
                                 validator: (value) {
@@ -265,7 +264,7 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
                                 titleText: 'Motivo Actual: ' +
-                                    perdido.motivo.toString(),
+                                    perdido.perdida_motivo_id.toString(),
                                 hintText: 'Elija el Motivo',
                                 value: motivoResult,
                                 validator: (value) {
