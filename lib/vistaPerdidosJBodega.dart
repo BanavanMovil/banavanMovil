@@ -9,10 +9,31 @@ import 'package:banavanmov/blocs/perdidoBloc.dart';
 import 'package:banavanmov/response.dart';
 import 'package:banavanmov/actualizarPerdidoJBodega.dart';
 
+import 'package:banavanmov/model/lote.dart';
+import 'package:banavanmov/providers/loteProvider.dart';
+
+import 'package:banavanmov/model/color.dart';
+import 'package:banavanmov/providers/colorProvider.dart';
+
+import 'package:banavanmov/model/personnel.dart';
+import 'package:banavanmov/providers/personnelProvider.dart';
+
+import 'package:banavanmov/model/semana.dart';
+import 'package:banavanmov/providers/semanaProvider.dart';
+
+import 'package:banavanmov/model/motivo.dart';
+import 'package:banavanmov/providers/motivoProvider.dart';
+
 class PerdidosVista extends StatefulWidget {
   @override
   _PerdidosVistaState createState() => _PerdidosVistaState();
 }
+
+Map<String, String> todosLotes = {};
+Map<String, String> todosColores = {};
+Map<String, String> todosUsers = {};
+Map<String, String> todosSemanas = {};
+Map<String, String> todosMotivos = {};
 
 class _PerdidosVistaState extends State<PerdidosVista> {
   final PerdidoProvider pv = new PerdidoProvider();
@@ -23,6 +44,12 @@ class _PerdidosVistaState extends State<PerdidosVista> {
   void initState() {
     super.initState();
     _bloc = PerdidoBloc();
+
+    cargarDatosLotes();
+    cargarDatosColores();
+    cargarDatosUsers();
+    cargarDatosSemanas();
+    cargarDatosMotivos();
   }
 
   @override
@@ -112,6 +139,70 @@ class _PerdidosVistaState extends State<PerdidosVista> {
     //}
     //return Row();
   }
+
+  void cargarDatosLotes() async {
+    LoteProvider _provider = LoteProvider();
+    Future<List<Lote>> _futureOfList = _provider.todosLosLotes();
+    List<Lote> list = await _futureOfList;
+    list.forEach((element) {
+      var newLote = Map<String, String>();
+      newLote[element.id.toString()] = element.numero.toString();
+      todosLotes.addAll(newLote);
+    });
+  }
+
+  void cargarDatosColores() async {
+    ColorProvider _provider = ColorProvider();
+    Future<List<Colour>> _futureOfList = _provider.getAll();
+    List<Colour> list = await _futureOfList;
+    list.forEach((element) {
+      var newColor = Map<String, String>();
+      newColor[element.id.toString()] = element.nombre.toString();
+      todosColores.addAll(newColor);
+    });
+    //var powerRanger = todosColores["17"];
+    //print(powerRanger);
+  }
+
+  void cargarDatosUsers() async {
+    PersonnelProvider _provider = PersonnelProvider();
+    Future<List<Personnel>> _futureOfList = _provider.getAll();
+    List<Personnel> list = await _futureOfList;
+    list.forEach((element) {
+      var newPersonnel = Map<String, String>();
+      newPersonnel[element.id.toString()] =
+          element.nombres.toString() + " " + element.apellidos.toString();
+      todosUsers.addAll(newPersonnel);
+    });
+    //var powerRanger = todosColores["17"];
+    //print(powerRanger);
+  }
+
+  void cargarDatosSemanas() async {
+    SemanaProvider _provider = SemanaProvider();
+    Future<List<Semana>> _futureOfList = _provider.getAll();
+    List<Semana> list = await _futureOfList;
+    list.forEach((element) {
+      var newSemana = Map<String, String>();
+      newSemana[element.id.toString()] = element.numero.toString();
+      todosSemanas.addAll(newSemana);
+    });
+    //var powerRanger = todosColores["17"];
+    //print(powerRanger);
+  }
+
+  void cargarDatosMotivos() async {
+    MotivoProvider _provider = MotivoProvider();
+    Future<List<Motivo>> _futureOfList = _provider.getAll();
+    List<Motivo> list = await _futureOfList;
+    list.forEach((element) {
+      var newMotivo = Map<String, String>();
+      newMotivo[element.id.toString()] = element.titulo.toString();
+      todosSemanas.addAll(newMotivo);
+    });
+    //var powerRanger = todosColores["17"];
+    //print(powerRanger);
+  }
 }
 
 class PerdidoList extends StatelessWidget {
@@ -141,7 +232,7 @@ class PerdidoList extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 10, top: 10.0),
                     child: Row(children: <Widget>[
                       Text(
-                        "Lote: " + p.lote_id.toString(),
+                        "Lote: " + todosLotes[p.lote_id.toString()],
                         style: TextStyle(fontSize: 10),
                       ),
                     ])),
@@ -149,7 +240,7 @@ class PerdidoList extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
                       Text(
-                        "Reportado por: " + p.user_id.toString(),
+                        "Reportado por: " + todosUsers[p.user_id.toString()],
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ])),
@@ -162,7 +253,7 @@ class PerdidoList extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
                       Text("Motivo de pérdida: " +
-                          p.perdida_motivo_id.toString()),
+                          todosMotivos[p.perdida_motivo_id.toString()]),
                     ])),
                 /*Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),

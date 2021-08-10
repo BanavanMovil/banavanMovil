@@ -4,18 +4,19 @@ import 'dart:convert';
 import 'package:banavanmov/model/perdido.dart';
 import 'dart:io';
 import 'package:banavanmov/exception/customException.dart';
+import 'package:banavanmov/publicarPerdidoJBodega.dart';
 
 class PerdidoProvider {
   //final String url = 'https://api.jsonbin.io/b/60b12f05a5cd4a5576a9933e';
   final String url = 'https://coco-backend-api.herokuapp.com/api/perdido/';
 
   //POST
-  Future<bool> sendPerdido(Perdido perdido) async {
-    print("Aqui esta el racimo perdido:" + perdido.toJson().toString());
+  Future<bool> sendPerdido(NewObject newObject) async {
+    print("Aqui esta el racimo perdido:" + newObject.toJson().toString());
     /*final response = await http.post(url + "create",
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: json.encode(perdido.toJson()));
-    if (response.statusCode == 200) {
+        body: json.encode(newObject.toJson()));
+    if (response.statusCode == 201) {
       print("Este es el status code: " + response.statusCode.toString());
       print("Racimo Perdido Creado");
       return true;

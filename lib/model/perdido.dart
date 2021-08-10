@@ -14,11 +14,11 @@ class PerdidoResponse {
 
 class Perdido {
   int id;
-  int lote_id;
-  int cantidad;
-  int user_id;
-  int perdida_motivo_id;
-  int semana_id;
+  String lote_id;
+  String cantidad;
+  String user_id;
+  String perdida_motivo_id;
+  String semana_id;
   String fecha;
 
   Perdido({

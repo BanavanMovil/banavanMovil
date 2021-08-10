@@ -19,6 +19,46 @@ import 'package:banavanmov/model/semana.dart';
 import 'package:banavanmov/providers/semanaProvider.dart';
 import 'package:banavanmov/providers/loteProvider.dart';
 
+class NewObject {
+  //int id;
+  int lote_id;
+  int cantidad;
+  int user_id;
+  String fecha;
+  int color_id;
+  int perdida_motivo_id;
+
+  NewObject({
+    //this.id,
+    this.lote_id,
+    this.cantidad,
+    this.user_id,
+    this.color_id,
+    this.fecha,
+    this.perdida_motivo_id,
+  });
+
+  factory NewObject.fromJson(Map<String, dynamic> json) => NewObject(
+        //id: json['id'],
+        lote_id: json['lote_id'],
+        cantidad: json['cantidad'],
+        user_id: json['user_id'],
+        color_id: json['color_id'],
+        fecha: json['fecha'],
+        perdida_motivo_id: json['perdida_motivo_id'],
+      );
+
+  Map<String, dynamic> toJson() => {
+        //'id': id,
+        'lote_id': lote_id,
+        'cantidad': cantidad,
+        'user_id': user_id,
+        'color_id': color_id,
+        'fecha': fecha,
+        'perdida_motivo_id': perdida_motivo_id,
+      };
+}
+
 class PublicarPerdidoJB extends StatefulWidget {
   @override
   _PublicarPerdidoJBState createState() => _PublicarPerdidoJBState();
@@ -32,7 +72,9 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
   String _selectedUser, _selectedUserResult;
   String _selectedPerdidaMotivo, _selectedPerdidaMotivoResult;
   DateTime _selectedFecha, _selectedFechaResult;
-  String _selectedSemana, _selectedSemanaResult;
+  //String _selectedSemana, _selectedSemanaResult;
+
+  String _selectedColor, _selectedColorResult;
 
   PerdidoProvider pp;
 
@@ -57,8 +99,10 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
     _selectedUserResult = '';
     _selectedPerdidaMotivo = '';
     _selectedPerdidaMotivoResult = '';
-    _selectedSemana = '';
-    _selectedSemanaResult = '';
+    //_selectedSemana = '';
+    //_selectedSemanaResult = '';
+    _selectedColor = '';
+    _selectedColorResult = '';
 
     pp = new PerdidoProvider();
   }
@@ -74,12 +118,33 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
         _selectedUserResult = _selectedUser;
         _selectedPerdidaMotivoResult = _selectedPerdidaMotivo;
         _selectedFechaResult = _selectedFecha;
-        _selectedSemanaResult = _selectedSemana;
+        //_selectedSemanaResult = _selectedSemana;
+        _selectedColorResult = _selectedColor;
       });
 
       List<String> _arrayNewFecha = _selectedFechaResult.toString().split(' ');
 
-      Perdido p = new Perdido(
+      NewObject no = new NewObject(
+          //id: -1,
+          lote_id: int.parse(_selectedLoteResult),
+          cantidad: _selectedCantidadResult,
+          user_id: int.parse(_selectedUserResult),
+          perdida_motivo_id: int.parse(_selectedPerdidaMotivoResult),
+          //fecha: _selectedFechaResult.toString(),
+          fecha: _arrayNewFecha[0],
+          color_id: int.parse(_selectedColorResult));
+
+      pp.sendPerdido(no);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Racimo Perdido Creado'),
+          action: SnackBarAction(
+            label: 'Cerrar',
+            onPressed: () {
+              // Code to execute.
+            },
+          )));
+
+      /*Perdido p = new Perdido(
           id: -1,
           lote_id: int.parse(_selectedLoteResult),
           cantidad: _selectedCantidadResult,
@@ -97,7 +162,12 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
             onPressed: () {
               // Code to execute.
             },
-          )));
+          )));*/
+
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        //return Footer();
+        return PerdidosVista();
+      }));
     }
   }
 
@@ -185,7 +255,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                             child: Icon(Icons.date_range))
                       ],
                     )),
-                    Center(
+                    /*Center(
                       child: FutureBuilder(
                         future: SemanaProvider().getAll(),
                         builder: (BuildContext context,
@@ -223,7 +293,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                           return CircularProgressIndicator();
                         },
                       ),
-                    ),
+                    ),*/
                     Center(
                       child: FutureBuilder(
                         future: LoteProvider().todosLosLotes(),
@@ -358,6 +428,45 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                         },
                       ),
                     ),
+                    Center(
+                      child: FutureBuilder(
+                        future: ColorProvider().getAll(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Colour>> snapshot) {
+                          if (snapshot.hasData) {
+                            var colores = snapshot.data;
+                            var coloresDS = crearDataSourceColor(colores);
+                            return Container(
+                                padding: EdgeInsets.all(10),
+                                child: DropDownFormField(
+                                  titleText: 'Color',
+                                  hintText: 'Elija el Color',
+                                  value: _selectedColor,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Por favor seleccione un color";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedColor = newValue;
+                                    });
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      _selectedColor = value;
+                                    });
+                                  },
+                                  dataSource: coloresDS,
+                                  textField: 'display',
+                                  valueField: 'value',
+                                ));
+                          }
+                          return CircularProgressIndicator();
+                        },
+                      ),
+                    ),
                     /*new ElevatedButton(
                       child: Text("Guardar",
                           textAlign: TextAlign.center,
@@ -457,6 +566,19 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
         "value": element.id.toString()
       };
 
+      lista.add(pedazo);
+    });
+    return lista;
+  }
+
+  crearDataSourceColor(List<Colour> colores) {
+    var lista = [];
+
+    colores.forEach((element) {
+      var pedazo = {
+        "display": element.nombre.toString(),
+        "value": element.id.toString()
+      };
       lista.add(pedazo);
     });
     return lista;

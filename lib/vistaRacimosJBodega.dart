@@ -226,7 +226,7 @@ class CosechadoList extends StatelessWidget {
                     child: Row(children: <Widget>[
                       Text(
                         "Trabajador: " + todosUsers[c.user_id.toString()],
-                        style: TextStyle(fontSize: 10),
+                        style: TextStyle(),
                       ),
                     ])),
                 Padding(
