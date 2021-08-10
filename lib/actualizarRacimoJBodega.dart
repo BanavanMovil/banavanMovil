@@ -130,7 +130,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                       },
                     ),
                   ),
-                  Center(
+                  /*Center(
                     child: FutureBuilder(
                       future: SemanaProvider().getAll(),
                       builder: (BuildContext context,
@@ -169,17 +169,17 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                         return CircularProgressIndicator();
                       },
                     ),
-                  ),
+                  ),*/
                   Container(
                       child: Column(children: <Widget>[
-                    Padding(
+                    /*Padding(
                       padding: EdgeInsets.only(left: 5.0),
                       child: Text(
                         "Número de Racimos Actual: " +
                             cosechado.cantidad.toString(),
                         textAlign: TextAlign.left,
                       ),
-                    ),
+                    ),*/
                     new ListTile(
                       title: TextFormField(
                           //controller: _controller,

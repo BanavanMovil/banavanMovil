@@ -16,10 +16,10 @@ class CosechadoResponse {
 
 class Cosechado {
   int id;
-  int lote_id;
-  int cantidad;
-  int user_id;
-  int semana_id;
+  String lote_id;
+  String cantidad;
+  String user_id;
+  String semana_id;
   String fecha;
 
   Cosechado({

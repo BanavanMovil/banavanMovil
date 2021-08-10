@@ -13,10 +13,10 @@ class CosechadoProvider {
   //POST
   Future<bool> sendCosechado(NewObject newObject) async {
     print("Aqui esta el racimo cosechado: " + newObject.toJson().toString());
-    /*final response = await http.post(url + "create",
+    final response = await http.post(url + "create",
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: json.encode(perdido.toJson()));
-    if (response.statusCode == 200) {
+        body: json.encode(newObject.toJson()));
+    if (response.statusCode == 201) {
       print("Este es el status code: " + response.statusCode.toString());
       print("Racimo Perdido Creado");
       return true;
@@ -25,7 +25,7 @@ class CosechadoProvider {
       print("Este es el status code: " + response.statusCode.toString());
       print("Algo paso");
       return false;
-    }*/
+    }
   }
 
   //PUT

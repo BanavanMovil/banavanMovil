@@ -1,4 +1,5 @@
 import 'package:banavanmov/model/cosechado.dart';
+
 import 'package:flutter/material.dart';
 //
 //
@@ -14,6 +15,12 @@ import 'package:banavanmov/providers/loteProvider.dart';
 import 'package:banavanmov/model/color.dart';
 import 'package:banavanmov/providers/colorProvider.dart';
 
+import 'package:banavanmov/model/personnel.dart';
+import 'package:banavanmov/providers/personnelProvider.dart';
+
+import 'package:banavanmov/model/semana.dart';
+import 'package:banavanmov/providers/semanaProvider.dart';
+
 class RacimosVista extends StatefulWidget {
   @override
   _RacimosVistaState createState() => _RacimosVistaState();
@@ -21,6 +28,8 @@ class RacimosVista extends StatefulWidget {
 
 Map<String, String> todosLotes = {};
 Map<String, String> todosColores = {};
+Map<String, String> todosUsers = {};
+Map<String, String> todosSemanas = {};
 
 class _RacimosVistaState extends State<RacimosVista> {
   final CosechadoProvider cv = new CosechadoProvider();
@@ -37,6 +46,8 @@ class _RacimosVistaState extends State<RacimosVista> {
     _bloc = CosechadoBloc();
     cargarDatosLotes();
     cargarDatosColores();
+    cargarDatosUsers();
+    cargarDatosSemanas();
   }
 
   @override
@@ -150,6 +161,33 @@ class _RacimosVistaState extends State<RacimosVista> {
     //var powerRanger = todosColores["17"];
     //print(powerRanger);
   }
+
+  void cargarDatosUsers() async {
+    PersonnelProvider _provider = PersonnelProvider();
+    Future<List<Personnel>> _futureOfList = _provider.getAll();
+    List<Personnel> list = await _futureOfList;
+    list.forEach((element) {
+      var newPersonnel = Map<String, String>();
+      newPersonnel[element.id.toString()] =
+          element.nombres.toString() + " " + element.apellidos.toString();
+      todosUsers.addAll(newPersonnel);
+    });
+    //var powerRanger = todosColores["17"];
+    //print(powerRanger);
+  }
+
+  void cargarDatosSemanas() async {
+    SemanaProvider _provider = SemanaProvider();
+    Future<List<Semana>> _futureOfList = _provider.getAll();
+    List<Semana> list = await _futureOfList;
+    list.forEach((element) {
+      var newSemana = Map<String, String>();
+      newSemana[element.id.toString()] = element.numero.toString();
+      todosSemanas.addAll(newSemana);
+    });
+    //var powerRanger = todosColores["17"];
+    //print(powerRanger);
+  }
 }
 
 class CosechadoList extends StatelessWidget {
@@ -179,7 +217,15 @@ class CosechadoList extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 10, top: 10.0),
                     child: Row(children: <Widget>[
                       Text(
-                        "Lote: " + c.lote_id.toString(),
+                        "Lote: " + todosLotes[c.lote_id.toString()],
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 10.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Trabajador: " + todosUsers[c.user_id.toString()],
                         style: TextStyle(fontSize: 10),
                       ),
                     ])),
@@ -195,12 +241,12 @@ class CosechadoList extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
-                      Text("Semana: " + c.semana_id.toString()),
+                      Text("Semana: " + todosSemanas[c.semana_id.toString()]),
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
-                      Text("Color de Cinta: " + todosColores["18"]),
+                      Text("Fecha: " + c.fecha.toString()),
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 280.0, top: 0.0),

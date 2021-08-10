@@ -19,7 +19,7 @@ import 'package:banavanmov/model/personnel.dart';
 import 'package:banavanmov/providers/personnelProvider.dart';
 
 class NewObject {
-  int id;
+  //int id;
   int lote_id;
   int cantidad;
   int user_id;
@@ -27,7 +27,7 @@ class NewObject {
   int color_id;
 
   NewObject({
-    this.id,
+    //this.id,
     this.lote_id,
     this.cantidad,
     this.user_id,
@@ -36,7 +36,7 @@ class NewObject {
   });
 
   factory NewObject.fromJson(Map<String, dynamic> json) => NewObject(
-        id: json['id'],
+        //id: json['id'],
         lote_id: json['lote_id'],
         cantidad: json['cantidad'],
         user_id: json['user_id'],
@@ -45,7 +45,7 @@ class NewObject {
       );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
+        //'id': id,
         'lote_id': lote_id,
         'cantidad': cantidad,
         'user_id': user_id,
@@ -109,7 +109,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
       List<String> _arrayNewFecha = _selectedFechaResult.toString().split(' ');
 
       NewObject no = new NewObject(
-          id: -1,
+          //id: -1,
           lote_id: int.parse(_selectedLoteResult),
           cantidad: _selectedCantidadResult,
           user_id: int.parse(_selectedUserResult),
