@@ -13,7 +13,7 @@ class PerdidoProvider {
   //POST
   Future<bool> sendPerdido(NewObject newObject) async {
     print("Aqui esta el racimo perdido:" + newObject.toJson().toString());
-    /*final response = await http.post(url + "create",
+    final response = await http.post(url + "create",
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: json.encode(newObject.toJson()));
     if (response.statusCode == 201) {
@@ -25,7 +25,7 @@ class PerdidoProvider {
       print("Este es el status code: " + response.statusCode.toString());
       print("Algo paso");
       return false;
-    }*/
+    }
   }
 
   //PUT

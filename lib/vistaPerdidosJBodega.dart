@@ -198,7 +198,7 @@ class _PerdidosVistaState extends State<PerdidosVista> {
     list.forEach((element) {
       var newMotivo = Map<String, String>();
       newMotivo[element.id.toString()] = element.titulo.toString();
-      todosSemanas.addAll(newMotivo);
+      todosMotivos.addAll(newMotivo);
     });
     //var powerRanger = todosColores["17"];
     //print(powerRanger);
@@ -218,6 +218,14 @@ class PerdidoList extends StatelessWidget {
               return _crearCartaPerdido(context, perdidos[index]);
             },
           );
+
+    /*? ListView.builder(
+            itemCount: perdidos.length,
+            itemBuilder: (context, index) {
+              return _crearCartaPerdido(context, perdidos[index]);
+            },
+          )
+        : Text("No se encontraron Racimos Perdidos");*/
   }
 
   Widget _crearCartaPerdido(BuildContext context, Perdido p) {
