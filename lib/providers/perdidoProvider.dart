@@ -5,6 +5,7 @@ import 'package:banavanmov/model/perdido.dart';
 import 'dart:io';
 import 'package:banavanmov/exception/customException.dart';
 import 'package:banavanmov/publicarPerdidoJBodega.dart';
+import 'package:banavanmov/actualizarPerdidoJBodega.dart';
 
 class PerdidoProvider {
   //final String url = 'https://api.jsonbin.io/b/60b12f05a5cd4a5576a9933e';
@@ -29,13 +30,21 @@ class PerdidoProvider {
   }
 
   //PUT
-  Future<bool> updatePerdido(Perdido perdido) async {
-    final response =
-        await http.put(url + perdido.id.toString(), body: perdido.toJson());
-    final decodeData = json.decode(response.body);
-
-    //print(decodeData);
-    return true;
+  Future<bool> updatePerdido(NewObjectTwo newObjectt) async {
+    print("Aqui esta el racimo perdido: " + newObjectt.toJson().toString());
+    final response = await http.put(url + "update",
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: json.encode(newObjectt.toJson()));
+    if (response.statusCode == 200) {
+      print("Este es el status code: " + response.statusCode.toString());
+      print("Racimo Cosechado Actualizado");
+      return true;
+    } else {
+      print(response.body);
+      print("Este es el status code: " + response.statusCode.toString());
+      print("Algo paso");
+      return false;
+    }
   }
 
   Future<List<Perdido>> getAllPerdido() async {

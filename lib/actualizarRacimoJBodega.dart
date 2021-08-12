@@ -558,7 +558,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
     //print(powerRanger);
   }
 
-  crearDataSourceSemana(List<Semana> semanas) {
+  /*crearDataSourceSemana(List<Semana> semanas) {
     var lista = [];
 
     semanas.forEach((element) {
@@ -570,7 +570,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
       lista.add(pedazo);
     });
     return lista;
-  }
+  }*/
 
   crearDataSourceLote(List<Lote> lotes) {
     var lista = [];
@@ -578,7 +578,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
     lotes.forEach((element) {
       var pedazo = {
         "display": element.numero.toString(),
-        "value": element.numero.toString()
+        "value": element.id.toString()
       };
 
       lista.add(pedazo);
