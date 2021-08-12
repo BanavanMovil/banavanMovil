@@ -5,6 +5,7 @@ import 'package:banavanmov/model/cosechado.dart';
 import 'dart:io';
 import 'package:banavanmov/exception/customException.dart';
 import 'package:banavanmov/publicarRacimoJBodega.dart';
+import 'package:banavanmov/actualizarRacimoJBodega.dart';
 
 class CosechadoProvider {
   //final String url = 'https://api.jsonbin.io/b/60b12ffc893b7c555b1dc945';
@@ -29,13 +30,27 @@ class CosechadoProvider {
   }
 
   //PUT
-  Future<bool> updateCosechado(Cosechado cosechado) async {
-    final response =
-        await http.put(url + cosechado.id.toString(), body: cosechado.toJson());
-    final decodeData = json.decode(response.body);
+  Future<bool> updateCosechado(NewObjectTwo newObjectt) async {
+    print("Aqui esta el racimo cosechado: " + newObjectt.toJson().toString());
+    final response = await http.put(url + "update",
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: json.encode(newObjectt.toJson()));
+    if (response.statusCode == 200) {
+      print("Este es el status code: " + response.statusCode.toString());
+      print("Racimo Cosechado Actualizado");
+      return true;
+    } else {
+      print(response.body);
+      print("Este es el status code: " + response.statusCode.toString());
+      print("Algo paso");
+      return false;
+    }
+    /*final response = await http.put(url + newObjectt.id.toString(),
+        body: newObjectt.toJson());
+    final decodeData = json.decode(response.body);*/
 
     //print(decodeData);
-    return true;
+    //return true;
   }
 
   Future<List<dynamic>> getAll() async {
