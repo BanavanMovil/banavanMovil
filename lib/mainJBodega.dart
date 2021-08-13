@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:banavanmov/vistaEnfundadoJBodega.dart';
 import 'package:banavanmov/vistaRacimosJBodega.dart';
 import 'package:banavanmov/vistaPerdidosJBodega.dart';
+import 'package:banavanmov/Login.dart';
 
 class JBodegaVista extends StatefulWidget {
   @override
@@ -21,12 +22,38 @@ class _JBodegaVista extends State<JBodegaVista> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      key: globalKey,
       appBar: AppBar(
-        title: Text('Jefe de Bodega'),
+        title: const Text('Jefe de Bodega'),
         backgroundColor: Colors.orange,
         centerTitle: true,
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            //tooltip: 'Show Snackbar',
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return Login();
+              }));
+            },
+          ),
+        ],
       ),
+      //key: globalKey,
+      /*appBar: AppBar(
+          title: Text('Jefe de Bodega'),
+          backgroundColor: Colors.orange,
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.add_alert),
+              tooltip: 'Show Snackbar',
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('This is a snackbar')));
+              },
+            ),
+          ]),*/
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         //child: Card(

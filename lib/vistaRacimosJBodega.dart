@@ -1,6 +1,8 @@
 import 'package:banavanmov/model/cosechado.dart';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 //
 //
 import 'package:banavanmov/publicarRacimoJBodega.dart';
@@ -54,6 +56,39 @@ class _RacimosVistaState extends State<RacimosVista> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text.rich(
+          TextSpan(
+            //text: 'Lote: ', // default text style
+            children: <TextSpan>[
+              /*TextSpan(
+                                text: ' beautiful ',
+                                style: TextStyle(fontStyle: FontStyle.italic)),*/
+              TextSpan(
+                  text: "Jefe de Bodega\n",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text: "Racimos Cosechados", style: TextStyle(fontSize: 18.0)),
+            ],
+          ),
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20.0, fontFamily: 'Karla'),
+        ),
+        backgroundColor: Colors.orange,
+        centerTitle: true,
+        //automaticallyImplyLeading: false,
+        /*actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            tooltip: 'Show Snackbar',
+            onPressed: () {
+              /*Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return Login();
+              }));*/
+            },
+          ),
+        ],*/
+      ),
+      /*appBar: AppBar(
         backgroundColor: Colors.orange,
         centerTitle: true,
         title: !isBusqueda
@@ -65,7 +100,7 @@ class _RacimosVistaState extends State<RacimosVista> {
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                     icon: Icon(
-                      Icons.search,
+                      Icons.exit_to_app,
                       color: Colors.white,
                     ),
                     hintText: "Filtra por Semana",
@@ -91,7 +126,7 @@ class _RacimosVistaState extends State<RacimosVista> {
                   },
                 )
         ],
-      ),
+      ),*/
       body: RefreshIndicator(
         onRefresh: () => _bloc.fetchAllCosechados(),
         child: StreamBuilder<Response<List<Cosechado>>>(
@@ -216,39 +251,126 @@ class CosechadoList extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 10.0),
                     child: Row(children: <Widget>[
-                      Text(
+                      /*Text(
                         "Lote: " + todosLotes[c.lote_id.toString()],
                         style: TextStyle(fontSize: 10),
-                      ),
+                      ),*/
+                      Text.rich(
+                        TextSpan(
+                          //text: 'Lote: ', // default text style
+                          children: <TextSpan>[
+                            /*TextSpan(
+                                text: ' beautiful ',
+                                style: TextStyle(fontStyle: FontStyle.italic)),*/
+                            TextSpan(
+                                text: "Lote: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: todosLotes[c.lote_id.toString()].toString(),
+                              //style: TextStyle(fontWeight: FontWeight.bold)
+                            ),
+                          ],
+                        ),
+                      )
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 10.0),
                     child: Row(children: <Widget>[
-                      Text(
+                      /*Text(
                         "Trabajador: " + todosUsers[c.user_id.toString()],
                         style: TextStyle(),
-                      ),
+                      ),*/
+                      Text.rich(
+                        TextSpan(
+                          //text: 'Lote: ', // default text style
+                          children: <TextSpan>[
+                            /*TextSpan(
+                                text: ' beautiful ',
+                                style: TextStyle(fontStyle: FontStyle.italic)),*/
+                            TextSpan(
+                                text: "Trabajador: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: todosUsers[c.user_id.toString()].toString(),
+                              //style: TextStyle(fontWeight: FontWeight.bold)
+                            ),
+                          ],
+                        ),
+                      )
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
-                      Text(
+                      /*Text(
                         "Número de racimos cosechados: " +
                             c.cantidad.toString(),
                         style: TextStyle(),
-                      ),
+                      ),*/
+                      Text.rich(
+                        TextSpan(
+                          //text: 'Lote: ', // default text style
+                          children: <TextSpan>[
+                            /*TextSpan(
+                                text: ' beautiful ',
+                                style: TextStyle(fontStyle: FontStyle.italic)),*/
+                            TextSpan(
+                                text: "Cantidad: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: c.cantidad.toString(),
+                              //style: TextStyle(fontWeight: FontWeight.bold)
+                            ),
+                          ],
+                        ),
+                      )
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
-                      Text("Semana: " + todosSemanas[c.semana_id.toString()]),
+                      /*Text("Semana: " +
+                          todosSemanas[c.semana_id.toString()].toString()),*/
+                      Text.rich(
+                        TextSpan(
+                          //text: 'Lote: ', // default text style
+                          children: <TextSpan>[
+                            /*TextSpan(
+                                text: ' beautiful ',
+                                style: TextStyle(fontStyle: FontStyle.italic)),*/
+                            TextSpan(
+                                text: "Semana: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: todosSemanas[c.semana_id.toString()]
+                                  .toString(),
+                              //style: TextStyle(fontWeight: FontWeight.bold)
+                            ),
+                          ],
+                        ),
+                      )
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
-                      Text("Fecha: " + c.fecha.toString()),
+                      /*Text("Fecha: " + c.fecha.toString()),*/
+                      Text.rich(
+                        TextSpan(
+                          //text: 'Lote: ', // default text style
+                          children: <TextSpan>[
+                            /*TextSpan(
+                                text: ' beautiful ',
+                                style: TextStyle(fontStyle: FontStyle.italic)),*/
+                            TextSpan(
+                                text: "Fecha: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: c.fecha.toString(),
+                              //style: TextStyle(fontWeight: FontWeight.bold)
+                            ),
+                          ],
+                        ),
+                      )
                     ])),
-                Padding(
+                /*Padding(
                     padding: const EdgeInsets.only(left: 280.0, top: 0.0),
                     child: IconButton(
                       icon: Icon(Icons.edit),
@@ -258,11 +380,28 @@ class CosechadoList extends StatelessWidget {
                           return ActualizarCosechadoJB(c);
                         }));
                       },
-                    )),
-                Placeholder(
+                    )),*/
+                /*Placeholder(
                   fallbackHeight: 10,
                   fallbackWidth: 100,
                   color: Colors.transparent,
+                ),*/
+                ButtonBar(
+                  children: <Widget>[
+                    /*FlatButton(
+                      child: const Text('BTN1'),
+                      onPressed: () {/* ... */},
+                    ),*/
+                    FlatButton(
+                      child: const Text('EDITAR'),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ActualizarCosechadoJB(c);
+                        }));
+                      },
+                    ),
+                  ],
                 ),
               ]),
         ));

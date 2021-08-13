@@ -256,7 +256,8 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
                                 titleText: 'Lote Actual: ' +
-                                    todosLotes[cosechado.lote_id.toString()],
+                                    todosLotes[cosechado.lote_id.toString()]
+                                        .toString(),
                                 hintText: 'Elija el Lote',
                                 value: _selectedLote,
                                 validator: (value) {
@@ -375,7 +376,8 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
                                 titleText: 'Trabajador Actual: ' +
-                                    todosUsers[cosechado.user_id.toString()],
+                                    todosUsers[cosechado.user_id.toString()]
+                                        .toString(),
                                 hintText: 'Elija el Trabajador',
                                 value: _selectedUser,
                                 validator: (value) {
@@ -403,10 +405,53 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                       },
                     ),
                   ),
+
+                  /*Center(
+                    child: FutureBuilder(
+                      future: ColorProvider().getAll(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Colour>> snapshot) {
+                        if (snapshot.hasData) {
+                          var colores = snapshot.data;
+                          var coloresDS = crearDataSourceColor(colores);
+                          return Container(
+                              padding: EdgeInsets.all(10),
+                              child: DropDownFormField(
+                                titleText: 'Color Actual: ' +
+                                    todosColores[todosSemanasColores[
+                                        cosechado.semana_id.toString()]],
+                                hintText: 'Elija el Color',
+                                value: _selectedColor,
+                                validator: (value) {
+                                  if (value == null) {
+                                    return "Por favor seleccione un color";
+                                  }
+                                  return null;
+                                },
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedColor = newValue;
+                                  });
+                                },
+                                onSaved: (value) {
+                                  setState(() {
+                                    _selectedColor = value;
+                                  });
+                                },
+                                dataSource: coloresDS,
+                                textField: 'display',
+                                valueField: 'value',
+                              ));
+                        }
+                        return CircularProgressIndicator();
+                      },
+                    ),
+                  ),*/
                   Container(
                     child: Column(
                       children: <Widget>[
-                        Text("Fecha de Cosechado Actual: " + cosechado.fecha),
+                        Text("Fecha de Cosechado Actual: " +
+                            cosechado.fecha.toString()),
                         Row(
                           children: <Widget>[
                             Text(_selectedFecha == null
@@ -445,9 +490,11 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                           return Container(
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
-                                titleText: 'Color Actual: ' +
+                                titleText:
+                                    'Color Actual: ' /*+
                                     todosColores[todosSemanasColores[
-                                        cosechado.semana_id.toString()]],
+                                        cosechado.semana_id.toString()]],*/
+                                ,
                                 hintText: 'Elija el Color',
                                 value: _selectedColor,
                                 validator: (value) {
@@ -572,6 +619,19 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
     return lista;
   }*/
 
+  crearDataSourceColor(List<Colour> colores) {
+    var lista = [];
+
+    colores.forEach((element) {
+      var pedazo = {
+        "display": element.nombre.toString(),
+        "value": element.id.toString()
+      };
+      lista.add(pedazo);
+    });
+    return lista;
+  }
+
   crearDataSourceLote(List<Lote> lotes) {
     var lista = [];
 
@@ -598,19 +658,6 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
       if (element.activo.toString() == '1') {
         lista.add(pedazo);
       }
-    });
-    return lista;
-  }
-
-  crearDataSourceColor(List<Colour> colores) {
-    var lista = [];
-
-    colores.forEach((element) {
-      var pedazo = {
-        "display": element.nombre.toString(),
-        "value": element.id.toString()
-      };
-      lista.add(pedazo);
     });
     return lista;
   }
