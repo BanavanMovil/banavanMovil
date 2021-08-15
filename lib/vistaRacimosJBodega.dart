@@ -3,8 +3,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-//
-//
 import 'package:banavanmov/publicarRacimoJBodega.dart';
 import 'package:banavanmov/response.dart';
 import 'package:banavanmov/blocs/cosechadoBloc.dart';
@@ -32,15 +30,12 @@ Map<String, String> todosLotes = {};
 Map<String, String> todosColores = {};
 Map<String, String> todosUsers = {};
 Map<String, String> todosSemanas = {};
+Map<String, String> todosSemanasColores = {};
 
 class _RacimosVistaState extends State<RacimosVista> {
   final CosechadoProvider cv = new CosechadoProvider();
   bool isBusqueda = false;
   CosechadoBloc _bloc;
-
-  //List<String> lista = [];
-
-  //var newRanger = Map<String, String>();
 
   @override
   void initState() {
@@ -50,6 +45,7 @@ class _RacimosVistaState extends State<RacimosVista> {
     cargarDatosColores();
     cargarDatosUsers();
     cargarDatosSemanas();
+    cargarDatosSemanasColores();
   }
 
   @override
@@ -58,11 +54,7 @@ class _RacimosVistaState extends State<RacimosVista> {
       appBar: AppBar(
         title: Text.rich(
           TextSpan(
-            //text: 'Lote: ', // default text style
             children: <TextSpan>[
-              /*TextSpan(
-                                text: ' beautiful ',
-                                style: TextStyle(fontStyle: FontStyle.italic)),*/
               TextSpan(
                   text: "Jefe de Bodega\n",
                   style: TextStyle(fontWeight: FontWeight.bold)),
@@ -75,58 +67,7 @@ class _RacimosVistaState extends State<RacimosVista> {
         ),
         backgroundColor: Colors.orange,
         centerTitle: true,
-        //automaticallyImplyLeading: false,
-        /*actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              /*Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return Login();
-              }));*/
-            },
-          ),
-        ],*/
       ),
-      /*appBar: AppBar(
-        backgroundColor: Colors.orange,
-        centerTitle: true,
-        title: !isBusqueda
-            ? Text('     Jefe de Bodega\nRacimos Cosechados')
-            : TextField(
-                onChanged: (value) {
-                  //_filterEmpleos(value);
-                },
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.exit_to_app,
-                      color: Colors.white,
-                    ),
-                    hintText: "Filtra por Semana",
-                    hintStyle: TextStyle(color: Colors.white)),
-              ),
-        actions: <Widget>[
-          isBusqueda
-              ? IconButton(
-                  icon: Icon(Icons.cancel),
-                  onPressed: () {
-                    setState(() {
-                      this.isBusqueda = false;
-                      //filteredEmpleoList = empleoList;
-                    });
-                  },
-                )
-              : IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    setState(() {
-                      this.isBusqueda = true;
-                    });
-                  },
-                )
-        ],
-      ),*/
       body: RefreshIndicator(
         onRefresh: () => _bloc.fetchAllCosechados(),
         child: StreamBuilder<Response<List<Cosechado>>>(
@@ -139,6 +80,7 @@ class _RacimosVistaState extends State<RacimosVista> {
                   break;
                 case Status.COMPLETED:
                   return CosechadoList(cosechados: snapshot.data.data);
+
                   break;
                 case Status.ERROR:
                   return Error(
@@ -157,20 +99,15 @@ class _RacimosVistaState extends State<RacimosVista> {
   }
 
   Widget botonCosechado() {
-    //if (globals.isLoggedIn) {
     return FloatingActionButton(
       backgroundColor: Colors.orange,
       onPressed: () {
-        //if (globals.isLoggedIn) {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return PublicarRacimoJB();
         }));
       },
-      //},
       child: const Icon(Icons.add),
     );
-    //}
-    //return Row();
   }
 
   void cargarDatosLotes() async {
@@ -202,13 +139,14 @@ class _RacimosVistaState extends State<RacimosVista> {
     Future<List<Personnel>> _futureOfList = _provider.getAll();
     List<Personnel> list = await _futureOfList;
     list.forEach((element) {
-      var newPersonnel = Map<String, String>();
-      newPersonnel[element.id.toString()] =
-          element.nombres.toString() + " " + element.apellidos.toString();
-      todosUsers.addAll(newPersonnel);
+      if (element.rol.toString() == 'Trabajador' &&
+          element.activo.toString() == '1') {
+        var newPersonnel = Map<String, String>();
+        newPersonnel[element.id.toString()] =
+            element.nombres.toString() + " " + element.apellidos.toString();
+        todosUsers.addAll(newPersonnel);
+      }
     });
-    //var powerRanger = todosColores["17"];
-    //print(powerRanger);
   }
 
   void cargarDatosSemanas() async {
@@ -222,6 +160,17 @@ class _RacimosVistaState extends State<RacimosVista> {
     });
     //var powerRanger = todosColores["17"];
     //print(powerRanger);
+  }
+
+  void cargarDatosSemanasColores() async {
+    SemanaProvider _provider = SemanaProvider();
+    Future<List<Semana>> _futureOfList = _provider.getAll();
+    List<Semana> list = await _futureOfList;
+    list.forEach((element) {
+      var newSemana = Map<String, String>();
+      newSemana[element.id.toString()] = element.color_id.toString();
+      todosSemanasColores.addAll(newSemana);
+    });
   }
 }
 
@@ -251,23 +200,14 @@ class CosechadoList extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 10.0),
                     child: Row(children: <Widget>[
-                      /*Text(
-                        "Lote: " + todosLotes[c.lote_id.toString()],
-                        style: TextStyle(fontSize: 10),
-                      ),*/
                       Text.rich(
                         TextSpan(
-                          //text: 'Lote: ', // default text style
                           children: <TextSpan>[
-                            /*TextSpan(
-                                text: ' beautiful ',
-                                style: TextStyle(fontStyle: FontStyle.italic)),*/
                             TextSpan(
                                 text: "Lote: ",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
                               text: todosLotes[c.lote_id.toString()].toString(),
-                              //style: TextStyle(fontWeight: FontWeight.bold)
                             ),
                           ],
                         ),
@@ -276,23 +216,14 @@ class CosechadoList extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 10.0),
                     child: Row(children: <Widget>[
-                      /*Text(
-                        "Trabajador: " + todosUsers[c.user_id.toString()],
-                        style: TextStyle(),
-                      ),*/
                       Text.rich(
                         TextSpan(
-                          //text: 'Lote: ', // default text style
                           children: <TextSpan>[
-                            /*TextSpan(
-                                text: ' beautiful ',
-                                style: TextStyle(fontStyle: FontStyle.italic)),*/
                             TextSpan(
                                 text: "Trabajador: ",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
                               text: todosUsers[c.user_id.toString()].toString(),
-                              //style: TextStyle(fontWeight: FontWeight.bold)
                             ),
                           ],
                         ),
@@ -301,24 +232,14 @@ class CosechadoList extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
-                      /*Text(
-                        "Número de racimos cosechados: " +
-                            c.cantidad.toString(),
-                        style: TextStyle(),
-                      ),*/
                       Text.rich(
                         TextSpan(
-                          //text: 'Lote: ', // default text style
                           children: <TextSpan>[
-                            /*TextSpan(
-                                text: ' beautiful ',
-                                style: TextStyle(fontStyle: FontStyle.italic)),*/
                             TextSpan(
                                 text: "Cantidad: ",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
                               text: c.cantidad.toString(),
-                              //style: TextStyle(fontWeight: FontWeight.bold)
                             ),
                           ],
                         ),
@@ -327,22 +248,14 @@ class CosechadoList extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
-                      /*Text("Semana: " +
-                          todosSemanas[c.semana_id.toString()].toString()),*/
                       Text.rich(
                         TextSpan(
-                          //text: 'Lote: ', // default text style
                           children: <TextSpan>[
-                            /*TextSpan(
-                                text: ' beautiful ',
-                                style: TextStyle(fontStyle: FontStyle.italic)),*/
                             TextSpan(
-                                text: "Semana: ",
+                                text: "Semana de Cosecha: ",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
-                              text: todosSemanas[c.semana_id.toString()]
-                                  .toString(),
-                              //style: TextStyle(fontWeight: FontWeight.bold)
+                              text: c.semana_cosecha.toString(),
                             ),
                           ],
                         ),
@@ -351,47 +264,38 @@ class CosechadoList extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
-                      /*Text("Fecha: " + c.fecha.toString()),*/
                       Text.rich(
                         TextSpan(
-                          //text: 'Lote: ', // default text style
                           children: <TextSpan>[
-                            /*TextSpan(
-                                text: ' beautiful ',
-                                style: TextStyle(fontStyle: FontStyle.italic)),*/
                             TextSpan(
                                 text: "Fecha: ",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
                               text: c.fecha.toString(),
-                              //style: TextStyle(fontWeight: FontWeight.bold)
                             ),
                           ],
                         ),
                       )
                     ])),
-                /*Padding(
-                    padding: const EdgeInsets.only(left: 280.0, top: 0.0),
-                    child: IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ActualizarCosechadoJB(c);
-                        }));
-                      },
-                    )),*/
-                /*Placeholder(
-                  fallbackHeight: 10,
-                  fallbackWidth: 100,
-                  color: Colors.transparent,
-                ),*/
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 7.0),
+                    child: Row(children: <Widget>[
+                      Text.rich(
+                        TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Color: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: todosColores[
+                                  todosSemanasColores[c.semana_id.toString()]],
+                            ),
+                          ],
+                        ),
+                      )
+                    ])),
                 ButtonBar(
                   children: <Widget>[
-                    /*FlatButton(
-                      child: const Text('BTN1'),
-                      onPressed: () {/* ... */},
-                    ),*/
                     FlatButton(
                       child: const Text('EDITAR'),
                       onPressed: () {

@@ -6,13 +6,15 @@ import 'package:banavanmov/model/semana.dart';
 import 'package:banavanmov/model/solicitudTipo.dart';
 import 'package:flutter/material.dart';
 
+import 'package:banavanmov/providers/colorProvider.dart';
+
 class DataSource {
   crearDataSourceColor(List<Colour> colores) {
     var lista = [];
 
     colores.forEach((element) {
       var pedazo = {
-        "display": element.nombre.toString(),
+        "display": element.hex_code.toString(),
         "value": element.nombre.toString()
       };
       lista.add(pedazo);
@@ -29,7 +31,8 @@ class DataSource {
             element.nombres.toString() + ' ' + element.apellidos.toString(),
         "value": element.id.toString()
       };
-      if (element.activo.toString() == '1') {
+      if (element.activo.toString() == '1' &&
+          element.rol.toString() == 'Trabajador') {
         lista.add(pedazo);
       }
     });

@@ -19,7 +19,7 @@ class CosechadoProvider {
         body: json.encode(newObject.toJson()));
     if (response.statusCode == 201) {
       print("Este es el status code: " + response.statusCode.toString());
-      print("Racimo Perdido Creado");
+      print("Racimo Cosechado Creado");
       return true;
     } else {
       print(response.body);

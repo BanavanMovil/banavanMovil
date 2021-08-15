@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import 'package:banavanmov/vistaRacimosJBodega.dart';
 import 'package:banavanmov/providers/cosechadoProvider.dart';
@@ -17,6 +18,7 @@ import 'package:banavanmov/providers/loteProvider.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:banavanmov/model/personnel.dart';
 import 'package:banavanmov/providers/personnelProvider.dart';
+import 'package:banavanmov/utils/dataSource.dart';
 
 class NewObject {
   //int id;
@@ -59,14 +61,20 @@ class PublicarRacimoJB extends StatefulWidget {
   _PublicarRacimoJBState createState() => _PublicarRacimoJBState();
 }
 
+Map<String, String> todosColores = {};
+Map<String, String> todosColoresHex = {};
+
 class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
   final globalKey = GlobalKey<ScaffoldState>();
+
+  final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  final DateFormat secondFormatter = DateFormat('yyyy-MM-dd');
 
   String _selectedLote, _selectedLoteResult;
   int _selectedCantidad, _selectedCantidadResult;
   String _selectedUser, _selectedUserResult;
   DateTime _selectedFecha, _selectedFechaResult;
-  //String _selectedSemana, _selectedSemanaResult;
+  String _selectedSemana, _selectedSemanaResult;
 
   String _selectedColor, _selectedColorResult;
 
@@ -84,8 +92,8 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
     _selectedCantidadResult = 0;
     _selectedUser = '';
     _selectedUserResult = '';
-    //_selectedSemana = '';
-    //_selectedSemanaResult = '';
+    _selectedSemana = '';
+    _selectedSemanaResult = '';
     _selectedColor = '';
     _selectedColorResult = '';
 
@@ -106,15 +114,16 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
         _selectedColorResult = _selectedColor;
       });
 
-      List<String> _arrayNewFecha = _selectedFechaResult.toString().split(' ');
+      //List<String> _arrayNewFecha = _selectedFechaResult.toString().split(' ');
 
       NewObject no = new NewObject(
           //id: -1,
           lote_id: int.parse(_selectedLoteResult),
           cantidad: _selectedCantidadResult,
           user_id: int.parse(_selectedUserResult),
+          fecha: secondFormatter.format(_selectedFecha),
           //fecha: _selectedFechaResult.toString(),
-          fecha: _arrayNewFecha[0],
+          //fecha: _arrayNewFecha[0],
           color_id: int.parse(_selectedColorResult));
 
       cp.sendCosechado(no);
@@ -151,6 +160,32 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
         return RacimosVista();
       }));
     }
+  }
+
+  void cargarDatosColores() async {
+    ColorProvider _provider = ColorProvider();
+    Future<List<Colour>> _futureOfList = _provider.getAll();
+    List<Colour> list = await _futureOfList;
+    list.forEach((element) {
+      var newColor = Map<String, String>();
+      newColor[element.hex_code.toString()] = element.id.toString();
+      todosColores.addAll(newColor);
+    });
+    //var powerRanger = todosColores["17"];
+    //print(powerRanger);
+  }
+
+  void cargarDatosColoresHex() async {
+    ColorProvider _provider = ColorProvider();
+    Future<List<Colour>> _futureOfList = _provider.getAll();
+    List<Colour> list = await _futureOfList;
+    list.forEach((element) {
+      var newColor = Map<String, String>();
+      newColor[element.hex_code.toString()] = element.nombre.toString();
+      todosColoresHex.addAll(newColor);
+    });
+    //var powerRanger = todosColores["17"];
+    //print(powerRanger);
   }
 
   @override
@@ -250,7 +285,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                             AsyncSnapshot<List<Lote>> snapshot) {
                           if (snapshot.hasData) {
                             var lote = snapshot.data;
-                            var loteDS = crearDataSourceLote(lote);
+                            var loteDS = DataSource().crearDataSourceLote(lote);
                             return Container(
                                 padding: EdgeInsets.all(10),
                                 child: DropDownFormField(
@@ -282,6 +317,45 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                         },
                       ),
                     ),
+                    /*Center(
+                      child: FutureBuilder(
+                        future: LoteProvider().todosLosLotes(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Lote>> snapshot) {
+                          if (snapshot.hasData) {
+                            var lote = snapshot.data;
+                            var loteDS = crearDataSourceLote(lote);
+                            return Container(
+                                padding: EdgeInsets.all(10),
+                                child: DropDownFormField(
+                                  titleText: 'Lote',
+                                  hintText: 'Elija el Lote',
+                                  value: _selectedLote,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Por favor seleccione un lote";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedLote = newValue;
+                                    });
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      _selectedLote = value;
+                                    });
+                                  },
+                                  dataSource: loteDS,
+                                  textField: 'display',
+                                  valueField: 'value',
+                                ));
+                          }
+                          return CircularProgressIndicator();
+                        },
+                      ),
+                    ),*/
                     Container(
                         padding: EdgeInsets.all(10),
                         child: Column(children: [
@@ -300,6 +374,46 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                           )
                         ])),
                     Center(
+                      child: FutureBuilder(
+                        future: PersonnelProvider().getAll(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Personnel>> snapshot) {
+                          if (snapshot.hasData) {
+                            var personal = snapshot.data;
+                            var personalDS =
+                                DataSource().crearDataSourcePersonnel(personal);
+                            return Container(
+                                padding: EdgeInsets.all(10),
+                                child: DropDownFormField(
+                                  titleText: 'Trabajador',
+                                  hintText: 'Elija el Trabajador',
+                                  value: _selectedUser,
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Por favor seleccione un trabajador";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedUser = newValue;
+                                    });
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      _selectedUser = value;
+                                    });
+                                  },
+                                  dataSource: personalDS,
+                                  textField: 'display',
+                                  valueField: 'value',
+                                ));
+                          }
+                          return CircularProgressIndicator();
+                        },
+                      ),
+                    ),
+                    /*Center(
                       child: FutureBuilder(
                         future: PersonnelProvider().getAll(),
                         builder: (BuildContext context,
@@ -337,8 +451,117 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                           return CircularProgressIndicator();
                         },
                       ),
-                    ),
+                    ),*/
+
                     new ListTile(
+                        //leading: const Icon(Icons.star),
+                        title: Row(
+                      children: <Widget>[
+                        Text(_selectedFecha == null
+                            ? "No ha seleccionado fecha"
+                            : formatter.format(_selectedFecha)),
+                        Spacer(),
+                        ElevatedButton(
+                            onPressed: () {
+                              cargarDatosColores();
+                              cargarDatosColoresHex();
+                              showDatePicker(
+                                      context: context,
+                                      initialDate: _selectedFecha == null
+                                          ? DateTime.now()
+                                          : _selectedFecha,
+                                      firstDate: DateTime(2001),
+                                      lastDate: DateTime(2222))
+                                  .then((date) async {
+                                if (date != null) {
+                                  print("FECHA: " + date.toString());
+                                  setState(() {
+                                    _selectedFecha = date;
+                                  });
+                                  return SemanaProvider()
+                                      .getDateData(formatter.format(date));
+                                } else {
+                                  setState(() {
+                                    _selectedFecha = null;
+                                  });
+                                }
+                              }).then((value) {
+                                print("MAPA: " + value['numero']);
+                                setState(() {
+                                  //var colorDS = DataSource().crearDataSourceLote(lote);
+                                  //_selectedColor = value['color_code'];
+                                  _selectedSemana = value['numero'].toString();
+                                  //_selectedColorResult =
+                                  //todosColores[_selectedColor];
+                                  //color = value['color_code'];
+                                  //print("Hola mundo" + _selectedColor);
+                                  //print("El id del color es: " +
+                                  //  _selectedColorResult);
+                                  //print("El color es: " +
+                                  //  todosColoresHex[_selectedColor]
+                                  // .toString());
+                                  //print("TERMINA EL SET STATE");
+                                  _selectedSemanaResult =
+                                      value['id'].toString();
+                                });
+                                /*setState(() {
+                                  semana = value['id'];
+                                });*/
+                              });
+                            },
+                            child: Icon(Icons.date_range))
+                      ],
+                    )),
+                    Container(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                "Semana: ",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                              Text(_selectedFecha != null
+                                  ? _selectedSemana.toString()
+                                  : '--')
+                            ],
+                          ),
+                          /*Row(
+                            children: <Widget>[
+                              Text(
+                                "Color: ",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                              _selectedFecha == null
+                                  ? Text("--")
+                                  : Text(todosColoresHex[_selectedColor]
+                                      .toString())
+                              /*IconButton(
+                                      color: _selectedColor != null
+                                          ? DataSource()
+                                              .getColorFromHex(_selectedColor)
+                                          : Colors.accents,
+                                      icon: Icon(Icons.crop_square_outlined),
+                                      onPressed: () {},
+                                    )*/
+                              /*IconButton(
+                                      color: _selectedColor != null
+                                          ? DataSource()
+                                              .getColorFromHex(_selectedColor)
+                                          : Colors.accents,
+                                      icon: Icon(Icons.crop_square_outlined),
+                                      onPressed: () {},
+                                    )*/
+                            ],
+                          ),*/
+                        ],
+                      ),
+                    ),
+
+                    /*new ListTile(
                         //leading: const Icon(Icons.star),
                         title: Row(
                       children: <Widget>[
@@ -363,7 +586,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                             },
                             child: Icon(Icons.date_range))
                       ],
-                    )),
+                    )),*/
                     Center(
                       child: FutureBuilder(
                         future: ColorProvider().getAll(),
@@ -436,7 +659,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
     }
   }*/
 
-  crearDataSourcePersonnel(List<Personnel> personal) {
+  /*crearDataSourcePersonnel(List<Personnel> personal) {
     var lista = [];
 
     personal.forEach((element) {
@@ -450,7 +673,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
       }
     });
     return lista;
-  }
+  }*/
 
   crearDataSourceColor(List<Colour> colores) {
     var lista = [];
@@ -479,7 +702,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
     return lista;
   }*/
 
-  crearDataSourceLote(List<Lote> lotes) {
+  /*crearDataSourceLote(List<Lote> lotes) {
     var lista = [];
 
     lotes.forEach((element) {
@@ -491,5 +714,5 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
       lista.add(pedazo);
     });
     return lista;
-  }
+  }*/
 }
