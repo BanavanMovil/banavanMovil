@@ -7,6 +7,7 @@ import 'package:banavanmov/model/solicitudTipo.dart';
 import 'package:banavanmov/providers/actividadProvider.dart';
 import 'package:banavanmov/providers/loteProvider.dart';
 import 'package:banavanmov/providers/solicitudTipoProvider.dart';
+import 'package:banavanmov/utils/dataSource.dart';
 
 import 'package:flutter/material.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
@@ -109,7 +110,8 @@ class SolicitudJCState extends State<SolicitudJC> {
                           AsyncSnapshot<List<SolicitudTipo>> snapshot) {
                         if (snapshot.hasData) {
                           var tipos = snapshot.data;
-                          var tiposDS = crearDataSourceSolicitudTipo(tipos);
+                          var tiposDS =
+                              DataSource().crearDataSourceSolicitudTipo(tipos);
                           return DropDownFormField(
                             titleText: 'Solicitud',
                             hintText: 'Elija el tipo de Solicitud',
@@ -148,7 +150,7 @@ class SolicitudJCState extends State<SolicitudJC> {
                           AsyncSnapshot<List<Lote>> snapshot) {
                         if (snapshot.hasData) {
                           var lotes = snapshot.data;
-                          var loteDS = crearDataSourceLote(lotes);
+                          var loteDS = DataSource().crearDataSourceLote(lotes);
                           return DropDownFormField(
                             titleText: 'Lote',
                             hintText: 'Elija un lote',
@@ -187,8 +189,8 @@ class SolicitudJCState extends State<SolicitudJC> {
                           AsyncSnapshot<List<Actividad>> snapshot) {
                         if (snapshot.hasData) {
                           var actividades = snapshot.data;
-                          var actividadesDS =
-                              crearDataSourceActividad(actividades);
+                          var actividadesDS = DataSource()
+                              .crearDataSourceActividad(actividades);
                           return DropDownFormField(
                             titleText: 'Actividad',
                             hintText: 'Elija la Actividad',
@@ -294,53 +296,5 @@ class SolicitudJCState extends State<SolicitudJC> {
             ),
           ),
         ));
-  }
-
-  crearDataSourceLote(List<Lote> lotes) {
-    var lista = [];
-
-    //print(lista2);
-    lotes.forEach((element) {
-      //print(element.id.toString() + element.numero.toString());
-      var pedazo = {
-        "display": element.numero.toString(),
-        "value": element.id.toString()
-      };
-      lista.add(pedazo);
-    });
-    //print(lista);
-    return lista;
-  }
-
-  crearDataSourceSolicitudTipo(List<SolicitudTipo> tipos) {
-    var lista = [];
-
-    //print(lista2);
-    tipos.forEach((element) {
-      //print(element.id.toString() + element.titulo.toString());
-      var pedazo = {
-        "display": element.titulo.toString(),
-        "value": element.id.toString()
-      };
-      lista.add(pedazo);
-    });
-    //print(lista);
-    return lista;
-  }
-
-  crearDataSourceActividad(List<Actividad> actividades) {
-    var lista = [];
-
-    //print(lista2);
-    actividades.forEach((element) {
-      //print(element.id.toString() + element.nombre.toString());
-      var pedazo = {
-        "display": element.nombre.toString(),
-        "value": element.id.toString()
-      };
-      lista.add(pedazo);
-    });
-    //print(lista);
-    return lista;
   }
 }

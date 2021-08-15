@@ -1,4 +1,5 @@
 import 'package:banavanmov/actividadesJCampo.dart';
+import 'package:banavanmov/asignarPersonalJC.dart';
 import 'package:banavanmov/solicitudJCampo.dart';
 import 'package:banavanmov/historialJCampo.dart';
 import 'package:banavanmov/vistaSolicitudesJC.dart';
@@ -51,7 +52,7 @@ class _MainJCampoState extends State<MainJCampo> {
                             textAlign: TextAlign.center,
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
-                        onPressed: historial,
+                        onPressed: asignarPersonal,
                       ),
                       Placeholder(
                         fallbackHeight: 50,
@@ -118,6 +119,15 @@ class _MainJCampoState extends State<MainJCampo> {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       //globals.isLoggedIn = true;
       return SolicitudesJC();
+    }));
+  }
+
+  void asignarPersonal() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      //globals.isLoggedIn = true;
+      return PersonnelList(
+        personal: List.of([]),
+      );
     }));
   }
 }

@@ -1,4 +1,14 @@
 import 'package:banavanmov/actualizarEnfundadoJBodega.dart';
+import 'package:banavanmov/model/color.dart';
+import 'package:banavanmov/model/lote.dart';
+import 'package:banavanmov/model/personnel.dart';
+import 'package:banavanmov/model/semana.dart';
+import 'package:banavanmov/providers/colorProvider.dart';
+import 'package:banavanmov/providers/loteProvider.dart';
+import 'package:banavanmov/providers/personnelProvider.dart';
+import 'package:banavanmov/providers/semanaProvider.dart';
+import 'package:banavanmov/utils/dataSource.dart';
+import 'package:banavanmov/utils/util.dart';
 import 'package:flutter/material.dart';
 //
 //
@@ -17,11 +27,34 @@ class _EnfundadoVistaState extends State<EnfundadoVista> {
   final EnfundadoProvider ep = new EnfundadoProvider();
   bool isBusqueda = false;
   EnfundadoBloc _bloc;
-
+  List<Lote> lotes;
+  List<Personnel> personal;
+  List<Semana> semanas;
+  List<Colour> colores;
   @override
   void initState() {
     super.initState();
     _bloc = EnfundadoBloc();
+    LoteProvider().todosLosLotes().then((value) {
+      setState(() {
+        lotes = value;
+      });
+    });
+    PersonnelProvider().getAll().then((value) {
+      setState(() {
+        personal = value;
+      });
+    });
+    SemanaProvider().getAll().then((value) {
+      setState(() {
+        semanas = value;
+      });
+    });
+    ColorProvider().getAll().then((value) {
+      setState(() {
+        colores = value;
+      });
+    });
   }
 
   @override
@@ -77,7 +110,15 @@ class _EnfundadoVistaState extends State<EnfundadoVista> {
                   return Loading(loadingMessage: snapshot.data.message);
                   break;
                 case Status.COMPLETED:
-                  return EnfundadoList(enfundados: snapshot.data.data);
+                  return EnfundadoList(
+                    enfundados: snapshot.data.data,
+                    datos: {
+                      "lotes": lotes,
+                      "personal": personal,
+                      "semana": semanas,
+                      "colores": colores
+                    },
+                  );
                   break;
                 case Status.ERROR:
                   return Error(
@@ -115,7 +156,8 @@ class _EnfundadoVistaState extends State<EnfundadoVista> {
 
 class EnfundadoList extends StatelessWidget {
   final List<Enfundado> enfundados;
-  const EnfundadoList({Key key, this.enfundados}) : super(key: key);
+  final Map<String, dynamic> datos;
+  const EnfundadoList({Key key, this.enfundados, this.datos}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -125,66 +167,102 @@ class EnfundadoList extends StatelessWidget {
       },
     );
   }
-}
 
-Widget _crearCartaEnfundado(BuildContext context, Enfundado e) {
-  return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Card(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
-                  child: Row(children: <Widget>[
-                    Text(
-                      "Lote: " + e.lote_id.toString(),
-                      style: TextStyle(fontSize: 10),
-                    ),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
-                  child: Row(children: <Widget>[
-                    Text(
-                      e.user_id.toString(),
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
-                  child: Row(children: <Widget>[
-                    Text("Semana: " + e.semana_id.toString()),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
-                  child: Row(children: <Widget>[
-                    Text("Color de Cinta: " + e.semana_id.toString()),
-                    Spacer(),
-                    Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return ActualizarEnfundadoJB(e);
-                            }));
-                          },
-                        ))
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
-                  child: Row(children: <Widget>[
-                    Text("Hora fin: " + e.fecha),
-                  ])),
-              Placeholder(
-                fallbackHeight: 10,
-                fallbackWidth: 100,
-                color: Colors.transparent,
-              ),
-            ]),
-      ));
+  Widget _crearCartaEnfundado(BuildContext context, Enfundado e) {
+    var semana = Util().obtenerSemanaDeId(e.id, datos['semana']);
+    var color;
+    if (semana != null) {
+      color =
+          Util().obtenerColorDeId(int.parse(semana.color_id), datos['colores']);
+    }
+
+    var lote = Util().obtenerLoteDeId(e.lote_id, datos['lotes']);
+    var trabajador = Util().obtenerTrabajadorDeId(
+        int.parse(e.user_id.toString()), datos['personal']);
+    return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Card(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Lote: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(lote.toString()),
+                      Spacer(),
+                      Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return ActualizarEnfundadoJB(
+                                  enfunde: e,
+                                  datos: {
+                                    "lote": lote,
+                                    'trabajador': trabajador,
+                                    "semana": semana,
+                                    'color': color
+                                  },
+                                );
+                              }));
+                            },
+                          ))
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        trabajador != null ? trabajador : "--",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Semana: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(semana != null ? semana.numero : "--")
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Color de Cinta: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.crop_square_rounded),
+                        onPressed: () {},
+                        color: DataSource().getColorFromHex(color),
+                      ),
+                      Spacer(),
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Fecha: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(e.fecha)
+                    ])),
+                Placeholder(
+                  fallbackHeight: 10,
+                  fallbackWidth: 100,
+                  color: Colors.transparent,
+                ),
+              ]),
+        ));
+  }
 }
 
 class Error extends StatelessWidget {

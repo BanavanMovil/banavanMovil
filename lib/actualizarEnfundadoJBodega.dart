@@ -1,5 +1,7 @@
 import 'package:banavanmov/model/enfundado.dart';
 import 'package:banavanmov/providers/enfundadoProvider.dart';
+import 'package:banavanmov/utils/dataSource.dart';
+import 'package:banavanmov/utils/util.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 import 'package:flutter/material.dart';
@@ -13,12 +15,12 @@ import 'package:banavanmov/providers/personnelProvider.dart';
 import 'package:banavanmov/model/semana.dart';
 import 'package:banavanmov/providers/semanaProvider.dart';
 import 'package:banavanmov/providers/loteProvider.dart';
+import 'package:intl/intl.dart';
 
 class ActualizarEnfundadoJB extends StatefulWidget {
-  Enfundado enfunde;
-  ActualizarEnfundadoJB(Enfundado enfunde) {
-    this.enfunde = enfunde;
-  }
+  final Enfundado enfunde;
+  final Map<String, dynamic> datos;
+  ActualizarEnfundadoJB({this.enfunde, this.datos});
 
   @override
   ActualizarEnfundadoJBState createState() =>
@@ -29,10 +31,16 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
   Enfundado enfundado;
   final _formKey = GlobalKey<FormState>();
   final globalKey = GlobalKey<ScaffoldState>();
+  final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  final DateFormat secondFormatter = DateFormat('yyyy-MM-dd');
   String user, personnelResult;
   String lote, loteResult;
   DateTime fecha;
   String semana, semanaResult;
+  String color;
+  Map<String, dynamic> datos;
+  EnfundadoProvider ep;
+  // ignore: non_constant_identifier_names
   String fundas_entregadas, fundas_entregadasResult;
   ActualizarEnfundadoJBState(Enfundado enfunde) {
     this.enfundado = enfunde;
@@ -41,6 +49,7 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
   @override
   void initState() {
     super.initState();
+    datos = widget.datos;
     user = '';
     semana = '';
     fundas_entregadas = '';
@@ -49,6 +58,7 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
     semanaResult = '';
     fundas_entregadasResult = '';
     loteResult = '';
+    ep = new EnfundadoProvider();
   }
 
   validarCampos() {
@@ -60,25 +70,31 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
   }
 
   _saveForm() {
-    print(validarCampos());
-    //print(trabajadorResult);
-    //print(semanaResult);
-    //print(fundas_entregadasResult);
-    //print(fundas_recibidasResult);
-    //print(fecha_entrega);
-
-    if (validarCampos()) {
-      EnfundadoProvider ep = new EnfundadoProvider();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Enfundado Actualizado')));
-      //trabajadorResult = "null";
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        //return Footer();
-        return EnfundadoVista();
-      }));
+    var form = _formKey.currentState;
+    print("Semana: " + semana);
+    if (form.validate() && fecha != null) {
+      form.save();
+      print("Personnel Result: " + personnelResult);
+      Enfundado e = new Enfundado(
+          id: enfundado.id,
+          lote_id: int.parse(loteResult),
+          user_id: int.parse(personnelResult),
+          fundas_entregadas: int.parse(fundas_entregadasResult),
+          fecha: secondFormatter.format(fecha),
+          semana_id: int.parse(semana),
+          cantidad: int.parse(fundas_entregadasResult));
+      print("Se va a actualizar el enfundado");
+      ep.updateEnfundado(e);
+      print("Seactualizo enfundado");
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No hay cambios en los campos')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Datos Erroneos o incompletos'),
+          action: SnackBarAction(
+            label: 'Cerrar',
+            onPressed: () {
+              // Code to execute.
+            },
+          )));
     }
   }
 
@@ -111,12 +127,13 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                           AsyncSnapshot<List<Personnel>> snapshot) {
                         if (snapshot.hasData) {
                           var personal = snapshot.data;
-                          var personalDS = crearDataSourcePersonnel(personal);
+                          var personalDS =
+                              DataSource().crearDataSourcePersonnel(personal);
                           return Container(
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
-                                titleText: 'Trabajador Actual: ' +
-                                    enfundado.user_id.toString(),
+                                titleText:
+                                    'Trabajador Actual: ' + datos['trabajador'],
                                 hintText: 'Elija el Trabajador',
                                 value: personnelResult,
                                 validator: (value) {
@@ -151,12 +168,12 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                           AsyncSnapshot<List<Lote>> snapshot) {
                         if (snapshot.hasData) {
                           var lote = snapshot.data;
-                          var loteDS = crearDataSourceLote(lote);
+                          var loteDS = DataSource().crearDataSourceLote(lote);
                           return Container(
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
-                                titleText: 'Lote Actual: ' +
-                                    enfundado.lote_id.toString(),
+                                titleText:
+                                    'Lote Actual: ' + datos['lote'].toString(),
                                 hintText: 'Elija el Lote',
                                 value: loteResult,
                                 validator: (value) {
@@ -192,7 +209,7 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                           children: <Widget>[
                             Text(fecha == null
                                 ? "No ha seleccionado fecha"
-                                : fecha.toString()),
+                                : secondFormatter.format(fecha)),
                             Spacer(),
                             ElevatedButton(
                                 onPressed: () {
@@ -203,10 +220,32 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                                               : fecha,
                                           firstDate: DateTime(2001),
                                           lastDate: DateTime(2222))
-                                      .then((date) {
+                                      .then((date) async {
+                                    if (date != null) {
+                                      print("FECHA: " + date.toString());
+                                      setState(() {
+                                        fecha = date;
+                                      });
+                                      return SemanaProvider()
+                                          .getDateData(formatter.format(date));
+                                    } else {
+                                      setState(() {
+                                        fecha = null;
+                                      });
+                                    }
+                                  }).then((value) {
+                                    print("MAPA: " + value['numero']);
                                     setState(() {
-                                      fecha = date;
+                                      color = value['color_code'];
+                                      semana = value['numero'].toString();
+                                      //color = value['color_code'];
+                                      //print(color);
+                                      //print("TERMINA EL SET STATE");
+                                      semanaResult = value['id'].toString();
                                     });
+                                    /*setState(() {
+                                  semana = value['id'];
+                                });*/
                                   });
                                 },
                                 child: Icon(Icons.date_range))
@@ -215,50 +254,56 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                       ],
                     ),
                   ),
-                  Center(
-                    child: FutureBuilder(
-                      future: SemanaProvider().getAll(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<Semana>> snapshot) {
-                        if (snapshot.hasData) {
-                          var semana = snapshot.data;
-                          var semanaDS = crearDataSourceSemana(semana);
-                          return Container(
-                              padding: EdgeInsets.all(10),
-                              child: DropDownFormField(
-                                titleText: 'Semana Actual: ' +
-                                    enfundado.semana_id.toString(),
-                                hintText: 'Elija la Semana',
-                                value: semanaResult,
-                                validator: (value) {
-                                  if (value == null) {
-                                    return "Por favor seleccione una semana";
-                                  }
-                                  return null;
-                                },
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    semanaResult = newValue;
-                                  });
-                                },
-                                onSaved: (value) {
-                                  setState(() {
-                                    semanaResult = value;
-                                  });
-                                },
-                                dataSource: semanaDS,
-                                textField: 'display',
-                                valueField: 'value',
-                              ));
-                        }
-                        return CircularProgressIndicator();
-                      },
-                    ),
-                  ),
+                  Container(
+                      child: Row(
+                    children: <Widget>[
+                      Text(
+                        "Semana Actual: ",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      Text(datos['semana'].numero),
+                      Text("   "),
+                      Text(
+                        "Semana Nueva:  ",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      Text(fecha != null ? semana.toString() : "--")
+                    ],
+                  )),
+                  Container(
+                      child: Row(
+                    children: <Widget>[
+                      Text(
+                        "Color Actual: ",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.crop_square_sharp),
+                        onPressed: () {},
+                        color: DataSource().getColorFromHex(datos['color']),
+                      ),
+                      Text("   "),
+                      Text(
+                        "Color  Nuevo:  ",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      fecha != null
+                          ? IconButton(
+                              icon: Icon(Icons.crop_square_sharp),
+                              onPressed: () {},
+                              color: DataSource().getColorFromHex(color),
+                            )
+                          : Text("--")
+                    ],
+                  )),
                   Container(
                       child: Column(children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.only(left: 5.0),
+                      padding: EdgeInsets.only(left: 5.0, top: 10.0),
                       child: Text(
                         "Fundas Entregadas Actual: " +
                             enfundado.fundas_entregadas.toString(),
@@ -269,6 +314,12 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
                       title: TextFormField(
                           //controller: _controller,
                           keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Ingrese un valor.";
+                            }
+                            return null;
+                          },
                           onChanged: (newValue) {
                             setState(() {
                               fundas_entregadasResult = newValue;
@@ -297,62 +348,5 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
         ),
       ),
     );
-  }
-
-  crearDataSourceColor(List<Colour> colores) {
-    var lista = [];
-
-    colores.forEach((element) {
-      var pedazo = {
-        "display": element.nombre.toString(),
-        "value": element.nombre.toString()
-      };
-      lista.add(pedazo);
-    });
-    return lista;
-  }
-
-  crearDataSourcePersonnel(List<Personnel> personal) {
-    var lista = [];
-
-    personal.forEach((element) {
-      var pedazo = {
-        "display":
-            element.nombres.toString() + ' ' + element.apellidos.toString(),
-        "value": element.nombres.toString() + ' ' + element.apellidos.toString()
-      };
-      if (element.activo.toString() == '1') {
-        lista.add(pedazo);
-      }
-    });
-    return lista;
-  }
-
-  crearDataSourceSemana(List<Semana> semanas) {
-    var lista = [];
-
-    semanas.forEach((element) {
-      var pedazo = {
-        "display": element.numero.toString(),
-        "value": element.numero.toString()
-      };
-
-      lista.add(pedazo);
-    });
-    return lista;
-  }
-
-  crearDataSourceLote(List<Lote> lotes) {
-    var lista = [];
-
-    lotes.forEach((element) {
-      var pedazo = {
-        "display": element.numero.toString(),
-        "value": element.numero.toString()
-      };
-
-      lista.add(pedazo);
-    });
-    return lista;
   }
 }

@@ -6,36 +6,47 @@ import 'package:banavanmov/model/enfundado.dart';
 import 'package:banavanmov/exception/customException.dart';
 
 class EnfundadoProvider {
-  final String baseUrl = 'http://demo7764382.mockable.io/enfundados/';
+  final String baseUrl =
+      'https://coco-backend-api.herokuapp.com/api/enfundado/';
 
   //POST
   Future<bool> postEnfundado(Enfundado enfundado) async {
-    final response = await http.post(baseUrl, body: enfundado.toJson());
+    print("Aqui esta la enfundado:" + enfundado.toJson().toString());
+    final response = await http.post(baseUrl + 'create',
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: json.encode(enfundado.toJson()));
     final decodeData = json.decode(response.body);
 
-    //print(decodeData);
-    return true;
+    print(decodeData);
+    print("Status code: " + response.statusCode.toString());
+    if (response.statusCode == 201) {
+      return true;
+    }
+    return false;
   }
 
   //PUT
   Future<bool> updateEnfundado(Enfundado enfundado) async {
-    final response = await http.put(baseUrl + enfundado.id.toString(),
-        body: enfundado.toJson());
+    print("Aqui esta la enfundado:" + enfundado.toJson().toString());
+    final response = await http.put(baseUrl + 'update',
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(enfundado.toJson()));
     final decodeData = json.decode(response.body);
 
-    //print(decodeData);
+    print(decodeData);
     return true;
   }
 
-  Future<List<dynamic>> getAll() async {
+  Future<List<Enfundado>> getAll() async {
     var responseJson;
     try {
-      final resp = await http.get(baseUrl);
+      final resp = await http.get(baseUrl + 'get');
       responseJson = _response(resp);
+      //print(responseJson);
     } on SocketException {
       throw FetchDataException('Sin Conexion');
     }
-    return responseJson;
+    return EnfundadoResponse.fromJson(responseJson['registros']).results;
   }
 
   dynamic _response(http.Response response) {

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:banavanmov/model/personnel.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:banavanmov/exception/customException.dart';
@@ -13,7 +14,7 @@ class PersonnelProvider {
   Future<List<Personnel>> getAll() async {
     var responseJson;
     try {
-      final resp = await http.get(baseUrl + 'get?isActive=0');
+      final resp = await http.get(baseUrl + 'get?isActive=1');
       responseJson = _response(resp);
     } on SocketException {
       throw FetchDataException('Sin Conexion');

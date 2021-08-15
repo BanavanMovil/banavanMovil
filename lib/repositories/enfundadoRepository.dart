@@ -8,6 +8,6 @@ class EnfundadoRepository {
 
   Future<List<Enfundado>> fetchAllEnfundados() async {
     final response = await _provider.getAll();
-    return EnfundadoResponse.fromJson(response).results;
+    return response;
   }
 }

@@ -26,6 +26,23 @@ class SemanaProvider {
     return SemanaResponse.fromJson(newResponseJson).results;
   }
 
+  Future<Map<String, dynamic>> getDateData(String fecha) async {
+    var responseJson;
+    try {
+      final resp = await http.get(baseUrl + 'getDateData?fecha=' + fecha);
+      responseJson = _response(resp);
+    } on SocketException {
+      throw FetchDataException('Sin Conexion');
+    }
+    //print(responseJson);
+    var newResponseJson = responseJson;
+    //print("\n\n");
+    print(newResponseJson);
+    print("print en el provider" + newResponseJson['id'].toString());
+    //return SemanaResponse.fromJson(responseJson).results;c
+    return newResponseJson;
+  }
+
   dynamic _response(http.Response response) {
     switch (response.statusCode) {
       case 200:
