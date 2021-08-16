@@ -295,6 +295,7 @@ class CosechadoList extends StatelessWidget {
                       )
                     ])),
                 ButtonBar(
+                  alignment: MainAxisAlignment.center,
                   children: <Widget>[
                     FlatButton(
                       child: const Text('EDITAR'),

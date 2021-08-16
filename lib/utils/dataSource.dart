@@ -14,8 +14,8 @@ class DataSource {
 
     colores.forEach((element) {
       var pedazo = {
-        "display": element.hex_code.toString(),
-        "value": element.nombre.toString()
+        "display": element.nombre.toString(),
+        "value": element.id.toString()
       };
       lista.add(pedazo);
     });
