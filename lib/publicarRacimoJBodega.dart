@@ -348,8 +348,8 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                         Spacer(),
                         ElevatedButton(
                             onPressed: () {
-                              cargarDatosColores();
-                              cargarDatosColoresHex();
+                              //cargarDatosColores();
+                              //cargarDatosColoresHex();
                               showDatePicker(
                                       context: context,
                                       initialDate: _selectedFecha == null
