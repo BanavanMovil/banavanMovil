@@ -41,8 +41,13 @@ class ActividadProvider {
 
   //DELETE
   Future<bool> deleteActividad(Actividad actividad) async {
-    //TODO
-    return true;
+    final response =
+        await http.delete(baseUrl + "delete?nombre=" + actividad.nombre);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   dynamic _response(http.Response response) {

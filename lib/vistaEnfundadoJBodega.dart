@@ -160,12 +160,19 @@ class EnfundadoList extends StatelessWidget {
   const EnfundadoList({Key key, this.enfundados, this.datos}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: enfundados.length,
-      itemBuilder: (context, index) {
-        return _crearCartaEnfundado(context, enfundados[index]);
-      },
-    );
+    return (enfundados == null || enfundados.length == 0)
+        ? Center(
+            child: Text(
+              "No se encontraron Enfundados",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          )
+        : ListView.builder(
+            itemCount: enfundados.length,
+            itemBuilder: (context, index) {
+              return _crearCartaEnfundado(context, enfundados[index]);
+            },
+          );
   }
 
   Widget _crearCartaEnfundado(BuildContext context, Enfundado e) {

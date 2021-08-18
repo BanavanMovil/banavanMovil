@@ -3,6 +3,7 @@ import 'package:banavanmov/misc/personnelListTile.dart';
 import 'package:banavanmov/model/personnel.dart';
 import 'package:banavanmov/model/solicitud.dart';
 import 'package:banavanmov/providers/personnelProvider.dart';
+import 'package:banavanmov/providers/solicitudProvider.dart';
 import 'package:banavanmov/response.dart';
 import 'package:flutter/material.dart';
 
@@ -164,6 +165,30 @@ class _PersonnelListState extends State<PersonnelList> {
   void enviarTrabajadores() {
     print("Aqui va el post a user actividad");
     if (solicitud.personal_requerido == personalElegido.length) {
+      SolicitudProvider()
+          .sendTrabajadores(solicitud, listadoIdsTrabajadores(personalElegido))
+          .then((value) {
+        if (value) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Trabajadores Asignados Correctamente.'),
+              action: SnackBarAction(
+                label: 'Cerrar',
+                onPressed: () {
+                  // Code to execute.
+                },
+              )));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content:
+                  const Text('Ocurrio un problema al enviar la informacion.'),
+              action: SnackBarAction(
+                label: 'Cerrar',
+                onPressed: () {
+                  // Code to execute.
+                },
+              )));
+        }
+      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: const Text('El numero de trabajadores no es el exacto'),
@@ -174,5 +199,13 @@ class _PersonnelListState extends State<PersonnelList> {
             },
           )));
     }
+  }
+
+  List<int> listadoIdsTrabajadores(List<Personnel> lista) {
+    var nuevaLista = [];
+    lista.forEach((element) {
+      nuevaLista.add(element.id);
+    });
+    return nuevaLista;
   }
 }

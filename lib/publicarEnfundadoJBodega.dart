@@ -67,7 +67,7 @@ class _PublicarEnfundadoJBState extends State<PublicarEnfundadoJB> {
           user_id: int.parse(personnelResult),
           fundas_entregadas: int.parse(fundas_entregadas),
           fecha: secondFormatter.format(fecha_entrega),
-          semana_id: int.parse(semana),
+          semana_id: int.parse(semanaResult),
           cantidad: int.parse(fundas_entregadas));
       print("Se va a enviar el enfundado");
       return ep.postEnfundado(e);

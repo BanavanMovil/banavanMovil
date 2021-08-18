@@ -195,10 +195,14 @@ class SolicitudList extends StatelessWidget {
                       Spacer(),
                       Padding(
                           padding: const EdgeInsets.only(right: 10.0),
-                          child: IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {},
-                          ))
+                          child: e.is_answered
+                              ? ((e.is_accepted && !e.is_used)
+                                  ? IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: () {},
+                                    )
+                                  : null)
+                              : null)
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 5.0),

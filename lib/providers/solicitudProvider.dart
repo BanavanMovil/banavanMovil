@@ -39,6 +39,24 @@ class SolicitudProvider {
     }
   }
 
+  //POST USER ACTIVIDAD
+  Future<bool> sendTrabajadores(Solicitud s, List<int> personal) async {
+    final response = await http.post(
+        'https://coco-backend-api.herokuapp.com/api/userActividad/register',
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: json.encode({'solicitud_id': s.id, 'workers': personal}));
+    if (response.statusCode == 200) {
+      print("Este es el status code: " + response.statusCode.toString());
+      print("Trabajadores Enviados");
+      return true;
+    } else {
+      print(response.body);
+      print("Este es el status code: " + response.statusCode.toString());
+      print("Algo paso");
+      return false;
+    }
+  }
+
   dynamic _response(http.Response response) {
     switch (response.statusCode) {
       case 200:

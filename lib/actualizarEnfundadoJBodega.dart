@@ -81,7 +81,7 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
           user_id: int.parse(personnelResult),
           fundas_entregadas: int.parse(fundas_entregadasResult),
           fecha: secondFormatter.format(fecha),
-          semana_id: int.parse(semana),
+          semana_id: int.parse(semanaResult),
           cantidad: int.parse(fundas_entregadasResult));
       print("Se va a actualizar el enfundado");
       ep.updateEnfundado(e);
