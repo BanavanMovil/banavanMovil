@@ -167,8 +167,13 @@ class SolicitudList extends StatelessWidget {
   const SolicitudList({Key key, this.solicitudes}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return solicitudes == null
-        ? Text("No se encontraron Solicitudes")
+    return (solicitudes == null || solicitudes.length == 0)
+        ? Center(
+            child: Text(
+              "No se encontraron Solicitudes",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          )
         : ListView.builder(
             itemCount: solicitudes.length,
             itemBuilder: (context, index) {

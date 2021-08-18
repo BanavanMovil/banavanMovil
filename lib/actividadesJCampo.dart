@@ -225,7 +225,35 @@ class ActividadList extends StatelessWidget {
                 "Esta seguro que desea eliminar la Actividad: " + a.nombre),
             actions: <Widget>[
               MaterialButton(
-                  elevation: 4.0, onPressed: () {}, child: Text("SI")),
+                  elevation: 4.0,
+                  onPressed: () {
+                    ActividadProvider().deleteActividad(a).then((value) {
+                      if (value) {
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                const Text('Actividad Eliminada Exitosamente!'),
+                            action: SnackBarAction(
+                              label: 'Cerrar',
+                              onPressed: () {
+                                // Code to execute.
+                              },
+                            )));
+                      } else {
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                const Text('No se pudo eliminar la actividad.'),
+                            action: SnackBarAction(
+                              label: 'Cerrar',
+                              onPressed: () {
+                                // Code to execute.
+                              },
+                            )));
+                      }
+                    });
+                  },
+                  child: Text("SI")),
               MaterialButton(
                   elevation: 4.0,
                   onPressed: () {

@@ -5,7 +5,6 @@ import 'package:banavanmov/utils/util.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 import 'package:flutter/material.dart';
-import 'package:banavanmov/vistaEnfundadoJBodega.dart';
 
 import 'package:banavanmov/model/color.dart';
 import 'package:banavanmov/model/lote.dart';
@@ -84,8 +83,31 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
           semana_id: int.parse(semanaResult),
           cantidad: int.parse(fundas_entregadasResult));
       print("Se va a actualizar el enfundado");
-      ep.updateEnfundado(e);
-      print("Seactualizo enfundado");
+      ep.updateEnfundado(e).then((value) {
+        if (value) {
+          print("Se actualizo enfundado");
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Actualizacion completada'),
+              action: SnackBarAction(
+                label: 'Cerrar',
+                onPressed: () {
+                  // Code to execute.
+                },
+              )));
+          //Para cerrar el
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Ocurrio un error. Intentelo nuevamente'),
+              action: SnackBarAction(
+                label: 'Cerrar',
+                onPressed: () {
+                  // Code to execute.
+                },
+              )));
+        }
+      });
+      
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: const Text('Datos Erroneos o incompletos'),
