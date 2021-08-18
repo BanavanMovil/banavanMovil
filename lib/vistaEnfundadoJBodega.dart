@@ -61,6 +61,38 @@ class _EnfundadoVistaState extends State<EnfundadoVista> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text.rich(
+          TextSpan(
+            //text: 'Lote: ', // default text style
+            children: <TextSpan>[
+              /*TextSpan(
+                                text: ' beautiful ',
+                                style: TextStyle(fontStyle: FontStyle.italic)),*/
+              TextSpan(
+                  text: "Jefe de Bodega\n",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: "Enfundado", style: TextStyle(fontSize: 18.0)),
+            ],
+          ),
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20.0, fontFamily: 'Karla'),
+        ),
+        backgroundColor: Colors.orange,
+        centerTitle: true,
+        //automaticallyImplyLeading: false,
+        /*actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            tooltip: 'Show Snackbar',
+            onPressed: () {
+              /*Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return Login();
+              }));*/
+            },
+          ),
+        ],*/
+      ),
+      /*appBar: AppBar(
         backgroundColor: Colors.orange,
         centerTitle: true,
         title: !isBusqueda
@@ -98,7 +130,7 @@ class _EnfundadoVistaState extends State<EnfundadoVista> {
                   },
                 )
         ],
-      ),
+      ),*/
       body: RefreshIndicator(
         onRefresh: () => _bloc.fetchAllEnfundados(),
         child: StreamBuilder<Response<List<Enfundado>>>(

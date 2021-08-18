@@ -21,6 +21,7 @@ class Cosechado {
   String user_id;
   String semana_id;
   String fecha;
+  String semana_cosecha;
 
   Cosechado({
     this.id,
@@ -29,6 +30,7 @@ class Cosechado {
     this.user_id,
     this.semana_id,
     this.fecha,
+    this.semana_cosecha,
   });
 
   factory Cosechado.fromJson(Map<String, dynamic> json) => Cosechado(
@@ -38,6 +40,7 @@ class Cosechado {
         user_id: json['user_id'],
         semana_id: json['semana_id'],
         fecha: json['fecha'],
+        semana_cosecha: json['semana_cosecha'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -47,5 +50,6 @@ class Cosechado {
         'user_id': user_id,
         'semana_id': semana_id,
         'fecha': fecha,
+        'semana_cosecha': semana_cosecha,
       };
 }

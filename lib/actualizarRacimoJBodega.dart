@@ -2,6 +2,11 @@ import 'package:banavanmov/model/cosechado.dart';
 import 'package:banavanmov/providers/cosechadoProvider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
+import 'package:flutter/material.dart';
+
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+
 import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:banavanmov/vistaRacimosJBodega.dart';
@@ -16,6 +21,8 @@ import 'package:banavanmov/providers/colorProvider.dart';
 
 import 'package:banavanmov/model/personnel.dart';
 import 'package:banavanmov/providers/personnelProvider.dart';
+
+import 'package:banavanmov/utils/dataSource.dart';
 
 class NewObjectTwo {
   int id;
@@ -75,13 +82,16 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
   //final _formKey = GlobalKey<FormState>();
   final globalKey = GlobalKey<ScaffoldState>();
 
+  final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  final DateFormat secondFormatter = DateFormat('yyyy-MM-dd');
+
   String _selectedId, _selectedIdResult;
 
   String _selectedLote, _selectedLoteResult;
   int _selectedCantidad, _selectedCantidadResult;
   String _selectedUser, _selectedUserResult;
   DateTime _selectedFecha, _selectedFechaResult;
-  //String _selectedSemana, _selectedSemanaResult;
+  String _selectedSemana, _selectedSemanaResult;
 
   String _selectedColor, _selectedColorResult;
 
@@ -89,27 +99,9 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
 
   final formKey = GlobalKey<FormState>();
 
-  /*String lote, loteResult;
-  String semana, semanaResult;
-  String color, colorResult;
-  String numRacimos, numRacimosResult;*/
-
   ActualizarCosechadoJBState(Cosechado cosechado) {
     this.cosechado = cosechado;
   }
-
-  /*@override
-  void initState() {
-    super.initState();
-    semana = '';
-    lote = '';
-    color = '';
-    numRacimos = '';
-    semanaResult = '';
-    loteResult = '';
-    colorResult = '';
-    numRacimosResult = '';
-  }*/
 
   @override
   void initState() {
@@ -124,8 +116,8 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
     _selectedCantidadResult = 0;
     _selectedUser = '';
     _selectedUserResult = '';
-    //_selectedSemana = '';
-    //_selectedSemanaResult = '';
+    _selectedSemana = '';
+    _selectedSemanaResult = '';
     _selectedColor = '';
     _selectedColorResult = '';
 
@@ -138,29 +130,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
     cargarDatosSemanasColores();
   }
 
-  /*validarCampos() {
-    return loteResult.isNotEmpty ||
-        semanaResult != null ||
-        numRacimosResult != null;
-  }*/
-
-  /*_saveForm() {
-    print(validarCampos());
-    if (validarCampos()) {
-      CosechadoProvider cp = new CosechadoProvider();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Cosechado Actualizado')));
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        //return Footer();
-        return RacimosVista();
-      }));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No hay cambios en los campos')));
-    }
-  }*/
-
-  _saveForm(/*BuildContext context*/) {
+  _saveForm(/*BuildContext context*/) async {
     print("Entra al boton guardar");
     var form = formKey.currentState;
     if (form.validate()) {
@@ -175,7 +145,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
         _selectedColorResult = _selectedColor;
       });
 
-      List<String> _arrayNewFecha = _selectedFechaResult.toString().split(' ');
+      //List<String> _arrayNewFecha = _selectedFechaResult.toString().split(' ');
 
       NewObjectTwo not = new NewObjectTwo(
           id: int.parse(cosechado.id.toString()),
@@ -183,43 +153,62 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
           cantidad: _selectedCantidadResult,
           user_id: int.parse(_selectedUserResult),
           //fecha: _selectedFechaResult.toString(),
-          fecha: _arrayNewFecha[0],
+          fecha: secondFormatter.format(_selectedFecha),
+          //fecha: _arrayNewFecha[0],
           color_id: int.parse(_selectedColorResult));
 
-      cp.updateCosechado(not);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text('Racimo Cosechado Actualizado'),
-          action: SnackBarAction(
-            label: 'Cerrar',
-            onPressed: () {
-              // Code to execute.
-            },
-          )));
+      if (await cp.updateCosechado(not)) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: const Text('Racimo Cosechado Actualizado'),
+            action: SnackBarAction(
+              label: 'Cerrar',
+              onPressed: () {
+                // Code to execute.
+              },
+            )));
 
-      /*Cosechado c = new Cosechado(
-          id: -1,
-          lote_id: int.parse(_selectedLoteResult),
-          cantidad: _selectedCantidadResult,
-          user_id: int.parse(_selectedUserResult),
-          //fecha: _selectedFechaResult.toString(),
-          fecha: _arrayNewFecha[0],
-          semana_id: int.parse(_selectedSemanaResult));*/
-
-      /*cp.sendCosechado(c);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text('Racimo Cosechado Creado'),
-          action: SnackBarAction(
-            label: 'Cerrar',
-            onPressed: () {
-              // Code to execute.
-            },
-          )));*/
-
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        //return Footer();
-        return RacimosVista();
-      }));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) {
+          //return Footer();
+          return RacimosVista();
+        }));
+      } else {
+        _showDialogConfirm(context);
+      }
     }
+  }
+
+  _showDialogConfirm(BuildContext ctx) {
+    showDialog(
+        context: ctx,
+        builder: (context) {
+          return SimpleDialog(
+            title: Center(child: Text("Error en los Datos")),
+            children: <Widget>[
+              Center(child: Text("No existe una semana para ese color.")),
+              Placeholder(
+                fallbackHeight: 7,
+                fallbackWidth: 100,
+                color: Colors.transparent,
+              ),
+              //Center(child: Text("")),
+              Center(child: Text("Ese color no cumple con los")),
+              Center(child: Text("requerimientos de edad.")),
+
+              Placeholder(
+                fallbackHeight: 10,
+                fallbackWidth: 100,
+                color: Colors.transparent,
+              ),
+              Center(
+                  child: RaisedButton(
+                      child: Text("Ok"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      })),
+            ],
+          );
+        });
   }
 
   @override
@@ -251,7 +240,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                           AsyncSnapshot<List<Lote>> snapshot) {
                         if (snapshot.hasData) {
                           var lote = snapshot.data;
-                          var loteDS = crearDataSourceLote(lote);
+                          var loteDS = DataSource().crearDataSourceLote(lote);
                           return Container(
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
@@ -285,46 +274,6 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                       },
                     ),
                   ),
-                  /*Center(
-                    child: FutureBuilder(
-                      future: SemanaProvider().getAll(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<Semana>> snapshot) {
-                        if (snapshot.hasData) {
-                          var semana = snapshot.data;
-                          var semanaDS = crearDataSourceSemana(semana);
-                          return Container(
-                              padding: EdgeInsets.all(10),
-                              child: DropDownFormField(
-                                titleText: 'Semana Actual: ' +
-                                    cosechado.semana_id.toString(),
-                                hintText: 'Elija la Semana',
-                                value: semanaResult,
-                                validator: (value) {
-                                  if (value == null) {
-                                    return "Por favor seleccione una semana";
-                                  }
-                                  return null;
-                                },
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    semanaResult = newValue;
-                                  });
-                                },
-                                onSaved: (value) {
-                                  setState(() {
-                                    semanaResult = value;
-                                  });
-                                },
-                                dataSource: semanaDS,
-                                textField: 'display',
-                                valueField: 'value',
-                              ));
-                        }
-                        return CircularProgressIndicator();
-                      },
-                    ),
-                  ),*/
                   Container(
                       child: Column(children: <Widget>[
                     Padding(
@@ -335,34 +284,39 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                         textAlign: TextAlign.left,
                       ),
                     ),
-                    CustomNumberPicker(
-                      initialValue: 0,
-                      maxValue: 10000,
-                      minValue: 0,
-                      onValue: (value) {
-                        this._selectedCantidad = value;
-                        print(this._selectedCantidad);
-                      },
-                    )
-
-                    /*new ListTile(
-                      title: TextFormField(
-                          //controller: _controller,
-                          keyboardType: TextInputType.number,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedCantidad = newValue;
-                            });
-                          },
-                          onSaved: (value) {
-                            setState(() {
-                              _selectedCantidad = value;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            labelText: "Número de Racimos Cosechados",
-                          )),
-                    ),*/
+                    TextFormField(
+                        //controller: _controller,
+                        keyboardType: TextInputType.number,
+                        onChanged: (newValue) {
+                          setState(() {
+                            if (newValue != null) {
+                              _selectedCantidad = int.parse(newValue);
+                            }
+                            //_selectedCantidad = int.parse(newValue);
+                          });
+                        },
+                        onSaved: (value) {
+                          setState(() {
+                            if (value != null) {
+                              _selectedCantidad = int.parse(value);
+                            }
+                            //_selectedCantidad = int.parse(value);
+                          });
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Por favor ingrese un valor.";
+                          }
+                          return null;
+                        },
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ],
+                        decoration: InputDecoration(
+                          labelText: "Número de Racimos",
+                          //hintText: "whatever you want",
+                          //icon: Icon(Icons.phone_iphone)
+                        )),
                   ])),
                   Center(
                     child: FutureBuilder(
@@ -371,7 +325,8 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                           AsyncSnapshot<List<Personnel>> snapshot) {
                         if (snapshot.hasData) {
                           var personal = snapshot.data;
-                          var personalDS = crearDataSourcePersonnel(personal);
+                          var personalDS =
+                              DataSource().crearDataSourcePersonnel(personal);
                           return Container(
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
@@ -405,8 +360,78 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                       },
                     ),
                   ),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        Text("Fecha de Cosechado Actual: " +
+                            cosechado.fecha.toString()),
+                        Row(
+                          children: <Widget>[
+                            Text(_selectedFecha == null
+                                ? "No ha seleccionado fecha"
+                                : formatter.format(_selectedFecha)),
+                            Spacer(),
+                            ElevatedButton(
+                                onPressed: () {
+                                  //cargarDatosColores();
+                                  //cargarDatosColoresHex();
+                                  showDatePicker(
+                                          context: context,
+                                          initialDate: _selectedFecha == null
+                                              ? DateTime.now()
+                                              : _selectedFecha,
+                                          firstDate: DateTime(2001),
+                                          lastDate: DateTime(2222))
+                                      .then((date) async {
+                                    if (date != null) {
+                                      print("FECHA: " + date.toString());
+                                      setState(() {
+                                        _selectedFecha = date;
+                                      });
+                                      return SemanaProvider()
+                                          .getDateData(formatter.format(date));
+                                    } else {
+                                      setState(() {
+                                        _selectedFecha = null;
+                                      });
+                                    }
+                                  }).then((value) {
+                                    print("MAPA: " + value['numero']);
+                                    setState(() {
+                                      _selectedSemana =
+                                          value['numero'].toString();
 
-                  /*Center(
+                                      _selectedSemanaResult =
+                                          value['id'].toString();
+                                    });
+                                  });
+                                },
+                                child: Icon(Icons.date_range))
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 15),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              "Semana: ",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                            Text(_selectedFecha != null
+                                ? _selectedSemana.toString()
+                                : '--')
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Center(
                     child: FutureBuilder(
                       future: ColorProvider().getAll(),
                       builder: (BuildContext context,
@@ -446,92 +471,10 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                         return CircularProgressIndicator();
                       },
                     ),
-                  ),*/
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        Text("Fecha de Cosechado Actual: " +
-                            cosechado.fecha.toString()),
-                        Row(
-                          children: <Widget>[
-                            Text(_selectedFecha == null
-                                ? "No ha seleccionado fecha"
-                                : _selectedFecha.toString()),
-                            Spacer(),
-                            ElevatedButton(
-                                onPressed: () {
-                                  showDatePicker(
-                                          context: context,
-                                          initialDate: _selectedFecha == null
-                                              ? DateTime.now()
-                                              : _selectedFecha,
-                                          firstDate: DateTime(2001),
-                                          lastDate: DateTime(2222))
-                                      .then((date) {
-                                    setState(() {
-                                      _selectedFecha = date;
-                                    });
-                                  });
-                                },
-                                child: Icon(Icons.date_range))
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  Center(
-                    child: FutureBuilder(
-                      future: ColorProvider().getAll(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<Colour>> snapshot) {
-                        if (snapshot.hasData) {
-                          var colores = snapshot.data;
-                          var coloresDS = crearDataSourceColor(colores);
-                          return Container(
-                              padding: EdgeInsets.all(10),
-                              child: DropDownFormField(
-                                titleText:
-                                    'Color Actual: ' /*+
-                                    todosColores[todosSemanasColores[
-                                        cosechado.semana_id.toString()]],*/
-                                ,
-                                hintText: 'Elija el Color',
-                                value: _selectedColor,
-                                validator: (value) {
-                                  if (value == null) {
-                                    return "Por favor seleccione un color";
-                                  }
-                                  return null;
-                                },
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    _selectedColor = newValue;
-                                  });
-                                },
-                                onSaved: (value) {
-                                  setState(() {
-                                    _selectedColor = value;
-                                  });
-                                },
-                                dataSource: coloresDS,
-                                textField: 'display',
-                                valueField: 'value',
-                              ));
-                        }
-                        return CircularProgressIndicator();
-                      },
-                    ),
                   ),
                   Center(
                       child: ElevatedButton(
                           child: Text('Actualizar'), onPressed: _saveForm)),
-
-                  /*ElevatedButton(
-                    child: Text("Actualizar",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 15, color: Colors.white)),
-                    onPressed: _saveForm,
-                  ),*/
                 ]),
               ),
             ),
@@ -605,20 +548,6 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
     //print(powerRanger);
   }
 
-  /*crearDataSourceSemana(List<Semana> semanas) {
-    var lista = [];
-
-    semanas.forEach((element) {
-      var pedazo = {
-        "display": element.numero.toString(),
-        "value": element.numero.toString()
-      };
-
-      lista.add(pedazo);
-    });
-    return lista;
-  }*/
-
   crearDataSourceColor(List<Colour> colores) {
     var lista = [];
 
@@ -628,36 +557,6 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
         "value": element.id.toString()
       };
       lista.add(pedazo);
-    });
-    return lista;
-  }
-
-  crearDataSourceLote(List<Lote> lotes) {
-    var lista = [];
-
-    lotes.forEach((element) {
-      var pedazo = {
-        "display": element.numero.toString(),
-        "value": element.id.toString()
-      };
-
-      lista.add(pedazo);
-    });
-    return lista;
-  }
-
-  crearDataSourcePersonnel(List<Personnel> personal) {
-    var lista = [];
-
-    personal.forEach((element) {
-      var pedazo = {
-        "display":
-            element.nombres.toString() + ' ' + element.apellidos.toString(),
-        "value": element.id.toString()
-      };
-      if (element.activo.toString() == '1') {
-        lista.add(pedazo);
-      }
     });
     return lista;
   }
