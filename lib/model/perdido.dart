@@ -20,6 +20,7 @@ class Perdido {
   String perdida_motivo_id;
   String semana_id;
   String fecha;
+  String semana_perdida;
 
   Perdido({
     this.id,
@@ -29,6 +30,7 @@ class Perdido {
     this.perdida_motivo_id,
     this.semana_id,
     this.fecha,
+    this.semana_perdida,
   });
 
   factory Perdido.fromJson(Map<String, dynamic> json) => Perdido(
@@ -39,6 +41,7 @@ class Perdido {
         perdida_motivo_id: json['perdida_motivo_id'],
         semana_id: json['semana_id'],
         fecha: json['fecha'],
+        semana_perdida: json['semana_perdida'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,5 +52,6 @@ class Perdido {
         'perdida_motivo_id': perdida_motivo_id,
         'semana_id': semana_id,
         'fecha': fecha,
+        'semana_perdida': semana_perdida,
       };
 }

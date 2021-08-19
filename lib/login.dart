@@ -176,7 +176,7 @@ class _LoginState extends State<Login> {
                         userController.clear();
                         passController.clear();
                         Navigator.pop(ctx);
-                        if (body['rol'] != 'JB') {
+                        if (body['rol'] != 'JC') {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return MainJCampo();

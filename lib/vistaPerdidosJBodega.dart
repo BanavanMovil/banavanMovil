@@ -34,6 +34,7 @@ Map<String, String> todosColores = {};
 Map<String, String> todosUsers = {};
 Map<String, String> todosSemanas = {};
 Map<String, String> todosMotivos = {};
+Map<String, String> todosSemanasColores = {};
 
 class _PerdidosVistaState extends State<PerdidosVista> {
   final PerdidoProvider pv = new PerdidoProvider();
@@ -50,49 +51,28 @@ class _PerdidosVistaState extends State<PerdidosVista> {
     cargarDatosUsers();
     cargarDatosSemanas();
     cargarDatosMotivos();
+    cargarDatosSemanasColores();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text.rich(
+          TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                  text: "Jefe de Bodega\n",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text: "Racimos Perdidos", style: TextStyle(fontSize: 18.0)),
+            ],
+          ),
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20.0, fontFamily: 'Karla'),
+        ),
         backgroundColor: Colors.orange,
         centerTitle: true,
-        title: !isBusqueda
-            ? Text('   Jefe de Bodega\nRacimos Perdidos')
-            : TextField(
-                onChanged: (value) {
-                  //_filterEmpleos(value);
-                },
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.search,
-                      color: Colors.white,
-                    ),
-                    hintText: "Filtra por Semana",
-                    hintStyle: TextStyle(color: Colors.white)),
-              ),
-        actions: <Widget>[
-          isBusqueda
-              ? IconButton(
-                  icon: Icon(Icons.cancel),
-                  onPressed: () {
-                    setState(() {
-                      this.isBusqueda = false;
-                      //filteredEmpleoList = empleoList;
-                    });
-                  },
-                )
-              : IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    setState(() {
-                      this.isBusqueda = true;
-                    });
-                  },
-                )
-        ],
       ),
       body: RefreshIndicator(
         onRefresh: () => _bloc.fetchAllPerdidos(),
@@ -124,20 +104,15 @@ class _PerdidosVistaState extends State<PerdidosVista> {
   }
 
   Widget botonPerdido() {
-    //if (globals.isLoggedIn) {
     return FloatingActionButton(
       backgroundColor: Colors.orange,
       onPressed: () {
-        //if (globals.isLoggedIn) {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return PublicarPerdidoJB();
         }));
       },
-      //},
       child: const Icon(Icons.add),
     );
-    //}
-    //return Row();
   }
 
   void cargarDatosLotes() async {
@@ -203,6 +178,17 @@ class _PerdidosVistaState extends State<PerdidosVista> {
     //var powerRanger = todosColores["17"];
     //print(powerRanger);
   }
+
+  void cargarDatosSemanasColores() async {
+    SemanaProvider _provider = SemanaProvider();
+    Future<List<Semana>> _futureOfList = _provider.getAll();
+    List<Semana> list = await _futureOfList;
+    list.forEach((element) {
+      var newSemana = Map<String, String>();
+      newSemana[element.id.toString()] = element.color_id.toString();
+      todosSemanasColores.addAll(newSemana);
+    });
+  }
 }
 
 class PerdidoList extends StatelessWidget {
@@ -218,14 +204,6 @@ class PerdidoList extends StatelessWidget {
               return _crearCartaPerdido(context, perdidos[index]);
             },
           );
-
-    /*? ListView.builder(
-            itemCount: perdidos.length,
-            itemBuilder: (context, index) {
-              return _crearCartaPerdido(context, perdidos[index]);
-            },
-          )
-        : Text("No se encontraron Racimos Perdidos");*/
   }
 
   Widget _crearCartaPerdido(BuildContext context, Perdido p) {
@@ -239,50 +217,129 @@ class PerdidoList extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 10.0),
                     child: Row(children: <Widget>[
-                      Text(
-                        "Lote: " + todosLotes[p.lote_id.toString()],
-                        style: TextStyle(fontSize: 10),
-                      ),
+                      Text.rich(
+                        TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Lote: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: todosLotes[p.lote_id.toString()].toString(),
+                            ),
+                          ],
+                        ),
+                      )
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 10.0),
+                    child: Row(children: <Widget>[
+                      Text.rich(
+                        TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Reportado por: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: todosUsers[p.user_id.toString()].toString(),
+                            ),
+                          ],
+                        ),
+                      )
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
-                      Text(
-                        "Reportado por: " + todosUsers[p.user_id.toString()],
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                      Text.rich(
+                        TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Cantidad: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: p.cantidad.toString(),
+                            ),
+                          ],
+                        ),
+                      )
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
-                      Text("Fecha de Reporte: " + p.fecha.toString()),
+                      Text.rich(
+                        TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Semana de Pérdida: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: p.semana_perdida.toString(),
+                            ),
+                          ],
+                        ),
+                      )
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
-                      Text("Motivo de pérdida: " +
-                          todosMotivos[p.perdida_motivo_id.toString()]),
+                      Text.rich(
+                        TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Fecha de Reporte: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: p.fecha.toString(),
+                            ),
+                          ],
+                        ),
+                      )
                     ])),
-                /*Padding(
+                Padding(
                     padding: const EdgeInsets.only(left: 10, top: 7.0),
                     child: Row(children: <Widget>[
-                      Text("Color de cinta: " + p.colorCinta),
-                    ])),*/
+                      Text.rich(
+                        TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Motivo de pérdida: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text: todosMotivos[
+                                    p.perdida_motivo_id.toString()]),
+                          ],
+                        ),
+                      )
+                    ])),
                 Padding(
-                    padding: const EdgeInsets.only(left: 280.0, top: 0.0),
-                    child: IconButton(
-                      icon: Icon(Icons.edit),
+                    padding: const EdgeInsets.only(left: 10, top: 7.0),
+                    child: Row(children: <Widget>[
+                      Text.rich(
+                        TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Color: ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: todosColores[
+                                  todosSemanasColores[p.semana_id.toString()]],
+                            ),
+                          ],
+                        ),
+                      )
+                    ])),
+                ButtonBar(
+                  alignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    FlatButton(
+                      child: const Text('EDITAR'),
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                           return ActualizarPerdidoJB(p);
                         }));
                       },
-                    )),
-                Placeholder(
-                  fallbackHeight: 10,
-                  fallbackWidth: 100,
-                  color: Colors.transparent,
+                    ),
+                  ],
                 ),
               ]),
         ));

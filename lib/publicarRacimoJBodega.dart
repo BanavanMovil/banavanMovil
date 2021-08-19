@@ -71,7 +71,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
   final DateFormat secondFormatter = DateFormat('yyyy-MM-dd');
 
   String _selectedLote, _selectedLoteResult;
-  int _selectedCantidad, _selectedCantidadResult;
+  String _selectedCantidad, _selectedCantidadResult;
   String _selectedUser, _selectedUserResult;
   DateTime _selectedFecha, _selectedFechaResult;
   String _selectedSemana, _selectedSemanaResult;
@@ -88,8 +88,8 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
 
     _selectedLote = '';
     _selectedLoteResult = '';
-    _selectedCantidad = 0;
-    _selectedCantidadResult = 0;
+    _selectedCantidad = '';
+    _selectedCantidadResult = '';
     _selectedUser = '';
     _selectedUserResult = '';
     _selectedSemana = '';
@@ -117,7 +117,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
       NewObject no = new NewObject(
           //id: -1,
           lote_id: int.parse(_selectedLoteResult),
-          cantidad: _selectedCantidadResult,
+          cantidad: int.parse(_selectedCantidadResult),
           user_id: int.parse(_selectedUserResult),
           fecha: secondFormatter.format(_selectedFecha),
           color_id: int.parse(_selectedColorResult));
@@ -175,32 +175,6 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
             ],
           );
         });
-  }
-
-  void cargarDatosColores() async {
-    ColorProvider _provider = ColorProvider();
-    Future<List<Colour>> _futureOfList = _provider.getAll();
-    List<Colour> list = await _futureOfList;
-    list.forEach((element) {
-      var newColor = Map<String, String>();
-      newColor[element.hex_code.toString()] = element.id.toString();
-      todosColores.addAll(newColor);
-    });
-    //var powerRanger = todosColores["17"];
-    //print(powerRanger);
-  }
-
-  void cargarDatosColoresHex() async {
-    ColorProvider _provider = ColorProvider();
-    Future<List<Colour>> _futureOfList = _provider.getAll();
-    List<Colour> list = await _futureOfList;
-    list.forEach((element) {
-      var newColor = Map<String, String>();
-      newColor[element.hex_code.toString()] = element.nombre.toString();
-      todosColoresHex.addAll(newColor);
-    });
-    //var powerRanger = todosColores["17"];
-    //print(powerRanger);
   }
 
   @override
@@ -262,30 +236,24 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                       ),
                     ),
                     new ListTile(
-                      //leading: const Icon(Icons.contact_phone),
+                      //leading: const Icon(Icons.supervisor_account),
 
                       title: TextFormField(
                           //controller: _controller,
                           keyboardType: TextInputType.number,
                           onChanged: (newValue) {
                             setState(() {
-                              if (newValue != null) {
-                                _selectedCantidad = int.parse(newValue);
-                              }
-                              //_selectedCantidad = int.parse(newValue);
+                              _selectedCantidad = newValue;
                             });
                           },
                           onSaved: (value) {
                             setState(() {
-                              if (value != null) {
-                                _selectedCantidad = int.parse(value);
-                              }
-                              //_selectedCantidad = int.parse(value);
+                              _selectedCantidad = value;
                             });
                           },
                           validator: (value) {
                             if (value.isEmpty) {
-                              return "Por favor ingrese un valor.";
+                              return "Ingrese un valor.";
                             }
                             return null;
                           },
@@ -293,7 +261,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                             WhitelistingTextInputFormatter.digitsOnly
                           ],
                           decoration: InputDecoration(
-                            labelText: "Número de Racimos",
+                            labelText: "Número de Racimos Cosechados",
                             //hintText: "whatever you want",
                             //icon: Icon(Icons.phone_iphone)
                           )),
@@ -348,8 +316,6 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                         Spacer(),
                         ElevatedButton(
                             onPressed: () {
-                              //cargarDatosColores();
-                              //cargarDatosColoresHex();
                               showDatePicker(
                                       context: context,
                                       initialDate: _selectedFecha == null
@@ -359,7 +325,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                                       lastDate: DateTime(2222))
                                   .then((date) async {
                                 if (date != null) {
-                                  print("FECHA: " + date.toString());
+                                  //print("FECHA: " + date.toString());
                                   setState(() {
                                     _selectedFecha = date;
                                   });
@@ -371,7 +337,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                                   });
                                 }
                               }).then((value) {
-                                print("MAPA: " + value['numero']);
+                                //print("MAPA: " + value['numero']);
                                 setState(() {
                                   _selectedSemana = value['numero'].toString();
 

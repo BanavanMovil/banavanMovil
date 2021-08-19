@@ -3,6 +3,7 @@ import 'package:banavanmov/model/color.dart';
 import 'package:banavanmov/model/lote.dart';
 import 'package:banavanmov/model/personnel.dart';
 import 'package:banavanmov/model/semana.dart';
+import 'package:banavanmov/model/motivo.dart';
 import 'package:banavanmov/model/solicitudTipo.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +36,20 @@ class DataSource {
           element.rol.toString() == 'Trabajador') {
         lista.add(pedazo);
       }
+    });
+    return lista;
+  }
+
+  crearDataSourceMotivo(List<Motivo> motivos) {
+    var lista = [];
+
+    motivos.forEach((element) {
+      var pedazo = {
+        "display": element.titulo.toString(),
+        "value": element.id.toString()
+      };
+
+      lista.add(pedazo);
     });
     return lista;
   }

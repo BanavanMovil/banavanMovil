@@ -88,7 +88,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
   String _selectedId, _selectedIdResult;
 
   String _selectedLote, _selectedLoteResult;
-  int _selectedCantidad, _selectedCantidadResult;
+  String _selectedCantidad, _selectedCantidadResult;
   String _selectedUser, _selectedUserResult;
   DateTime _selectedFecha, _selectedFechaResult;
   String _selectedSemana, _selectedSemanaResult;
@@ -112,8 +112,8 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
 
     _selectedLote = '';
     _selectedLoteResult = '';
-    _selectedCantidad = 0;
-    _selectedCantidadResult = 0;
+    _selectedCantidad = '';
+    _selectedCantidadResult = '';
     _selectedUser = '';
     _selectedUserResult = '';
     _selectedSemana = '';
@@ -133,28 +133,22 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
   _saveForm(/*BuildContext context*/) async {
     print("Entra al boton guardar");
     var form = formKey.currentState;
-    if (form.validate()) {
+    if (form.validate() && _selectedFecha != null) {
       form.save();
       setState(() {
-        //_selectedIdResult = _selectedId;
         _selectedLoteResult = _selectedLote;
         _selectedCantidadResult = _selectedCantidad;
         _selectedUserResult = _selectedUser;
         _selectedFechaResult = _selectedFecha;
-        //_selectedSemanaResult = _selectedSemana;
         _selectedColorResult = _selectedColor;
       });
-
-      //List<String> _arrayNewFecha = _selectedFechaResult.toString().split(' ');
 
       NewObjectTwo not = new NewObjectTwo(
           id: int.parse(cosechado.id.toString()),
           lote_id: int.parse(_selectedLoteResult),
-          cantidad: _selectedCantidadResult,
+          cantidad: int.parse(_selectedCantidadResult),
           user_id: int.parse(_selectedUserResult),
-          //fecha: _selectedFechaResult.toString(),
           fecha: secondFormatter.format(_selectedFecha),
-          //fecha: _arrayNewFecha[0],
           color_id: int.parse(_selectedColorResult));
 
       if (await cp.updateCosechado(not)) {
@@ -284,39 +278,32 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                         textAlign: TextAlign.left,
                       ),
                     ),
-                    TextFormField(
-                        //controller: _controller,
-                        keyboardType: TextInputType.number,
-                        onChanged: (newValue) {
-                          setState(() {
-                            if (newValue != null) {
-                              _selectedCantidad = int.parse(newValue);
+                    new ListTile(
+                      title: TextFormField(
+                          keyboardType: TextInputType.number,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedCantidad = newValue;
+                            });
+                          },
+                          onSaved: (value) {
+                            setState(() {
+                              _selectedCantidad = value;
+                            });
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Ingrese un valor.";
                             }
-                            //_selectedCantidad = int.parse(newValue);
-                          });
-                        },
-                        onSaved: (value) {
-                          setState(() {
-                            if (value != null) {
-                              _selectedCantidad = int.parse(value);
-                            }
-                            //_selectedCantidad = int.parse(value);
-                          });
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return "Por favor ingrese un valor.";
-                          }
-                          return null;
-                        },
-                        inputFormatters: <TextInputFormatter>[
-                          WhitelistingTextInputFormatter.digitsOnly
-                        ],
-                        decoration: InputDecoration(
-                          labelText: "Número de Racimos",
-                          //hintText: "whatever you want",
-                          //icon: Icon(Icons.phone_iphone)
-                        )),
+                            return null;
+                          },
+                          inputFormatters: <TextInputFormatter>[
+                            WhitelistingTextInputFormatter.digitsOnly
+                          ],
+                          decoration: InputDecoration(
+                            labelText: "Número de Racimos Cosechados",
+                          )),
+                    ),
                   ])),
                   Center(
                     child: FutureBuilder(
@@ -373,8 +360,6 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                             Spacer(),
                             ElevatedButton(
                                 onPressed: () {
-                                  //cargarDatosColores();
-                                  //cargarDatosColoresHex();
                                   showDatePicker(
                                           context: context,
                                           initialDate: _selectedFecha == null
@@ -384,7 +369,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                                           lastDate: DateTime(2222))
                                       .then((date) async {
                                     if (date != null) {
-                                      print("FECHA: " + date.toString());
+                                      //print("FECHA: " + date.toString());
                                       setState(() {
                                         _selectedFecha = date;
                                       });
@@ -396,7 +381,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                                       });
                                     }
                                   }).then((value) {
-                                    print("MAPA: " + value['numero']);
+                                    //print("MAPA: " + value['numero']);
                                     setState(() {
                                       _selectedSemana =
                                           value['numero'].toString();
