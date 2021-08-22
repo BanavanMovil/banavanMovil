@@ -24,58 +24,23 @@ import 'package:banavanmov/providers/personnelProvider.dart';
 
 import 'package:banavanmov/utils/dataSource.dart';
 
-class NewObjectTwo {
-  int id;
-  int lote_id;
-  int cantidad;
-  int user_id;
-  String fecha;
-  int color_id;
-
-  NewObjectTwo({
-    this.id,
-    this.lote_id,
-    this.cantidad,
-    this.user_id,
-    this.color_id,
-    this.fecha,
-  });
-
-  factory NewObjectTwo.fromJson(Map<String, dynamic> json) => NewObjectTwo(
-        id: json['id'],
-        lote_id: json['lote_id'],
-        cantidad: json['cantidad'],
-        user_id: json['user_id'],
-        color_id: json['color_id'],
-        fecha: json['fecha'],
-      );
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'lote_id': lote_id,
-        'cantidad': cantidad,
-        'user_id': user_id,
-        'color_id': color_id,
-        'fecha': fecha,
-      };
-}
+import 'package:banavanmov/model/newObjectAR.dart';
 
 class ActualizarCosechadoJB extends StatefulWidget {
-  Cosechado cosechado;
-  ActualizarCosechadoJB(Cosechado cosechado) {
-    this.cosechado = cosechado;
-  }
+  final Cosechado cosecha;
+  final Map<String, dynamic> datos;
+  ActualizarCosechadoJB({this.cosecha, this.datos});
 
   @override
   ActualizarCosechadoJBState createState() =>
-      ActualizarCosechadoJBState(cosechado);
+      ActualizarCosechadoJBState(cosecha);
 }
 
-Map<String, String> todosLotes = {};
+/*Map<String, String> todosLotes = {};
 Map<String, String> todosColores = {};
 Map<String, String> todosUsers = {};
 Map<String, String> todosSemanas = {};
-Map<String, String> todosSemanasColores = {};
+Map<String, String> todosSemanasColores = {};*/
 
 class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
   Cosechado cosechado;
@@ -95,6 +60,8 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
 
   String _selectedColor, _selectedColorResult;
 
+  Map<String, dynamic> datos;
+
   CosechadoProvider cp;
 
   final formKey = GlobalKey<FormState>();
@@ -106,6 +73,8 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
   @override
   void initState() {
     super.initState();
+
+    datos = widget.datos;
 
     _selectedId = '';
     _selectedIdResult = '';
@@ -123,14 +92,64 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
 
     cp = new CosechadoProvider();
 
-    cargarDatosLotes();
+    /*cargarDatosLotes();
     cargarDatosColores();
     cargarDatosUsers();
     cargarDatosSemanas();
-    cargarDatosSemanasColores();
+    cargarDatosSemanasColores();*/
   }
 
-  _saveForm(/*BuildContext context*/) async {
+  _saveForm() {
+    var form = formKey.currentState;
+    //print("Semana: " + semana);
+    if (form.validate() && _selectedFecha != null) {
+      form.save();
+      //print("Personnel Result: " + personnelResult);
+      NewObjectTwo e = new NewObjectTwo(
+          id: int.parse(cosechado.id.toString()),
+          lote_id: int.parse(_selectedLote),
+          cantidad: int.parse(_selectedCantidad),
+          user_id: int.parse(_selectedUser),
+          fecha: secondFormatter.format(_selectedFecha),
+          color_id: int.parse(_selectedColor));
+      print("Se va a actualizar el cosechado");
+      cp.updateCosechado(e).then((value) {
+        if (value) {
+          print("Se actualizo cosechado");
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Actualizacion completada'),
+              action: SnackBarAction(
+                label: 'Cerrar',
+                onPressed: () {
+                  // Code to execute.
+                },
+              )));
+          //Para cerrar el
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Ocurrio un error. Intentelo nuevamente'),
+              action: SnackBarAction(
+                label: 'Cerrar',
+                onPressed: () {
+                  // Code to execute.
+                },
+              )));
+        }
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Datos Erroneos o incompletos'),
+          action: SnackBarAction(
+            label: 'Cerrar',
+            onPressed: () {
+              // Code to execute.
+            },
+          )));
+    }
+  }
+
+  /*_saveForm(/*BuildContext context*/) async {
     print("Entra al boton guardar");
     var form = formKey.currentState;
     if (form.validate() && _selectedFecha != null) {
@@ -170,9 +189,9 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
         _showDialogConfirm(context);
       }
     }
-  }
+  }*/
 
-  _showDialogConfirm(BuildContext ctx) {
+  /*_showDialogConfirm(BuildContext ctx) {
     showDialog(
         context: ctx,
         builder: (context) {
@@ -203,7 +222,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
             ],
           );
         });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -238,9 +257,11 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                           return Container(
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
-                                titleText: 'Lote Actual: ' +
-                                    todosLotes[cosechado.lote_id.toString()]
-                                        .toString(),
+                                titleText:
+                                    'Lote Actual: ' + datos['lote'].toString(),
+
+                                //todosLotes[cosechado.lote_id.toString()]
+                                //        .toString(),
                                 hintText: 'Elija el Lote',
                                 value: _selectedLote,
                                 validator: (value) {
@@ -318,8 +339,9 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
                                 titleText: 'Trabajador Actual: ' +
-                                    todosUsers[cosechado.user_id.toString()]
-                                        .toString(),
+                                    datos['trabajador'].toString(),
+                                //todosUsers[cosechado.user_id.toString()]
+                                //  .toString(),
                                 hintText: 'Elija el Trabajador',
                                 value: _selectedUser,
                                 validator: (value) {
@@ -423,13 +445,14 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
                           AsyncSnapshot<List<Colour>> snapshot) {
                         if (snapshot.hasData) {
                           var colores = snapshot.data;
-                          var coloresDS = crearDataSourceColor(colores);
+                          var coloresDS =
+                              DataSource().crearDataSourceColor(colores);
                           return Container(
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
-                                titleText: 'Color Actual: ' +
-                                    todosColores[todosSemanasColores[
-                                        cosechado.semana_id.toString()]],
+                                titleText: 'Color Actual: ' + datos['color'],
+                                //todosColores[todosSemanasColores[
+                                //  cosechado.semana_id.toString()]],
                                 hintText: 'Elija el Color',
                                 value: _selectedColor,
                                 validator: (value) {
@@ -469,7 +492,7 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
     );
   }
 
-  void cargarDatosLotes() async {
+  /*void cargarDatosLotes() async {
     LoteProvider _provider = LoteProvider();
     Future<List<Lote>> _futureOfList = _provider.todosLosLotes();
     List<Lote> list = await _futureOfList;
@@ -531,9 +554,9 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
     });
     //var powerRanger = todosColores["17"];
     //print(powerRanger);
-  }
+  }*/
 
-  crearDataSourceColor(List<Colour> colores) {
+  /*crearDataSourceColor(List<Colour> colores) {
     var lista = [];
 
     colores.forEach((element) {
@@ -544,5 +567,5 @@ class ActualizarCosechadoJBState extends State<ActualizarCosechadoJB> {
       lista.add(pedazo);
     });
     return lista;
-  }
+  }*/
 }

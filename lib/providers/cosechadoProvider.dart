@@ -6,7 +6,7 @@ import 'package:banavanmov/model/cosechado.dart';
 import 'dart:io';
 import 'package:banavanmov/exception/customException.dart';
 import 'package:banavanmov/model/newObject.dart';
-import 'package:banavanmov/actualizarRacimoJBodega.dart';
+import 'package:banavanmov/model/newObjectAR.dart';
 
 class CosechadoProvider {
   //final String url = 'https://api.jsonbin.io/b/60b12ffc893b7c555b1dc945';

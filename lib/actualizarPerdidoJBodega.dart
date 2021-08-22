@@ -23,63 +23,23 @@ import 'package:banavanmov/model/color.dart';
 import 'package:banavanmov/providers/colorProvider.dart';
 
 import 'package:banavanmov/utils/dataSource.dart';
-
-class NewObjectTwo {
-  int id;
-  int lote_id;
-  int cantidad;
-  int user_id;
-  String fecha;
-  int color_id;
-  int perdida_motivo_id;
-
-  NewObjectTwo({
-    this.id,
-    this.lote_id,
-    this.cantidad,
-    this.user_id,
-    this.color_id,
-    this.fecha,
-    this.perdida_motivo_id,
-  });
-
-  factory NewObjectTwo.fromJson(Map<String, dynamic> json) => NewObjectTwo(
-        id: json['id'],
-        lote_id: json['lote_id'],
-        cantidad: json['cantidad'],
-        user_id: json['user_id'],
-        color_id: json['color_id'],
-        fecha: json['fecha'],
-        perdida_motivo_id: json['perdida_motivo_id'],
-      );
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'lote_id': lote_id,
-        'cantidad': cantidad,
-        'user_id': user_id,
-        'color_id': color_id,
-        'fecha': fecha,
-        'perdida_motivo_id': perdida_motivo_id,
-      };
-}
+import 'package:banavanmov/model/newObjectAP.dart';
 
 class ActualizarPerdidoJB extends StatefulWidget {
-  Perdido perdido;
-  ActualizarPerdidoJB(Perdido perdido) {
-    this.perdido = perdido;
-  }
+  final Perdido perdida;
+  final Map<String, dynamic> datos;
+  ActualizarPerdidoJB({this.perdida, this.datos});
 
   @override
-  ActualizarPerdidoJBState createState() => ActualizarPerdidoJBState(perdido);
+  ActualizarPerdidoJBState createState() => ActualizarPerdidoJBState(perdida);
 }
 
-Map<String, String> todosLotes = {};
+/*Map<String, String> todosLotes = {};
 Map<String, String> todosColores = {};
 Map<String, String> todosUsers = {};
 Map<String, String> todosSemanas = {};
 Map<String, String> todosSemanasColores = {};
-Map<String, String> todosMotivos = {};
+Map<String, String> todosMotivos = {};*/
 
 class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
   Perdido perdido;
@@ -100,6 +60,8 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
 
   String _selectedColor, _selectedColorResult;
 
+  Map<String, dynamic> datos;
+
   PerdidoProvider pp;
 
   final formKey = GlobalKey<FormState>();
@@ -111,6 +73,8 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
   @override
   void initState() {
     super.initState();
+
+    datos = widget.datos;
 
     _selectedId = '';
     _selectedIdResult = '';
@@ -130,15 +94,66 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
 
     pp = new PerdidoProvider();
 
-    cargarDatosLotes();
+    /*cargarDatosLotes();
     cargarDatosColores();
     cargarDatosUsers();
     cargarDatosSemanas();
     cargarDatosSemanasColores();
-    cargarDatosMotivos();
+    cargarDatosMotivos();*/
   }
 
-  _saveForm(/*BuildContext context*/) async {
+  _saveForm() {
+    var form = formKey.currentState;
+    //print("Semana: " + semana);
+    if (form.validate() && _selectedFecha != null) {
+      form.save();
+      //print("Personnel Result: " + personnelResult);
+      NewObjectTwo e = new NewObjectTwo(
+          id: int.parse(perdido.id.toString()),
+          lote_id: int.parse(_selectedLote),
+          cantidad: int.parse(_selectedCantidad),
+          user_id: int.parse(_selectedUser),
+          perdida_motivo_id: int.parse(_selectedPerdidaMotivo),
+          fecha: secondFormatter.format(_selectedFecha),
+          color_id: int.parse(_selectedColor));
+      print("Se va a actualizar el perdido");
+      pp.updatePerdido(e).then((value) {
+        if (value) {
+          print("Se actualizo perdido");
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Actualizacion completada'),
+              action: SnackBarAction(
+                label: 'Cerrar',
+                onPressed: () {
+                  // Code to execute.
+                },
+              )));
+          //Para cerrar el
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Ocurrio un error. Intentelo nuevamente'),
+              action: SnackBarAction(
+                label: 'Cerrar',
+                onPressed: () {
+                  // Code to execute.
+                },
+              )));
+        }
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Datos Erroneos o incompletos'),
+          action: SnackBarAction(
+            label: 'Cerrar',
+            onPressed: () {
+              // Code to execute.
+            },
+          )));
+    }
+  }
+
+  /*_saveForm(/*BuildContext context*/) async {
     print("Entra al boton guardar");
     var form = formKey.currentState;
     if (form.validate() && _selectedFecha != null) {
@@ -180,9 +195,9 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
         _showDialogConfirm(context);
       }
     }
-  }
+  }*/
 
-  _showDialogConfirm(BuildContext ctx) {
+  /*_showDialogConfirm(BuildContext ctx) {
     showDialog(
         context: ctx,
         builder: (context) {
@@ -213,7 +228,7 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
             ],
           );
         });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -247,8 +262,9 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                           return Container(
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
-                                titleText: 'Lote Actual: ' +
-                                    todosLotes[perdido.lote_id.toString()],
+                                titleText:
+                                    'Lote Actual: ' + datos['lote'].toString(),
+                                //todosLotes[perdido.lote_id.toString()],
                                 hintText: 'Elija el Lote',
                                 value: _selectedLote,
                                 validator: (value) {
@@ -331,7 +347,8 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
                                 titleText: 'Trabajador Actual: ' +
-                                    todosUsers[perdido.user_id.toString()],
+                                    datos['trabajador'].toString(),
+                                //todosUsers[perdido.user_id.toString()],
                                 hintText: 'Elija el Trabajador',
                                 value: _selectedUser,
                                 validator: (value) {
@@ -441,8 +458,9 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
                                 titleText: 'Motivo Actual: ' +
-                                    todosMotivos[
-                                        perdido.perdida_motivo_id.toString()],
+                                    datos['motivo'].toString(),
+                                //todosMotivos[
+                                //  perdido.perdida_motivo_id.toString()],
                                 hintText: 'Elija el Motivo',
                                 value: _selectedPerdidaMotivo,
                                 validator: (value) {
@@ -477,13 +495,14 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
                           AsyncSnapshot<List<Colour>> snapshot) {
                         if (snapshot.hasData) {
                           var colores = snapshot.data;
-                          var coloresDS = crearDataSourceColor(colores);
+                          var coloresDS =
+                              DataSource().crearDataSourceColor(colores);
                           return Container(
                               padding: EdgeInsets.all(10),
                               child: DropDownFormField(
-                                titleText: 'Color Actual: ' +
-                                    todosColores[todosSemanasColores[
-                                        perdido.semana_id.toString()]],
+                                titleText: 'Color Actual: ' + datos['color'],
+                                //todosColores[todosSemanasColores[
+                                //  perdido.semana_id.toString()]],
                                 hintText: 'Elija el Color',
                                 value: _selectedColor,
                                 validator: (value) {
@@ -523,7 +542,7 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
     );
   }
 
-  void cargarDatosLotes() async {
+  /*void cargarDatosLotes() async {
     LoteProvider _provider = LoteProvider();
     Future<List<Lote>> _futureOfList = _provider.todosLosLotes();
     List<Lote> list = await _futureOfList;
@@ -611,5 +630,5 @@ class ActualizarPerdidoJBState extends State<ActualizarPerdidoJB> {
       lista.add(pedazo);
     });
     return lista;
-  }
+  }*/
 }

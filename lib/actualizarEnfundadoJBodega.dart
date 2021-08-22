@@ -60,13 +60,13 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
     ep = new EnfundadoProvider();
   }
 
-  validarCampos() {
+  /*validarCampos() {
     return loteResult.isNotEmpty ||
         personnelResult != null ||
         semanaResult != null ||
         fundas_entregadasResult != null ||
         fecha != null;
-  }
+  }*/
 
   _saveForm() {
     var form = _formKey.currentState;
@@ -107,7 +107,6 @@ class ActualizarEnfundadoJBState extends State<ActualizarEnfundadoJB> {
               )));
         }
       });
-      
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: const Text('Datos Erroneos o incompletos'),

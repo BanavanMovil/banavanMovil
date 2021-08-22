@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:banavanmov/exception/customException.dart';
 import 'package:banavanmov/model/newObjectP.dart';
 import 'package:banavanmov/actualizarPerdidoJBodega.dart';
+import 'package:banavanmov/model/newObjectAP.dart';
 
 class PerdidoProvider {
   //final String url = 'https://api.jsonbin.io/b/60b12f05a5cd4a5576a9933e';

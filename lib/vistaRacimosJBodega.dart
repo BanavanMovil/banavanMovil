@@ -365,7 +365,12 @@ class CosechadoList extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return ActualizarCosechadoJB(c);
+                          return ActualizarCosechadoJB(cosecha: c, datos: {
+                            "lote": lote,
+                            'trabajador': trabajador,
+                            "semana": semana,
+                            'color': color
+                          });
                         }));
                       },
                     ),

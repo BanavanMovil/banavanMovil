@@ -404,7 +404,13 @@ class PerdidoList extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return ActualizarPerdidoJB(p);
+                          return ActualizarPerdidoJB(perdida: p, datos: {
+                            "lote": lote,
+                            'trabajador': trabajador,
+                            "semana": semana,
+                            'color': color,
+                            'motivo': motivo,
+                          });
                         }));
                       },
                     ),
