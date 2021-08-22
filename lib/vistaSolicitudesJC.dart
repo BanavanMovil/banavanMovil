@@ -1,3 +1,4 @@
+import 'package:banavanmov/asignarPersonalJC.dart';
 import 'package:banavanmov/blocs/solicitudesBloc.dart';
 import 'package:banavanmov/model/solicitud.dart';
 import 'package:banavanmov/providers/actividadProvider.dart';
@@ -211,7 +212,17 @@ class SolicitudList extends StatelessWidget {
                                         )
                                       : IconButton(
                                           icon: Icon(Icons.edit),
-                                          onPressed: () {}))
+                                          onPressed: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              //globals.isLoggedIn = true;
+                                              return PersonnelList(
+                                                personal: List.of([]),
+                                                solicitud: e,
+                                              );
+                                            }));
+                                          }))
                                   : null)
                               : null)
                     ])),

@@ -97,7 +97,10 @@ class _PersonnelListState extends State<PersonnelList> {
     //final allPersonnel = provider.personnel;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Asignar Personal"),
+        title: Text(
+          "Asignar Personal \n Personal Requerido: ${solicitud.personal_requerido}",
+          textAlign: TextAlign.center,
+        ),
       ),
       body: FutureBuilder(
         future: PersonnelProvider().getAll(),
@@ -202,7 +205,7 @@ class _PersonnelListState extends State<PersonnelList> {
   }
 
   List<int> listadoIdsTrabajadores(List<Personnel> lista) {
-    var nuevaLista = [];
+    List<int> nuevaLista = [];
     lista.forEach((element) {
       nuevaLista.add(element.id);
     });

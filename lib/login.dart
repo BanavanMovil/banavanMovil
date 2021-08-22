@@ -144,7 +144,15 @@ class _LoginState extends State<Login> {
         },
       ),
     );
-    Scaffold.of(context).showSnackBar(snackBar);
+    //Scaffold.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(msg != null ? msg : "Hubo un error en el login"),
+        action: SnackBarAction(
+          label: 'Cerrar',
+          onPressed: () {
+            // Code to execute.
+          },
+        )));
   }
 
   _showDialogConfirm(BuildContext ctx, dynamic body) {
@@ -229,7 +237,8 @@ class _LoginState extends State<Login> {
           isLoading = false;
         });
       }
-    } on Exception {
+    } catch (exception) {
+      print(exception);
       setState(() {
         isLoading = false;
       });
