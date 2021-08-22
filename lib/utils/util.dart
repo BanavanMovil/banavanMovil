@@ -3,12 +3,21 @@ import 'package:banavanmov/model/color.dart';
 import 'package:banavanmov/model/lote.dart';
 import 'package:banavanmov/model/personnel.dart';
 import 'package:banavanmov/model/semana.dart';
+import 'package:banavanmov/model/motivo.dart';
 
 class Util {
   obtenerLoteDeId(int id, List<Lote> lotes) {
     if (lotes != null) {
       var lote = lotes.firstWhere((element) => element.id == id);
       return lote.numero;
+    }
+    return null;
+  }
+
+  obtenerMotivoDeId(int id, List<Motivo> motivos) {
+    if (motivos != null) {
+      var motivo = motivos.firstWhere((element) => element.id == id);
+      return motivo.titulo;
     }
     return null;
   }
@@ -39,12 +48,14 @@ class Util {
     return null;
   }
 
-  // ignore: non_constant_identifier_names
   obtenerActividadDeId(int id, List<Actividad> actividades) {
     if (actividades != null) {
       var t = actividades.firstWhere((element) => element.id == id);
-      return t.nombre;
     }
-    return null;
+  }
+
+  obtenerColorNDeId(int id, List<Colour> colores) {
+    var t = colores.firstWhere((element) => element.id == id);
+    return t.nombre;
   }
 }

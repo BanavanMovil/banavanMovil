@@ -21,46 +21,7 @@ import 'package:banavanmov/model/semana.dart';
 import 'package:banavanmov/providers/semanaProvider.dart';
 import 'package:banavanmov/providers/loteProvider.dart';
 import 'package:banavanmov/utils/dataSource.dart';
-
-class NewObject {
-  //int id;
-  int lote_id;
-  int cantidad;
-  int user_id;
-  String fecha;
-  int color_id;
-  int perdida_motivo_id;
-
-  NewObject({
-    //this.id,
-    this.lote_id,
-    this.cantidad,
-    this.user_id,
-    this.color_id,
-    this.fecha,
-    this.perdida_motivo_id,
-  });
-
-  factory NewObject.fromJson(Map<String, dynamic> json) => NewObject(
-        //id: json['id'],
-        lote_id: json['lote_id'],
-        cantidad: json['cantidad'],
-        user_id: json['user_id'],
-        color_id: json['color_id'],
-        fecha: json['fecha'],
-        perdida_motivo_id: json['perdida_motivo_id'],
-      );
-
-  Map<String, dynamic> toJson() => {
-        //'id': id,
-        'lote_id': lote_id,
-        'cantidad': cantidad,
-        'user_id': user_id,
-        'color_id': color_id,
-        'fecha': fecha,
-        'perdida_motivo_id': perdida_motivo_id,
-      };
-}
+import 'package:banavanmov/model/newObjectP.dart';
 
 class PublicarPerdidoJB extends StatefulWidget {
   @override
@@ -81,6 +42,8 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
   String _selectedSemana, _selectedSemanaResult;
 
   String _selectedColor, _selectedColorResult;
+
+  bool key = false;
 
   PerdidoProvider pp;
 
@@ -106,7 +69,34 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
     pp = new PerdidoProvider();
   }
 
-  _saveForm(/*BuildContext context*/) async {
+  Future<bool> _saveForm() async {
+    var form = formKey.currentState;
+    if (form.validate() && _selectedFecha != null) {
+      form.save();
+      NewObject no = new NewObject(
+          lote_id: int.parse(_selectedLote),
+          cantidad: int.parse(_selectedCantidad),
+          user_id: int.parse(_selectedUser),
+          perdida_motivo_id: int.parse(_selectedPerdidaMotivo),
+          fecha: secondFormatter.format(_selectedFecha),
+          color_id: int.parse(_selectedColor));
+      print("Se va a enviar el perdido");
+      return pp.sendPerdido(no);
+    } else {
+      key = true;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Datos Erroneos o incompletos'),
+          action: SnackBarAction(
+            label: 'Cerrar',
+            onPressed: () {
+              // Code to execute.
+            },
+          )));
+      return true;
+    }
+  }
+
+  /*_saveForm(/*BuildContext context*/) async {
     print("Entra al boton guardar");
     var form = formKey.currentState;
     if (form.validate() && _selectedFecha != null) {
@@ -148,7 +138,7 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
         _showDialogConfirm(context);
       }
     }
-  }
+  }*/
 
   _showDialogConfirm(BuildContext ctx) {
     showDialog(
@@ -457,7 +447,46 @@ class _PublicarPerdidoJBState extends State<PublicarPerdidoJB> {
                     ),
                     Center(
                         child: ElevatedButton(
-                            child: Text('Guardar'), onPressed: _saveForm)),
+                      child: Text('Guardar'),
+                      onPressed: () {
+                        _saveForm().then((value) {
+                          if (value && key) {
+                            print("Complete los datos");
+                            key = false;
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: const Text('Complete los datos'),
+                                action: SnackBarAction(
+                                  label: 'Cerrar',
+                                  onPressed: () {
+                                    // Code to execute.
+                                  },
+                                )));
+                          } else if (value && !key) {
+                            print("Aqui esta el Perdido creado");
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content:
+                                    const Text('Perdido Creado Correctamente'),
+                                action: SnackBarAction(
+                                  label: 'Cerrar',
+                                  onPressed: () {
+                                    // Code to execute.
+                                  },
+                                )));
+                          } else {
+                            _showDialogConfirm(context);
+                            /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: const Text(
+                                    'Ocurrio un problema al crear el enfundado'),
+                                action: SnackBarAction(
+                                  label: 'Cerrar',
+                                  onPressed: () {
+                                    // Code to execute.
+                                  },
+                                )));*/
+                          }
+                        });
+                      }, // _saveForm
+                    )),
                   ],
                 ),
               ),

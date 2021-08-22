@@ -19,50 +19,15 @@ import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:banavanmov/model/personnel.dart';
 import 'package:banavanmov/providers/personnelProvider.dart';
 import 'package:banavanmov/utils/dataSource.dart';
-
-class NewObject {
-  //int id;
-  int lote_id;
-  int cantidad;
-  int user_id;
-  String fecha;
-  int color_id;
-
-  NewObject({
-    //this.id,
-    this.lote_id,
-    this.cantidad,
-    this.user_id,
-    this.color_id,
-    this.fecha,
-  });
-
-  factory NewObject.fromJson(Map<String, dynamic> json) => NewObject(
-        //id: json['id'],
-        lote_id: json['lote_id'],
-        cantidad: json['cantidad'],
-        user_id: json['user_id'],
-        color_id: json['color_id'],
-        fecha: json['fecha'],
-      );
-
-  Map<String, dynamic> toJson() => {
-        //'id': id,
-        'lote_id': lote_id,
-        'cantidad': cantidad,
-        'user_id': user_id,
-        'color_id': color_id,
-        'fecha': fecha,
-      };
-}
+import 'package:banavanmov/model/newObject.dart';
 
 class PublicarRacimoJB extends StatefulWidget {
   @override
   _PublicarRacimoJBState createState() => _PublicarRacimoJBState();
 }
 
-Map<String, String> todosColores = {};
-Map<String, String> todosColoresHex = {};
+//Map<String, String> todosColores = {};
+//Map<String, String> todosColoresHex = {};
 
 class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
   final globalKey = GlobalKey<ScaffoldState>();
@@ -77,6 +42,8 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
   String _selectedSemana, _selectedSemanaResult;
 
   String _selectedColor, _selectedColorResult;
+
+  bool key = false;
 
   CosechadoProvider cp;
 
@@ -100,7 +67,33 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
     cp = new CosechadoProvider();
   }
 
-  _saveForm(/*BuildContext context*/) async {
+  Future<bool> _saveForm() async {
+    var form = formKey.currentState;
+    if (form.validate() && _selectedFecha != null) {
+      form.save();
+      NewObject no = new NewObject(
+          lote_id: int.parse(_selectedLote),
+          cantidad: int.parse(_selectedCantidad),
+          user_id: int.parse(_selectedUser),
+          fecha: secondFormatter.format(_selectedFecha),
+          color_id: int.parse(_selectedColor));
+      print("Se va a enviar el enfundado");
+      return cp.sendCosechado(no);
+    } else {
+      key = true;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Datos Erroneos o incompletos'),
+          action: SnackBarAction(
+            label: 'Cerrar',
+            onPressed: () {
+              // Code to execute.
+            },
+          )));
+      return true;
+    }
+  }
+
+  /*_saveForm(/*BuildContext context*/) async {
     print("Entra al boton guardar");
     var form = formKey.currentState;
     if (form.validate() && _selectedFecha != null) {
@@ -141,7 +134,7 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
         _showDialogConfirm(context);
       }
     }
-  }
+  }*/
 
   _showDialogConfirm(BuildContext ctx) {
     showDialog(
@@ -410,7 +403,47 @@ class _PublicarRacimoJBState extends State<PublicarRacimoJB> {
                     ),
                     Center(
                         child: ElevatedButton(
-                            child: Text('Guardar'), onPressed: _saveForm)),
+                      child: Text('Guardar'),
+                      //onPressed: _saveForm
+                      onPressed: () {
+                        _saveForm().then((value) {
+                          if (value && key) {
+                            print("Complete los datos");
+                            key = false;
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: const Text('Complete los datos'),
+                                action: SnackBarAction(
+                                  label: 'Cerrar',
+                                  onPressed: () {
+                                    // Code to execute.
+                                  },
+                                )));
+                          } else if (value && !key) {
+                            print("Aqui esta el Cosechado creado");
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: const Text(
+                                    'Cosechado Creado Correctamente'),
+                                action: SnackBarAction(
+                                  label: 'Cerrar',
+                                  onPressed: () {
+                                    // Code to execute.
+                                  },
+                                )));
+                          } else {
+                            _showDialogConfirm(context);
+                            /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: const Text(
+                                    'Ocurrio un problema al crear el enfundado'),
+                                action: SnackBarAction(
+                                  label: 'Cerrar',
+                                  onPressed: () {
+                                    // Code to execute.
+                                  },
+                                )));*/
+                          }
+                        });
+                      },
+                    )),
                   ],
                 ),
               ),

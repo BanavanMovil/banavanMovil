@@ -24,34 +24,67 @@ import 'package:banavanmov/providers/semanaProvider.dart';
 import 'package:banavanmov/model/motivo.dart';
 import 'package:banavanmov/providers/motivoProvider.dart';
 
+import 'package:banavanmov/utils/util.dart';
+
 class PerdidosVista extends StatefulWidget {
   @override
   _PerdidosVistaState createState() => _PerdidosVistaState();
 }
 
-Map<String, String> todosLotes = {};
+/*Map<String, String> todosLotes = {};
 Map<String, String> todosColores = {};
 Map<String, String> todosUsers = {};
 Map<String, String> todosSemanas = {};
 Map<String, String> todosMotivos = {};
-Map<String, String> todosSemanasColores = {};
+Map<String, String> todosSemanasColores = {};*/
 
 class _PerdidosVistaState extends State<PerdidosVista> {
   final PerdidoProvider pv = new PerdidoProvider();
   bool isBusqueda = false;
   PerdidoBloc _bloc;
+  List<Lote> lotes;
+  List<Personnel> personal;
+  List<Semana> semanas;
+  List<Colour> colores;
+  List<Motivo> motivos;
 
   @override
   void initState() {
     super.initState();
     _bloc = PerdidoBloc();
 
-    cargarDatosLotes();
+    LoteProvider().todosLosLotes().then((value) {
+      setState(() {
+        lotes = value;
+      });
+    });
+    PersonnelProvider().getAll().then((value) {
+      setState(() {
+        personal = value;
+      });
+    });
+    SemanaProvider().getAll().then((value) {
+      setState(() {
+        semanas = value;
+      });
+    });
+    ColorProvider().getAll().then((value) {
+      setState(() {
+        colores = value;
+      });
+    });
+    MotivoProvider().getAll().then((value) {
+      setState(() {
+        motivos = value;
+      });
+    });
+
+    /*cargarDatosLotes();
     cargarDatosColores();
     cargarDatosUsers();
     cargarDatosSemanas();
     cargarDatosMotivos();
-    cargarDatosSemanasColores();
+    cargarDatosSemanasColores();*/
   }
 
   @override
@@ -85,7 +118,13 @@ class _PerdidosVistaState extends State<PerdidosVista> {
                   return Loading(loadingMessage: snapshot.data.message);
                   break;
                 case Status.COMPLETED:
-                  return PerdidoList(perdidos: snapshot.data.data);
+                  return PerdidoList(perdidos: snapshot.data.data, datos: {
+                    "lotes": lotes,
+                    "personal": personal,
+                    "semana": semanas,
+                    "colores": colores,
+                    "motivos": motivos,
+                  });
                   break;
                 case Status.ERROR:
                   return Error(
@@ -115,7 +154,7 @@ class _PerdidosVistaState extends State<PerdidosVista> {
     );
   }
 
-  void cargarDatosLotes() async {
+  /*void cargarDatosLotes() async {
     LoteProvider _provider = LoteProvider();
     Future<List<Lote>> _futureOfList = _provider.todosLosLotes();
     List<Lote> list = await _futureOfList;
@@ -188,25 +227,51 @@ class _PerdidosVistaState extends State<PerdidosVista> {
       newSemana[element.id.toString()] = element.color_id.toString();
       todosSemanasColores.addAll(newSemana);
     });
-  }
+  }*/
 }
 
 class PerdidoList extends StatelessWidget {
   final List<Perdido> perdidos;
-  const PerdidoList({Key key, this.perdidos}) : super(key: key);
+  final Map<String, dynamic> datos;
+  const PerdidoList({Key key, this.perdidos, this.datos}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return perdidos == null
-        ? Text("No se encontraron Racimos Perdidos")
+    return (perdidos == null || perdidos.length == 0)
+        ? Center(
+            child: Text(
+              "No se encontraron Racimos Perdidos",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          )
         : ListView.builder(
             itemCount: perdidos.length,
             itemBuilder: (context, index) {
               return _crearCartaPerdido(context, perdidos[index]);
             },
           );
+    /*return perdidos == null
+        ? Text("No se encontraron Racimos Perdidos")
+        : ListView.builder(
+            itemCount: perdidos.length,
+            itemBuilder: (context, index) {
+              return _crearCartaPerdido(context, perdidos[index]);
+            },
+          );*/
   }
 
   Widget _crearCartaPerdido(BuildContext context, Perdido p) {
+    var semana =
+        Util().obtenerSemanaDeId(int.parse(p.semana_id), datos['semana']);
+    var color;
+    if (semana != null) {
+      color = Util()
+          .obtenerColorNDeId(int.parse(semana.color_id), datos['colores']);
+    }
+    var motivo = Util()
+        .obtenerMotivoDeId(int.parse(p.perdida_motivo_id), datos['motivos']);
+    var lote = Util().obtenerLoteDeId(int.parse(p.lote_id), datos['lotes']);
+    var trabajador = Util().obtenerTrabajadorDeId(
+        int.parse(p.user_id.toString()), datos['personal']);
     return Padding(
         padding: const EdgeInsets.all(5.0),
         child: Card(
@@ -223,9 +288,9 @@ class PerdidoList extends StatelessWidget {
                             TextSpan(
                                 text: "Lote: ",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(
-                              text: todosLotes[p.lote_id.toString()].toString(),
-                            ),
+                            TextSpan(text: lote.toString()
+                                //todosLotes[p.lote_id.toString()].toString(),
+                                ),
                           ],
                         ),
                       )
@@ -240,7 +305,8 @@ class PerdidoList extends StatelessWidget {
                                 text: "Reportado por: ",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
-                              text: todosUsers[p.user_id.toString()].toString(),
+                              text: trabajador != null ? trabajador : "--",
+                              //todosUsers[p.user_id.toString()].toString(),
                             ),
                           ],
                         ),
@@ -304,8 +370,10 @@ class PerdidoList extends StatelessWidget {
                                 text: "Motivo de pérdida: ",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
-                                text: todosMotivos[
-                                    p.perdida_motivo_id.toString()]),
+                              text: motivo.toString(),
+                              //todosMotivos[
+                              //  p.perdida_motivo_id.toString()]
+                            ),
                           ],
                         ),
                       )
@@ -320,8 +388,9 @@ class PerdidoList extends StatelessWidget {
                                 text: "Color: ",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
-                              text: todosColores[
-                                  todosSemanasColores[p.semana_id.toString()]],
+                              text: color.toString(),
+                              //todosColores[
+                              //  todosSemanasColores[p.semana_id.toString()]],
                             ),
                           ],
                         ),
@@ -335,7 +404,13 @@ class PerdidoList extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return ActualizarPerdidoJB(p);
+                          return ActualizarPerdidoJB(perdida: p, datos: {
+                            "lote": lote,
+                            'trabajador': trabajador,
+                            "semana": semana,
+                            'color': color,
+                            'motivo': motivo,
+                          });
                         }));
                       },
                     ),

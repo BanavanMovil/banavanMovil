@@ -21,31 +21,58 @@ import 'package:banavanmov/providers/personnelProvider.dart';
 import 'package:banavanmov/model/semana.dart';
 import 'package:banavanmov/providers/semanaProvider.dart';
 
+import 'package:banavanmov/utils/util.dart';
+
 class RacimosVista extends StatefulWidget {
   @override
   _RacimosVistaState createState() => _RacimosVistaState();
 }
 
-Map<String, String> todosLotes = {};
+/*Map<String, String> todosLotes = {};
 Map<String, String> todosColores = {};
 Map<String, String> todosUsers = {};
 Map<String, String> todosSemanas = {};
-Map<String, String> todosSemanasColores = {};
+Map<String, String> todosSemanasColores = {};*/
 
 class _RacimosVistaState extends State<RacimosVista> {
   final CosechadoProvider cv = new CosechadoProvider();
   bool isBusqueda = false;
   CosechadoBloc _bloc;
 
+  List<Lote> lotes;
+  List<Personnel> personal;
+  List<Semana> semanas;
+  List<Colour> colores;
+
   @override
   void initState() {
     super.initState();
     _bloc = CosechadoBloc();
-    cargarDatosLotes();
+    /*cargarDatosLotes();
     cargarDatosColores();
     cargarDatosUsers();
     cargarDatosSemanas();
-    cargarDatosSemanasColores();
+    cargarDatosSemanasColores();*/
+    LoteProvider().todosLosLotes().then((value) {
+      setState(() {
+        lotes = value;
+      });
+    });
+    PersonnelProvider().getAll().then((value) {
+      setState(() {
+        personal = value;
+      });
+    });
+    SemanaProvider().getAll().then((value) {
+      setState(() {
+        semanas = value;
+      });
+    });
+    ColorProvider().getAll().then((value) {
+      setState(() {
+        colores = value;
+      });
+    });
   }
 
   @override
@@ -79,7 +106,12 @@ class _RacimosVistaState extends State<RacimosVista> {
                   return Loading(loadingMessage: snapshot.data.message);
                   break;
                 case Status.COMPLETED:
-                  return CosechadoList(cosechados: snapshot.data.data);
+                  return CosechadoList(cosechados: snapshot.data.data, datos: {
+                    "lotes": lotes,
+                    "personal": personal,
+                    "semana": semanas,
+                    "colores": colores
+                  });
 
                   break;
                 case Status.ERROR:
@@ -110,7 +142,7 @@ class _RacimosVistaState extends State<RacimosVista> {
     );
   }
 
-  void cargarDatosLotes() async {
+  /*void cargarDatosLotes() async {
     LoteProvider _provider = LoteProvider();
     Future<List<Lote>> _futureOfList = _provider.todosLosLotes();
     List<Lote> list = await _futureOfList;
@@ -160,9 +192,9 @@ class _RacimosVistaState extends State<RacimosVista> {
     });
     //var powerRanger = todosColores["17"];
     //print(powerRanger);
-  }
+  }*/
 
-  void cargarDatosSemanasColores() async {
+  /*void cargarDatosSemanasColores() async {
     SemanaProvider _provider = SemanaProvider();
     Future<List<Semana>> _futureOfList = _provider.getAll();
     List<Semana> list = await _futureOfList;
@@ -171,14 +203,30 @@ class _RacimosVistaState extends State<RacimosVista> {
       newSemana[element.id.toString()] = element.color_id.toString();
       todosSemanasColores.addAll(newSemana);
     });
-  }
+  }*/
 }
 
 class CosechadoList extends StatelessWidget {
   final List<Cosechado> cosechados;
-  const CosechadoList({Key key, this.cosechados}) : super(key: key);
+  final Map<String, dynamic> datos;
+  const CosechadoList({Key key, this.cosechados, this.datos}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    return (cosechados == null || cosechados.length == 0)
+        ? Center(
+            child: Text(
+              "No se encontraron Racimos Cosechados",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          )
+        : ListView.builder(
+            itemCount: cosechados.length,
+            itemBuilder: (context, index) {
+              return _crearCartaCosechado(context, cosechados[index]);
+            },
+          );
+  }
+  /*Widget build(BuildContext context) {
     return cosechados == null
         ? Text("No se encontraron Racimos Cosechados")
         : ListView.builder(
@@ -187,9 +235,21 @@ class CosechadoList extends StatelessWidget {
               return _crearCartaCosechado(context, cosechados[index]);
             },
           );
-  }
+  }*/
 
   Widget _crearCartaCosechado(BuildContext context, Cosechado c) {
+    var semana =
+        Util().obtenerSemanaDeId(int.parse(c.semana_id), datos['semana']);
+    var color;
+    if (semana != null) {
+      color = Util()
+          .obtenerColorNDeId(int.parse(semana.color_id), datos['colores']);
+    }
+
+    var lote = Util().obtenerLoteDeId(int.parse(c.lote_id), datos['lotes']);
+    var trabajador = Util().obtenerTrabajadorDeId(
+        int.parse(c.user_id.toString()), datos['personal']);
+
     return Padding(
         padding: const EdgeInsets.all(5.0),
         child: Card(
@@ -207,7 +267,8 @@ class CosechadoList extends StatelessWidget {
                                 text: "Lote: ",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
-                              text: todosLotes[c.lote_id.toString()].toString(),
+                              //text: todosLotes[c.lote_id.toString()].toString(),
+                              text: lote.toString(),
                             ),
                           ],
                         ),
@@ -223,7 +284,8 @@ class CosechadoList extends StatelessWidget {
                                 text: "Trabajador: ",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
-                              text: todosUsers[c.user_id.toString()].toString(),
+                              text: trabajador != null ? trabajador : "--",
+                              //todosUsers[c.user_id.toString()].toString(),
                             ),
                           ],
                         ),
@@ -287,8 +349,9 @@ class CosechadoList extends StatelessWidget {
                                 text: "Color: ",
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(
-                              text: todosColores[
-                                  todosSemanasColores[c.semana_id.toString()]],
+                              text: color,
+                              //todosColores[
+                              //  todosSemanasColores[c.semana_id.toString()]],
                             ),
                           ],
                         ),
@@ -302,7 +365,12 @@ class CosechadoList extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return ActualizarCosechadoJB(c);
+                          return ActualizarCosechadoJB(cosecha: c, datos: {
+                            "lote": lote,
+                            'trabajador': trabajador,
+                            "semana": semana,
+                            'color': color
+                          });
                         }));
                       },
                     ),
