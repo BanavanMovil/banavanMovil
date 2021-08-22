@@ -38,7 +38,7 @@ class SolicitudProvider {
           'Authorization': 'Bearer $token'
         },
         body: json.encode(solicitud.toJson()));
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       print("Este es el status code: " + response.statusCode.toString());
       print("Solicitud Creada");
       return true;

@@ -1,21 +1,28 @@
 import 'dart:io';
 
+import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:banavanmov/exception/customException.dart';
 
 class JCampoProvider {
-  final String baseUrl = "https://api.jsonbin.io/b/60aaf347b2b1d74df21bab8c";
+  final String baseUrl =
+      "https://coco-backend-api.herokuapp.com/api/userActividad/";
 
   Future<List<dynamic>> getAll() async {
+    var token = await LoginProvider.getToken();
     var responseJson;
     try {
-      final resp = await http.get(baseUrl);
+      final resp = await http.get(baseUrl + 'get', headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
       responseJson = _response(resp);
     } on SocketException {
       throw FetchDataException('No Internet connection');
     }
-    return responseJson;
+    return responseJson['registros'];
   }
 
   Future<bool> postSolicitud() async {

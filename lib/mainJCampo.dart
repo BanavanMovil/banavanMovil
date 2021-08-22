@@ -52,7 +52,7 @@ class _MainJCampoState extends State<MainJCampo> {
                             textAlign: TextAlign.center,
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
-                        onPressed: asignarPersonal,
+                        onPressed: historial,
                       ),
                       Placeholder(
                         fallbackHeight: 50,

@@ -1,3 +1,4 @@
+import 'package:banavanmov/model/actividad.dart';
 import 'package:banavanmov/model/color.dart';
 import 'package:banavanmov/model/lote.dart';
 import 'package:banavanmov/model/personnel.dart';
@@ -34,6 +35,15 @@ class Util {
     if (colores != null) {
       var t = colores.firstWhere((element) => element.id == id);
       return t.hex_code;
+    }
+    return null;
+  }
+
+  // ignore: non_constant_identifier_names
+  obtenerActividadDeId(int id, List<Actividad> actividades) {
+    if (actividades != null) {
+      var t = actividades.firstWhere((element) => element.id == id);
+      return t.nombre;
     }
     return null;
   }

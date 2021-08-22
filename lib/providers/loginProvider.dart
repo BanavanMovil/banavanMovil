@@ -14,9 +14,13 @@ class LoginProvider {
   Future<Map<String, dynamic>> login(String user, String pass) async {
     var responseJson;
     var body = {'email': user, 'password': pass};
+    print(body);
     try {
       final resp = await http.post(loginUrl,
-          headers: {'Content-Type': 'application/json'},
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
           body: json.encode(body));
       responseJson = _response(resp);
       print(responseJson);
@@ -51,6 +55,9 @@ class LoginProvider {
 
       case 403:
         throw UnauthorisedException(response.body.toString());
+      case 422:
+        var responseJson = json.decode(response.body.toString());
+        return responseJson;
       case 500:
 
       default:

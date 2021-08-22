@@ -18,7 +18,8 @@ class JCampoBloc {
   }
 
   fetchAllDailyInfo() async {
-    jcListSink.add(Response.loading('Fetching Data of Workers'));
+    jcListSink
+        .add(Response.loading('Buscando Actividades de los Trabajadores'));
     try {
       List<JefeCampoModel> movies = await jCampoRepository.fetchAllDailyInfo();
       jcListSink.add(Response.completed(movies));

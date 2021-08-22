@@ -13,40 +13,45 @@ class JefeCampoResponse {
 }
 
 class JefeCampoModel {
-  int idTrabajador;
-  String nombres;
-  String apellidos;
-  int lote;
-  String fechaLabor;
-  String horaInicio;
-  String horaFin;
+  int id;
+  // ignore: non_constant_identifier_names
+  int worker_id;
+  // ignore: non_constant_identifier_names
+  int assigner_id;
+  // ignore: non_constant_identifier_names
+  int actividad_id;
+  // ignore: non_constant_identifier_names
+  String fecha_realizacion;
+  // ignore: non_constant_identifier_names
+  int lote_id;
 
-  JefeCampoModel({
-    this.idTrabajador,
-    this.nombres,
-    this.apellidos,
-    this.lote,
-    this.fechaLabor,
-    this.horaInicio,
-    this.horaFin,
-  });
+  JefeCampoModel(
+      {this.id,
+      // ignore: non_constant_identifier_names
+      this.worker_id,
+      // ignore: non_constant_identifier_names
+      this.assigner_id,
+      // ignore: non_constant_identifier_names
+      this.actividad_id,
+      // ignore: non_constant_identifier_names
+      this.fecha_realizacion,
+      // ignore: non_constant_identifier_names
+      this.lote_id});
 
   factory JefeCampoModel.fromJson(Map<String, dynamic> json) => JefeCampoModel(
-      idTrabajador: json['idTrabajador'],
-      nombres: json['nombres'],
-      apellidos: json['apellidos'],
-      lote: json['lote'],
-      fechaLabor: json['fechaLabor'],
-      horaInicio: json['horaInicio'],
-      horaFin: json['horaFin']);
+      id: json['id'],
+      worker_id: json['worker_id'],
+      assigner_id: json['assigner_id'],
+      fecha_realizacion: json['fecha_realizacion'],
+      actividad_id: json['actividad_id'],
+      lote_id: json['lote_id']);
 
   Map<String, dynamic> toJson() => {
-        'idTrabajador': idTrabajador,
-        'nombres': nombres,
-        'apellidos': apellidos,
-        'lote': lote,
-        'fechaLabor': fechaLabor,
-        'horaInicio': horaInicio,
-        'horaFin': horaFin
+        'id': id,
+        'worker_id': worker_id,
+        'assigner_id': assigner_id,
+        'fecha_realizacion': fecha_realizacion,
+        'actividad_id': actividad_id,
+        'lote_id': lote_id
       };
 }

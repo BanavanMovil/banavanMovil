@@ -1,6 +1,15 @@
+import 'dart:math';
+
 import 'package:banavanmov/blocs/jCampoBloc.dart';
+import 'package:banavanmov/model/actividad.dart';
 import 'package:banavanmov/model/jCampo.dart';
+import 'package:banavanmov/model/lote.dart';
+import 'package:banavanmov/model/personnel.dart';
+import 'package:banavanmov/providers/actividadProvider.dart';
+import 'package:banavanmov/providers/loteProvider.dart';
 import 'package:banavanmov/providers/perdidoProvider.dart';
+import 'package:banavanmov/providers/personnelProvider.dart';
+import 'package:banavanmov/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:banavanmov/response.dart';
 
@@ -11,10 +20,29 @@ class HistorialJC extends StatefulWidget {
 
 class _HistorialJCState extends State<HistorialJC> {
   JCampoBloc _bloc;
+  List<Personnel> personal;
+  List<Lote> lotes;
+  List<Actividad> actividades;
+
   @override
   void initState() {
     super.initState();
     _bloc = JCampoBloc();
+    LoteProvider().todosLosLotes().then((value) {
+      setState(() {
+        lotes = value;
+      });
+    });
+    PersonnelProvider().getAll().then((value) {
+      setState(() {
+        personal = value;
+      });
+    });
+    ActividadProvider().getAll().then((value) {
+      setState(() {
+        actividades = value;
+      });
+    });
   }
 
   @override
@@ -35,7 +63,11 @@ class _HistorialJCState extends State<HistorialJC> {
                   return Loading(loadingMessage: snapshot.data.message);
                   break;
                 case Status.COMPLETED:
-                  return JCampoList(jefeCampoInfo: snapshot.data.data);
+                  return JCampoList(jefeCampoInfo: snapshot.data.data, datos: {
+                    'personal': personal,
+                    'lotes': lotes,
+                    'actividades': actividades
+                  });
                   break;
                 case Status.ERROR:
                   return Error(
@@ -67,64 +99,86 @@ class _HistorialJCState extends State<HistorialJC> {
 
 class JCampoList extends StatelessWidget {
   final List<JefeCampoModel> jefeCampoInfo;
-  const JCampoList({Key key, this.jefeCampoInfo}) : super(key: key);
+  final Map<String, dynamic> datos;
+  const JCampoList({Key key, this.jefeCampoInfo, this.datos}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: jefeCampoInfo.length,
-      itemBuilder: (context, index) {
-        return _crearCartaInfo(jefeCampoInfo[index]);
-      },
-    );
+    return (jefeCampoInfo == null || jefeCampoInfo.length == 0)
+        ? Center(
+            child: Text(
+              "No se encontraron Actividades de trabajadores",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          )
+        : ListView.builder(
+            itemCount: jefeCampoInfo.length,
+            itemBuilder: (context, index) {
+              return _crearCartaInfo(jefeCampoInfo[index]);
+            },
+          );
   }
-}
 
-Widget _crearCartaInfo(JefeCampoModel e) {
-  return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Card(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
-                  child: Row(children: <Widget>[
-                    Text(
-                      "Lote: " + e.lote.toString(),
-                      style: TextStyle(fontSize: 10),
-                    ),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
-                  child: Row(children: <Widget>[
-                    Text(
-                      e.nombres + " " + e.apellidos,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
-                  child: Row(children: <Widget>[
-                    Text("Fecha: " + e.fechaLabor),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
-                  child: Row(children: <Widget>[
-                    Text("HoraInicio: " + e.horaInicio),
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
-                  child: Row(children: <Widget>[
-                    Text("Hora fin: " + e.horaFin),
-                  ])),
-              Placeholder(
-                fallbackHeight: 10,
-                fallbackWidth: 100,
-                color: Colors.transparent,
-              ),
-            ]),
-      ));
+  Widget _crearCartaInfo(JefeCampoModel e) {
+    var lote = Util().obtenerLoteDeId(e.lote_id, datos['lotes']);
+    var trabajador = Util().obtenerTrabajadorDeId(
+        int.parse(e.worker_id.toString()), datos['personal']);
+    var asignador = Util().obtenerTrabajadorDeId(
+        int.parse(e.assigner_id.toString()), datos['personal']);
+    var actividad =
+        Util().obtenerActividadDeId(e.actividad_id, datos['actividades']);
+
+    return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Card(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Lote: ",
+                        style: TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      Text(lote)
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Realizada por: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(trabajador)
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Asignada por: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(asignador)
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Fecha Realizacion: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(e.fecha_realizacion)
+                    ])),
+                Placeholder(
+                  fallbackHeight: 10,
+                  fallbackWidth: 100,
+                  color: Colors.transparent,
+                ),
+              ]),
+        ));
+  }
 }
 
 class Error extends StatelessWidget {

@@ -73,15 +73,29 @@ class SolicitudJCState extends State<SolicitudJC> {
           is_used: false,
           actividad_id: int.parse(_selectedActividadResult));
 
-      sp.sendSolicitud(s);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text('Solicitud Creada'),
-          action: SnackBarAction(
-            label: 'Cerrar',
-            onPressed: () {
-              // Code to execute.
-            },
-          )));
+      sp.sendSolicitud(s).then((value) {
+        if (value) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Solicitud Creada'),
+              action: SnackBarAction(
+                label: 'Cerrar',
+                onPressed: () {
+                  // Code to execute.
+                },
+              )));
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text(
+                  'Ocurrio un error al crear la solicitud. Intentelo nuevamente'),
+              action: SnackBarAction(
+                label: 'Cerrar',
+                onPressed: () {
+                  // Code to execute.
+                },
+              )));
+        }
+      });
     }
   }
 

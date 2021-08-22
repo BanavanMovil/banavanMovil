@@ -195,27 +195,33 @@ class SolicitudList extends StatelessWidget {
                     child: Row(children: <Widget>[
                       Text(
                         "Solicitud ID: " + e.id.toString(),
-                        style: TextStyle(fontSize: 10),
+                        style: TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
                       ),
                       Spacer(),
                       Padding(
                           padding: const EdgeInsets.only(right: 10.0),
                           child: e.is_answered
-                              ? ((e.is_accepted && !e.is_used)
-                                  ? IconButton(
-                                      icon: Icon(Icons.edit),
-                                      onPressed: () {},
-                                    )
+                              ? (e.is_accepted
+                                  ? (e.is_used
+                                      ? IconButton(
+                                          icon: Icon(Icons.check),
+                                          color: Colors.greenAccent,
+                                          onPressed: () {},
+                                        )
+                                      : IconButton(
+                                          icon: Icon(Icons.edit),
+                                          onPressed: () {}))
                                   : null)
                               : null)
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 5.0),
                     child: Row(children: <Widget>[
-                      Text("Trabajadores Requeridos: "),
+                      Text("Trabajadores Requeridos: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       Text(
                         e.personal_requerido.toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ])),
                 Placeholder(
@@ -226,10 +232,10 @@ class SolicitudList extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 5.0),
                     child: Row(children: <Widget>[
-                      Text("Numero de Lote: "),
+                      Text("Numero de Lote: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       Text(
                         e.lote_id.toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ])),
                 Placeholder(
@@ -240,10 +246,10 @@ class SolicitudList extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 5.0),
                     child: Row(children: <Widget>[
-                      Text("Fecha: "),
+                      Text("Fecha: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       Text(
                         e.fecha_actividad.toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ])),
                 Placeholder(
@@ -254,10 +260,10 @@ class SolicitudList extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 5.0),
                     child: Row(children: <Widget>[
-                      Text("Mensaje: "),
+                      Text("Mensaje: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       Text(
                         e.mensaje,
-                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ])),
                 Placeholder(
@@ -268,12 +274,23 @@ class SolicitudList extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 5.0),
                     child: Row(children: <Widget>[
-                      Text("Estado: "),
+                      Text("Estado: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       Text(
                         e.is_answered
-                            ? (e.is_accepted ? "Aceptado" : "Rechazado")
+                            ? (e.is_accepted
+                                ? (e.is_used
+                                    ? "Trabajadores Asignados"
+                                    : "Aceptada")
+                                : "Rechazado")
                             : "En espera",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: e.is_answered
+                            ? (e.is_accepted
+                                ? (e.is_used
+                                    ? TextStyle(color: Colors.grey)
+                                    : TextStyle(color: Colors.greenAccent))
+                                : TextStyle(color: Colors.redAccent))
+                            : TextStyle(color: Colors.blueAccent),
                       ),
                     ])),
                 Placeholder(
