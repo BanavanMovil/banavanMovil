@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:banavanmov/exception/customException.dart';
@@ -11,9 +12,15 @@ class ActividadProvider {
 
   //GET
   Future<List<Actividad>> getAll() async {
+    var token = await LoginProvider.getToken();
+
     var responseJson;
     try {
-      final resp = await http.get(baseUrl + 'get');
+      final resp = await http.get(baseUrl + 'get', headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
       responseJson = _response(resp);
       //print(responseJson);
     } on SocketException {
@@ -24,8 +31,14 @@ class ActividadProvider {
 
   //POST
   Future<bool> createActividad(Actividad actividad) async {
+    var token = await LoginProvider.getToken();
+
     final response = await http.post(baseUrl + "create",
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: json.encode(actividad.toJson()));
     if (response.statusCode == 200) {
       print("Este es el status code: " + response.statusCode.toString());
@@ -41,8 +54,16 @@ class ActividadProvider {
 
   //DELETE
   Future<bool> deleteActividad(Actividad actividad) async {
-    final response =
-        await http.delete(baseUrl + "delete?nombre=" + actividad.nombre);
+    var token = await LoginProvider.getToken();
+
+    final response = await http.delete(
+      baseUrl + "delete?nombre=" + actividad.nombre,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
     if (response.statusCode == 200) {
       return true;
     } else {

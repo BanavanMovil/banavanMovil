@@ -1,3 +1,4 @@
+import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -13,9 +14,14 @@ class CosechadoProvider {
 
   //POST
   Future<bool> sendCosechado(NewObject newObject) async {
+    var token = await LoginProvider.getToken();
     print("Aqui esta el racimo cosechado: " + newObject.toJson().toString());
     final response = await http.post(url + "create",
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: json.encode(newObject.toJson()));
     if (response.statusCode == 201) {
       print("Este es el status code: " + response.statusCode.toString());
@@ -31,9 +37,14 @@ class CosechadoProvider {
 
   //PUT
   Future<bool> updateCosechado(NewObjectTwo newObjectt) async {
+    var token = await LoginProvider.getToken();
     print("Aqui esta el racimo cosechado: " + newObjectt.toJson().toString());
     final response = await http.put(url + "update",
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: json.encode(newObjectt.toJson()));
     if (response.statusCode == 200) {
       print("Este es el status code: " + response.statusCode.toString());
@@ -54,9 +65,14 @@ class CosechadoProvider {
   }
 
   Future<List<dynamic>> getAll() async {
+    var token = await LoginProvider.getToken();
     var responseJson;
     try {
-      final resp = await http.get(url + 'get');
+      final resp = await http.get(url + 'get', headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
       responseJson = _response(resp);
     } on SocketException {
       throw FetchDataException('No Internet connection');

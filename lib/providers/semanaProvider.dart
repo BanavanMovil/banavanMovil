@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:banavanmov/model/semana.dart';
+import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:banavanmov/exception/customException.dart';
@@ -11,9 +12,14 @@ class SemanaProvider {
 
   //Future<Map<String, List<Semana>>> getAll() async {
   Future<List<Semana>> getAll() async {
+    var token = await LoginProvider.getToken();
     var responseJson;
     try {
-      final resp = await http.get(baseUrl + 'get');
+      final resp = await http.get(baseUrl + 'get', headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
       responseJson = _response(resp);
     } on SocketException {
       throw FetchDataException('Sin Conexion');
@@ -27,9 +33,15 @@ class SemanaProvider {
   }
 
   Future<Map<String, dynamic>> getDateData(String fecha) async {
+    var token = await LoginProvider.getToken();
     var responseJson;
     try {
-      final resp = await http.get(baseUrl + 'getDateData?fecha=' + fecha);
+      final resp =
+          await http.get(baseUrl + 'getDateData?fecha=' + fecha, headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
       responseJson = _response(resp);
     } on SocketException {
       throw FetchDataException('Sin Conexion');

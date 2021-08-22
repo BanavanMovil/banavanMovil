@@ -1,4 +1,5 @@
 //https://flutter-es.io/docs/cookbook/navigation/navigation-basics
+import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:banavanmov/vistaEnfundadoJBodega.dart';
@@ -117,6 +118,10 @@ class _JBodegaVista extends State<JBodegaVista> {
   }
 
   void ingresarEnfundado() {
+    LoginProvider.getToken().then((value) {
+      print("Token: ");
+      print(value);
+    });
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return EnfundadoVista();
     }));

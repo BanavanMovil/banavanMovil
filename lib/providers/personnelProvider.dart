@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:banavanmov/model/personnel.dart';
+import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -12,9 +13,14 @@ class PersonnelProvider {
       'https://coco-backend-api.herokuapp.com/api/personnel/';
 
   Future<List<Personnel>> getAll() async {
+    var token = await LoginProvider.getToken();
     var responseJson;
     try {
-      final resp = await http.get(baseUrl + 'get?isActive=1');
+      final resp = await http.get(baseUrl + 'get?isActive=1', headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
       responseJson = _response(resp);
     } on SocketException {
       throw FetchDataException('Sin Conexion');

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -12,8 +13,13 @@ class EnfundadoProvider {
   //POST
   Future<bool> postEnfundado(Enfundado enfundado) async {
     print("Aqui esta la enfundado:" + enfundado.toJson().toString());
+    var token = await LoginProvider.getToken();
     final response = await http.post(baseUrl + 'create',
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: json.encode(enfundado.toJson()));
     final decodeData = json.decode(response.body);
 
@@ -28,8 +34,13 @@ class EnfundadoProvider {
   //PUT
   Future<bool> updateEnfundado(Enfundado enfundado) async {
     print("Aqui esta la enfundado:" + enfundado.toJson().toString());
+    var token = await LoginProvider.getToken();
     final response = await http.put(baseUrl + 'update',
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: json.encode(enfundado.toJson()));
     final decodeData = json.decode(response.body);
 
@@ -39,8 +50,13 @@ class EnfundadoProvider {
 
   Future<List<Enfundado>> getAll() async {
     var responseJson;
+    var token = await LoginProvider.getToken();
     try {
-      final resp = await http.get(baseUrl + 'get');
+      final resp = await http.get(baseUrl + 'get', headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
       responseJson = _response(resp);
       //print(responseJson);
     } on SocketException {

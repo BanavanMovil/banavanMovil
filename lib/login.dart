@@ -136,7 +136,7 @@ class _LoginState extends State<Login> {
 
   _showErrorMsg(msg) {
     final snackBar = SnackBar(
-      content: Text(msg),
+      content: Text(msg != null ? msg : "No se ha pasado nada"),
       action: SnackBarAction(
         label: 'Close',
         onPressed: () {
@@ -176,18 +176,31 @@ class _LoginState extends State<Login> {
                         userController.clear();
                         passController.clear();
                         Navigator.pop(ctx);
-                        if (body['rol'] != 'JC') {
+                        if (body['rol'] == 'Jefe de Campo') {
+                          LoginProvider.setToken(body['access_token']);
+                          print("Aqui se debio de guardar el token");
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return MainJCampo();
                           }));
-                        } else {
+                        } else if (body['rol'] == 'Jefe de Bodega') {
+                          LoginProvider.setToken(body['access_token']);
+                          print("Aqui se debio de guardar el token");
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return JBodegaVista();
                           }));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: const Text(
+                                  'Usuario sin acceso a la aplicacion'),
+                              action: SnackBarAction(
+                                label: 'Cerrar',
+                                onPressed: () {
+                                  // Code to execute.
+                                },
+                              )));
                         }
-                        ;
                       })),
             ],
           );
@@ -195,26 +208,33 @@ class _LoginState extends State<Login> {
   }
 
   void ingresarMain() async {
-    if (validarForm()) {
-      setState(() {
-        isLoading = true;
-      });
+    try {
+      if (validarForm()) {
+        setState(() {
+          isLoading = true;
+        });
 
-      var data = {'user': userController.text, 'pass': passController.text};
+        var body = await LoginProvider()
+            .login(userController.text, passController.text);
 
-      var res = await LoginProvider().login(data);
-      var body = jsonDecode(res.body);
-
-      if (body['message'].toString().isNotEmpty) {
-        print('Login exitoso');
-        _showDialogConfirm(context, body);
-      } else {
-        _showErrorMsg(body['message']);
+        print(body['message']);
+        if (body['message'] == null) {
+          print('Login Exitoso');
+          _showDialogConfirm(this.context, body);
+        } else {
+          print('Login Fallido');
+          _showErrorMsg(body['message']);
+        }
+        setState(() {
+          isLoading = false;
+        });
       }
+    } on Exception {
       setState(() {
         isLoading = false;
       });
     }
+
     //}
   }
 }

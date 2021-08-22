@@ -1,3 +1,4 @@
+import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -13,9 +14,14 @@ class PerdidoProvider {
 
   //POST
   Future<bool> sendPerdido(NewObject newObject) async {
+    var token = await LoginProvider.getToken();
     print("Aqui esta el racimo perdido:" + newObject.toJson().toString());
     final response = await http.post(url + "create",
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: json.encode(newObject.toJson()));
     if (response.statusCode == 201) {
       print("Este es el status code: " + response.statusCode.toString());
@@ -31,9 +37,14 @@ class PerdidoProvider {
 
   //PUT
   Future<bool> updatePerdido(NewObjectTwo newObjectt) async {
+    var token = await LoginProvider.getToken();
     print("Aqui esta el racimo perdido: " + newObjectt.toJson().toString());
     final response = await http.put(url + "update",
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: json.encode(newObjectt.toJson()));
     if (response.statusCode == 200) {
       print("Este es el status code: " + response.statusCode.toString());
@@ -48,7 +59,12 @@ class PerdidoProvider {
   }
 
   Future<List<Perdido>> getAllPerdido() async {
-    final response = await http.get(url + 'get');
+    var token = await LoginProvider.getToken();
+    final response = await http.get(url + 'get', headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token'
+    });
     final List<dynamic> decodedData = json.decode(response.body);
     final List<Perdido> perdidos = [];
 
@@ -63,9 +79,14 @@ class PerdidoProvider {
   }
 
   Future<List<dynamic>> getAll() async {
+    var token = await LoginProvider.getToken();
     var responseJson;
     try {
-      final resp = await http.get(url + 'get');
+      final resp = await http.get(url + 'get', headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
       responseJson = _response(resp);
     } on SocketException {
       throw FetchDataException('No Internet connection');

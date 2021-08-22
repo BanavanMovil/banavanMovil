@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:banavanmov/model/color.dart';
+import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:banavanmov/exception/customException.dart';
@@ -9,9 +10,17 @@ class ColorProvider {
   final String baseUrl = 'https://coco-backend-api.herokuapp.com/api/color/';
 
   Future<List<Colour>> getAll() async {
+    var token = await LoginProvider.getToken();
     var responseJson;
     try {
-      final resp = await http.get(baseUrl + 'get');
+      final resp = await http.get(
+        baseUrl + 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
       responseJson = _response(resp);
     } on SocketException {
       throw FetchDataException('Sin Conexion');

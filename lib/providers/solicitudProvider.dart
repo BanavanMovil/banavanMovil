@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:banavanmov/exception/customException.dart';
@@ -10,9 +11,14 @@ class SolicitudProvider {
       'https://coco-backend-api.herokuapp.com/api/solicitud/';
   //GET
   Future<List<Solicitud>> getAll() async {
+    var token = await LoginProvider.getToken();
     var responseJson;
     try {
-      final resp = await http.get(baseUrl + 'get');
+      final resp = await http.get(baseUrl + 'get', headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
       responseJson = _response(resp);
       print(responseJson);
     } on SocketException {
@@ -24,8 +30,13 @@ class SolicitudProvider {
   //POST
   Future<bool> sendSolicitud(Solicitud solicitud) async {
     print("Aqui esta la solicitud:" + solicitud.toJson().toString());
+    var token = await LoginProvider.getToken();
     final response = await http.post(baseUrl + "create",
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: json.encode(solicitud.toJson()));
     if (response.statusCode == 200) {
       print("Este es el status code: " + response.statusCode.toString());
@@ -41,9 +52,14 @@ class SolicitudProvider {
 
   //POST USER ACTIVIDAD
   Future<bool> sendTrabajadores(Solicitud s, List<int> personal) async {
+    var token = await LoginProvider.getToken();
     final response = await http.post(
         'https://coco-backend-api.herokuapp.com/api/userActividad/register',
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: json.encode({'solicitud_id': s.id, 'workers': personal}));
     if (response.statusCode == 200) {
       print("Este es el status code: " + response.statusCode.toString());
