@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:banavanmov/model/perdido.dart';
 import 'dart:io';
 import 'package:banavanmov/exception/customException.dart';
-import 'package:banavanmov/publicarPerdidoJBodega.dart';
+import 'package:banavanmov/model/newObjectP.dart';
 import 'package:banavanmov/actualizarPerdidoJBodega.dart';
 
 class PerdidoProvider {

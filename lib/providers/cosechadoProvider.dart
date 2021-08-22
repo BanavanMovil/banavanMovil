@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:banavanmov/model/cosechado.dart';
 import 'dart:io';
 import 'package:banavanmov/exception/customException.dart';
-import 'package:banavanmov/publicarRacimoJBodega.dart';
+import 'package:banavanmov/model/newObject.dart';
 import 'package:banavanmov/actualizarRacimoJBodega.dart';
 
 class CosechadoProvider {
