@@ -40,11 +40,11 @@ class JefeCampoModel {
 
   factory JefeCampoModel.fromJson(Map<String, dynamic> json) => JefeCampoModel(
       id: json['id'],
-      worker_id: json['worker_id'],
-      assigner_id: json['assigner_id'],
+      worker_id: int.parse(json['worker_id']),
+      assigner_id: int.parse(json['assigner_id']),
       fecha_realizacion: json['fecha_realizacion'],
-      actividad_id: json['actividad_id'],
-      lote_id: json['lote_id']);
+      actividad_id: int.parse(json['actividad_id']),
+      lote_id: int.parse(json['lote_id']));
 
   Map<String, dynamic> toJson() => {
         'id': id,

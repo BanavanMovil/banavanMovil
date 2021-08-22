@@ -60,7 +60,7 @@ class _MainJCampoState extends State<MainJCampo> {
                         color: Colors.transparent,
                       ),
                       new ElevatedButton(
-                        child: Text("Registro diario",
+                        child: Text("Registro Actividades",
                             textAlign: TextAlign.center,
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),
@@ -84,7 +84,7 @@ class _MainJCampoState extends State<MainJCampo> {
                         color: Colors.transparent,
                       ),
                       new ElevatedButton(
-                        child: Text("Mis Solicitudes",
+                        child: Text("Solicitudes",
                             textAlign: TextAlign.center,
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white)),

@@ -51,7 +51,9 @@ class Util {
   obtenerActividadDeId(int id, List<Actividad> actividades) {
     if (actividades != null) {
       var t = actividades.firstWhere((element) => element.id == id);
+      return t.nombre;
     }
+    return null;
   }
 
   obtenerColorNDeId(int id, List<Colour> colores) {

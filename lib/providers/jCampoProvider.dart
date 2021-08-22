@@ -19,6 +19,7 @@ class JCampoProvider {
         'Authorization': 'Bearer $token'
       });
       responseJson = _response(resp);
+      print(resp.body);
     } on SocketException {
       throw FetchDataException('No Internet connection');
     }

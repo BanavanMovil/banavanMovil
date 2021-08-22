@@ -49,7 +49,7 @@ class _HistorialJCState extends State<HistorialJC> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Historial de Cosecha'),
+        title: Text('Historial de Actividades'),
         backgroundColor: Colors.orange,
       ),
       body: RefreshIndicator(
@@ -126,7 +126,7 @@ class JCampoList extends StatelessWidget {
         int.parse(e.assigner_id.toString()), datos['personal']);
     var actividad =
         Util().obtenerActividadDeId(e.actividad_id, datos['actividades']);
-
+    print(actividad);
     return Padding(
         padding: const EdgeInsets.all(5.0),
         child: Card(
@@ -142,7 +142,7 @@ class JCampoList extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.bold),
                       ),
-                      Text(lote)
+                      Text(lote != null ? lote.toString() : "---")
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 5.0),
@@ -151,7 +151,7 @@ class JCampoList extends StatelessWidget {
                         "Realizada por: ",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(trabajador)
+                      Text(trabajador != null ? trabajador : "---")
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 5.0),
@@ -160,7 +160,7 @@ class JCampoList extends StatelessWidget {
                         "Asignada por: ",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(asignador)
+                      Text(asignador != null ? asignador : "---")
                     ])),
                 Padding(
                     padding: const EdgeInsets.only(left: 10, top: 5.0),
@@ -170,6 +170,15 @@ class JCampoList extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(e.fecha_realizacion)
+                    ])),
+                Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 5.0),
+                    child: Row(children: <Widget>[
+                      Text(
+                        "Actividad: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(actividad != null ? actividad : "---")
                     ])),
                 Placeholder(
                   fallbackHeight: 10,

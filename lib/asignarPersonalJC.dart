@@ -186,6 +186,7 @@ class _PersonnelListState extends State<PersonnelList> {
                   // Code to execute.
                 },
               )));
+          Navigator.pop(context);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content:

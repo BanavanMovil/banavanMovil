@@ -31,7 +31,7 @@ class _SolicitudesJCState extends State<SolicitudesJC> {
         backgroundColor: Colors.orange,
         centerTitle: true,
         title: !isBusqueda
-            ? Text('Jefe de Campo')
+            ? Text('Jefe de Campo \n Solicitudes')
             : TextField(
                 onChanged: (value) {
                   //_filterEmpleos(value);
@@ -45,26 +45,6 @@ class _SolicitudesJCState extends State<SolicitudesJC> {
                     hintText: "Filtra por Semana",
                     hintStyle: TextStyle(color: Colors.white)),
               ),
-        actions: <Widget>[
-          isBusqueda
-              ? IconButton(
-                  icon: Icon(Icons.cancel),
-                  onPressed: () {
-                    setState(() {
-                      this.isBusqueda = false;
-                      //filteredEmpleoList = empleoList;
-                    });
-                  },
-                )
-              : IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    setState(() {
-                      this.isBusqueda = true;
-                    });
-                  },
-                )
-        ],
       ),
       body: RefreshIndicator(
         onRefresh: () => _bloc.fetchAllSolicitudes(),
