@@ -189,6 +189,7 @@ class _EnfundadoVistaState extends State<EnfundadoVista> {
 class EnfundadoList extends StatelessWidget {
   final List<Enfundado> enfundados;
   final Map<String, dynamic> datos;
+
   const EnfundadoList({Key key, this.enfundados, this.datos}) : super(key: key);
   @override
   Widget build(BuildContext context) {

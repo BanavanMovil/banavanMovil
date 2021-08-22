@@ -61,7 +61,7 @@ class SolicitudProvider {
           'Authorization': 'Bearer $token'
         },
         body: json.encode({'solicitud_id': s.id, 'workers': personal}));
-    print(s.id);
+    print(s.id.toString() + " body: ${personal}");
     if (response.statusCode == 200) {
       print("Este es el status code: " + response.statusCode.toString());
       print("Trabajadores Enviados");

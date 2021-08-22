@@ -12,6 +12,7 @@ import 'package:banavanmov/utils/dataSource.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
+import 'package:intl/intl.dart';
 
 class SolicitudJC extends StatefulWidget {
   @override
@@ -27,6 +28,7 @@ class SolicitudJCState extends State<SolicitudJC> {
   String _selectedMensaje, _selectedMensajeResult;
   String _selectedActividad, _selectedActividadResult;
   DateTime _selectedFecha, _selectedFechaResult;
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
   SolicitudProvider sp;
   final formKey = new GlobalKey<FormState>();
   @override
@@ -67,7 +69,7 @@ class SolicitudJCState extends State<SolicitudJC> {
           user_id: 1,
           mensaje: _selectedMensajeResult,
           personal_requerido: _selectedTrabajadoresResult,
-          fecha_actividad: _selectedFecha.toString(),
+          fecha_actividad: formatter.format(_selectedFecha),
           is_accepted: false,
           is_answered: false,
           is_used: false,

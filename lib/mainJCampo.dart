@@ -1,5 +1,6 @@
 import 'package:banavanmov/actividadesJCampo.dart';
 import 'package:banavanmov/asignarPersonalJC.dart';
+import 'package:banavanmov/providers/loginProvider.dart';
 import 'package:banavanmov/solicitudJCampo.dart';
 import 'package:banavanmov/historialJCampo.dart';
 import 'package:banavanmov/vistaSolicitudesJC.dart';
@@ -33,6 +34,17 @@ class _MainJCampoState extends State<MainJCampo> {
           title: Text('Jefe de Campo'),
           backgroundColor: Colors.orange,
           centerTitle: true,
+          automaticallyImplyLeading: false,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.exit_to_app),
+              //tooltip: 'Show Snackbar',
+              onPressed: () {
+                LoginProvider.removeToken();
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
         body: Padding(
             padding: const EdgeInsets.all(15.0),

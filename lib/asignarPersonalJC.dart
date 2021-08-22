@@ -75,6 +75,7 @@ class _AsignarPersonalJCState extends State<AsignarPersonalJC> {
 class PersonnelList extends StatefulWidget {
   final List<Personnel> personal;
   final Solicitud solicitud;
+
   const PersonnelList({Key key, this.personal = const [], this.solicitud})
       : super(key: key);
   @override
@@ -84,11 +85,13 @@ class PersonnelList extends StatefulWidget {
 class _PersonnelListState extends State<PersonnelList> {
   List<Personnel> personalElegido;
   Solicitud solicitud;
+  List<Personnel> personalFiltrado;
   @override
   initState() {
     super.initState();
     personalElegido = widget.personal;
     solicitud = widget.solicitud;
+    personalFiltrado = [];
   }
 
   @override
@@ -108,6 +111,7 @@ class _PersonnelListState extends State<PersonnelList> {
             (BuildContext context, AsyncSnapshot<List<Personnel>> snapshot) {
           if (snapshot.hasData) {
             final allPersonnel = snapshot.data;
+
             return ListView(
               children: allPersonnel.map((p) {
                 final isSelected = personalElegido.contains(p);
@@ -167,6 +171,8 @@ class _PersonnelListState extends State<PersonnelList> {
 
   void enviarTrabajadores() {
     print("Aqui va el post a user actividad");
+    print(
+        "accep = ${solicitud.is_accepted}, answe = ${solicitud.is_answered}, used = ${solicitud.is_used}");
     if (solicitud.personal_requerido == personalElegido.length) {
       SolicitudProvider()
           .sendTrabajadores(solicitud, listadoIdsTrabajadores(personalElegido))
